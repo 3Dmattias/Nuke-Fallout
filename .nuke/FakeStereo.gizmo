@@ -1,0 +1,152 @@
+#! C:/Program Files/Nuke6.0v5/Nuke6.0.exe -nx
+version 6.0 v5
+Group {
+name FakeStereo
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {7 Eyedistance R 0 100}
+ Eyedistance 20
+ addUserKnob {7 Targetdist l Targetdistance R 0 10000}
+ Targetdist 880
+ addUserKnob {7 Focal l "focal length" R 0 400}
+ Focal 40
+ addUserKnob {7 Haperture l "horiz aperture" R 0 100}
+ Haperture 22.4
+ addUserKnob {7 Vaperture l "vert aperture"}
+ Vaperture {{Haperture/(width/height)}}
+ addUserKnob {41 rows l "Remap Resolution" T Card1.rows}
+ addUserKnob {41 columns l "" -STARTLINE T Card1.columns}
+ addUserKnob {41 format t "set to the format of the input" T Constant1.format}
+ addUserKnob {41 display T Scene1.display}
+ addUserKnob {41 view l "Source View" t "Use only one of the source Views" T OneViewRGB.view}
+}
+ Axis2 {
+  inputs 0
+  rotate {90 0 0}
+  skew {(default {{-(parent.Eyedistance*50)/parent.Targetdist} 0 0} right {{(parent.Eyedistance*50)/parent.Targetdist i} 0 0})}
+  name Ltoein
+  xpos 466
+  ypos -596
+ }
+ Camera2 {
+  selectable false
+  translate {(default {{parent.Eyedistance} 0 0} left {{-parent.Eyedistance} 0 0})}
+  rotate {-90 0 0}
+  focal {{parent.Focal i}}
+  haperture {{parent.Haperture i}}
+  vaperture {{parent.Vaperture i}}
+  name Lcam
+  tile_color 0x6d00ff
+  xpos 466
+  ypos -505
+ }
+ Input {
+  inputs 0
+  name Z
+  xpos 473
+  ypos -920
+ }
+ OneView {
+  name OneViewRGB
+  xpos 473
+  ypos -848
+ }
+ set C228357c0 [stack 0]
+ Expression {
+  temp_name0 ap
+  temp_expr0 parent.Haperture*0.5
+  temp_name1 Wd
+  temp_expr1 width*0.5
+  temp_name2 Hd
+  temp_expr2 height*0.5
+  temp_name3 fc
+  temp_expr3 parent.Focal
+  channel0 depth
+  expr0 "depth.Z/(fc/hypot  (fc, ap*hypot((x-Wd),(y-Hd))/Wd))"
+  channel1 none
+  channel2 none
+  channel3 none
+  name Expression1
+  xpos 473
+  ypos -696
+ }
+ Input {
+  inputs 0
+  name RGB
+  xpos 607
+  ypos -917
+  number 1
+ }
+clone $C228357c0 {
+  xpos 607
+  ypos -867
+  selected false
+ }
+ Card2 {
+  rows 100
+  columns 100
+  z 0.1
+  lens_in_focal {{parent.Focal i}}
+  lens_in_haperture {{parent.Haperture i}}
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  xpos 607
+  ypos -814
+ }
+ Normals {
+  action lookat
+  name Normals1
+  xpos 607
+  ypos -741
+ }
+ DisplaceGeo {
+  inputs 2
+  channels depth
+  source red
+  scale 1
+  recalc_normals false
+  name DisplaceGeo1
+  xpos 607
+  ypos -668
+ }
+ Scene {
+  display off
+  selectable false
+  render_mode textured
+  name Scene1
+  xpos 617
+  ypos -599
+ }
+ Constant {
+  inputs 0
+  channels none
+  name Constant1
+  xpos 715
+  ypos -599
+ }
+ ScanlineRender {
+  inputs 3
+  transparency false
+  filter Mitchell
+  output_motion_vectors false
+  name ScanlineRender2
+  selected true
+  xpos 607
+  ypos -485
+ }
+ Output {
+  name Output2
+  xpos 607
+  ypos -389
+ }
+end_group

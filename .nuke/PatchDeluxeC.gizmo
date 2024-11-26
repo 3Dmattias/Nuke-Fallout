@@ -1,0 +1,2119 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name PatchDeluxe
+ inputs 3
+ tile_color 0x22b7ffff
+ addUserKnob {20 PatchTool}
+ addUserKnob {41 PatchSize t "Set so that your hole is covered and then some extra to smoothen out the middle." T Iblur2CopyBlendhole.Blursize}
+ addUserKnob {41 Steps T Iblur2CopyBlendhole.Steps}
+ addUserKnob {26 qual l "" -STARTLINE T "Sets quality (1-20)"}
+ addUserKnob {41 FilterMatte t "Set to about half of PatchSize." T FilterErodeMASK.size}
+ addUserKnob {7 SoftenEdge t "Soften transition to patch. Use if quality is set low or if really big holes are patched. " R 0 20}
+ addUserKnob {6 InspectMatte l "Inspect matte" t "Shows the eroded mask. increase Patchsize until most of the red is gone. If you increase Patchsize further you get less quality." +STARTLINE}
+ addUserKnob {26 texsettings l "" +STARTLINE}
+ addUserKnob {6 Texture l "Use Texture" +STARTLINE}
+ addUserKnob {41 Highpass t "Low values keeps high frequency detail. " T Iblur2CopyHighpass.Blursize}
+ addUserKnob {41 Steps_1 l Steps T Iblur2CopyHighpass.Steps}
+ addUserKnob {26 qual2 l "" -STARTLINE T "Sets quality (1-20)"}
+ addUserKnob {41 TextureStrength t "Blends Texture intensity." T mixTexture.mix}
+ addUserKnob {26 maker l "" +STARTLINE T "\nmattias@malmer.nu"}
+}
+ Input {
+  inputs 0
+  name InputMatte
+  xpos 719
+  ypos -1260
+  number 1
+ }
+ Dot {
+  name Dot3
+  xpos 753
+  ypos -1050
+ }
+set N5a9e53d0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 753
+  ypos -936
+ }
+set N5a9e1dd0 [stack 0]
+ FilterErode {
+  size {{Iblur2CopyBlendhole.PDfilter17.size*.5}}
+  filter triangle
+  name FilterErodeMASK
+  xpos 719
+  ypos -845
+ }
+set N5a9e5a90 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 719
+  ypos -370
+ }
+ Clamp {
+  channels {-rgba.red rgba.green rgba.blue}
+  maximum 0.99
+  MinClampTo_enable true
+  MaxClampTo 0
+  MaxClampTo_enable true
+  name Clamp1
+  xpos 719
+  ypos -299
+ }
+push $N5a9e53d0
+ Dot {
+  name Dot4
+  xpos 531
+  ypos -1050
+ }
+ FilterErode {
+  size {{SoftenEdge}}
+  filter triangle
+  name FilterErode_soften_edges
+  xpos 497
+  ypos -586
+ }
+push $N5a9e5a90
+push $N5a9e1dd0
+ Input {
+  inputs 0
+  name InputSrc
+  xpos 411
+  ypos -1256
+ }
+ Dot {
+  name Dot5
+  xpos 445
+  ypos -1157
+ }
+set N5a9e6ed0 [stack 0]
+ Shuffle {
+  alpha white
+  name shuffle_setwhitealpha
+  xpos 581
+  ypos -1097
+ }
+ set C5a9e7230 [stack 0]
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  name Multiply_cut_hole
+  xpos 581
+  ypos -902
+ }
+ Group {
+  inputs 2
+  name Iblur2CopyBlendhole
+  xpos 581
+  ypos -730
+  addUserKnob {20 User}
+  addUserKnob {41 channels T Keymix3.channels}
+  addUserKnob {41 Blursize T PDfilter17.size}
+  addUserKnob {41 Blurchannel T Shuffle6.in}
+  addUserKnob {41 subchannel T Shuffle6.red}
+  addUserKnob {6 HighQuality l INVISIBLE +INVISIBLE +STARTLINE}
+  HighQuality true
+  addUserKnob {3 Steps}
+  Steps 8
+ }
+  Input {
+   inputs 0
+   name InputControl
+   xpos 1338
+   ypos -517
+   number 1
+  }
+add_layer {Iblurmask Iblurmask.a}
+  AddChannels {
+   channels Iblurmask
+   name AddChannels1
+   xpos 1338
+   ypos -444
+  }
+  Shuffle {
+   red alpha
+   out Iblurmask
+   name Shuffle6
+   xpos 1338
+   ypos -394
+  }
+  Dot {
+   name Dot41
+   xpos 1372
+   ypos -277
+  }
+  Dot {
+   name Dot49
+   xpos 1372
+   ypos -225
+  }
+set N94d10110 [stack 0]
+  Dot {
+   name Dot16
+   xpos 1372
+   ypos -155
+  }
+set N94d0c450 [stack 0]
+  Dot {
+   name Dot17
+   xpos 1372
+   ypos -84
+  }
+set N94d0dbf0 [stack 0]
+  Dot {
+   name Dot18
+   xpos 1372
+   ypos -9
+  }
+set N94d0c0f0 [stack 0]
+  Dot {
+   name Dot19
+   xpos 1372
+   ypos 63
+  }
+set N94d118b0 [stack 0]
+  Dot {
+   name Dot20
+   xpos 1372
+   ypos 141
+  }
+set N94d0b010 [stack 0]
+  Dot {
+   name Dot1
+   xpos 1372
+   ypos 217
+  }
+set N94d0df50 [stack 0]
+  Dot {
+   name Dot2
+   xpos 1372
+   ypos 295
+  }
+set N94d09bd0 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1372
+   ypos 375
+  }
+set N94d12990 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1372
+   ypos 458
+  }
+set N94d0c7b0 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1372
+   ypos 556
+  }
+set N94d0e610 [stack 0]
+  Dot {
+   name Dot10
+   xpos 1372
+   ypos 640
+  }
+set N94d11c10 [stack 0]
+  Dot {
+   name Dot11
+   xpos 1372
+   ypos 715
+  }
+set N94d0f6f0 [stack 0]
+  Dot {
+   name Dot12
+   xpos 1372
+   ypos 784
+  }
+set N94d122d0 [stack 0]
+  Dot {
+   name Dot13
+   xpos 1372
+   ypos 856
+  }
+set N94d0cb10 [stack 0]
+  Dot {
+   name Dot14
+   xpos 1372
+   ypos 934
+  }
+set N94d15f90 [stack 0]
+  Dot {
+   name Dot24
+   xpos 1372
+   ypos 1010
+  }
+set N94d12cf0 [stack 0]
+  Dot {
+   name Dot25
+   xpos 1372
+   ypos 1088
+  }
+set N94d13050 [stack 0]
+  Dot {
+   name Dot26
+   xpos 1372
+   ypos 1168
+  }
+set N94d11f70 [stack 0]
+  Dot {
+   name Dot27
+   xpos 1372
+   ypos 1251
+  }
+set N94d0ecd0 [stack 0]
+  Dot {
+   name Dot28
+   xpos 1372
+   ypos 1349
+  }
+set N94d12630 [stack 0]
+  Dot {
+   name Dot47
+   xpos 1372
+   ypos 1437
+  }
+  Grade {
+   channels Iblurmask
+   blackpoint {{(19/Stepswitch.which)}}
+   whitepoint {{(20/Stepswitch.which)}}
+   white_clamp true
+   name Grade21
+   xpos 1243
+   ypos 1427
+  }
+  Input {
+   inputs 0
+   name InputSrc
+   xpos 717
+   ypos -517
+  }
+  Dot {
+   name Dot37
+   xpos 751
+   ypos -334
+  }
+set N94d13710 [stack 0]
+  Dot {
+   name Dot38
+   xpos 948
+   ypos -334
+  }
+set N94d0fa50 [stack 0]
+  Dot {
+   name Dot50
+   xpos 948
+   ypos -225
+  }
+set N94d13a70 [stack 0]
+  Dot {
+   name Dot21
+   xpos 948
+   ypos -155
+  }
+set N94d15210 [stack 0]
+  Dot {
+   name Dot22
+   xpos 948
+   ypos -84
+  }
+set N94d14130 [stack 0]
+  Dot {
+   name Dot23
+   xpos 948
+   ypos -9
+  }
+set N94d13dd0 [stack 0]
+  Dot {
+   name Dot31
+   xpos 948
+   ypos 63
+  }
+set N94d0f030 [stack 0]
+  Dot {
+   name Dot32
+   xpos 946
+   ypos 141
+  }
+set N94d147f0 [stack 0]
+  Dot {
+   name Dot6
+   xpos 946
+   ypos 217
+  }
+set N94d14b50 [stack 0]
+  Dot {
+   name Dot7
+   xpos 946
+   ypos 295
+  }
+set N94d14eb0 [stack 0]
+  Dot {
+   name Dot8
+   xpos 946
+   ypos 375
+  }
+set N94d15570 [stack 0]
+  Dot {
+   name Dot9
+   xpos 946
+   ypos 458
+  }
+set N94d158d0 [stack 0]
+  Dot {
+   name Dot15
+   xpos 946
+   ypos 556
+  }
+set N94d15c30 [stack 0]
+  Dot {
+   name Dot29
+   xpos 948
+   ypos 640
+  }
+set N94d162f0 [stack 0]
+  Dot {
+   name Dot30
+   xpos 948
+   ypos 715
+  }
+set N94d16650 [stack 0]
+  Dot {
+   name Dot35
+   xpos 948
+   ypos 784
+  }
+set N94d169b0 [stack 0]
+  Dot {
+   name Dot36
+   xpos 948
+   ypos 856
+  }
+set N94d16d10 [stack 0]
+  Dot {
+   name Dot40
+   xpos 946
+   ypos 934
+  }
+set N94d173d0 [stack 0]
+  Dot {
+   name Dot42
+   xpos 946
+   ypos 1010
+  }
+set N94d17a90 [stack 0]
+  Dot {
+   name Dot43
+   xpos 946
+   ypos 1088
+  }
+set N94d1b090 [stack 0]
+  Dot {
+   name Dot44
+   xpos 946
+   ypos 1168
+  }
+set N94d1a670 [stack 0]
+  Dot {
+   name Dot45
+   xpos 946
+   ypos 1251
+  }
+set N94d17070 [stack 0]
+  Dot {
+   name Dot46
+   xpos 946
+   ypos 1349
+  }
+set N94d17df0 [stack 0]
+  Dot {
+   name Dot48
+   xpos 946
+   ypos 1437
+  }
+  Blur {
+   size {{PDfilter17.size*(20/Stepswitch.which) x207 0} {PDfilter17.size*(20/Stepswitch.which)}}
+   name PDfilter22
+   xpos 1021
+   ypos 1427
+  }
+push $N94d12630
+  Grade {
+   channels Iblurmask
+   blackpoint {{(18/Stepswitch.which)}}
+   whitepoint {{(19/Stepswitch.which)}}
+   white_clamp true
+   name Grade6
+   xpos 1243
+   ypos 1339
+  }
+push $N94d17df0
+  Blur {
+   size {{PDfilter17.size*(19/Stepswitch.which) x207 0} {PDfilter17.size*(19/Stepswitch.which)}}
+   name PDfilter11
+   xpos 1021
+   ypos 1339
+  }
+push $N94d0ecd0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(17/Stepswitch.which)}}
+   whitepoint {{(18/Stepswitch.which)}}
+   white_clamp true
+   name Grade7
+   xpos 1243
+   ypos 1241
+  }
+push $N94d17070
+  Blur {
+   size {{PDfilter17.size*(18/Stepswitch.which)} {PDfilter17.size*(18/Stepswitch.which)}}
+   name PDfilter12
+   xpos 1021
+   ypos 1241
+  }
+push $N94d11f70
+  Grade {
+   channels Iblurmask
+   blackpoint {{(16/Stepswitch.which)}}
+   whitepoint {{(17/Stepswitch.which)}}
+   white_clamp true
+   name Grade8
+   xpos 1243
+   ypos 1158
+  }
+push $N94d1a670
+  Blur {
+   size {{PDfilter17.size*(17/Stepswitch.which)} {PDfilter17.size*(17/Stepswitch.which)}}
+   name PDfilter13
+   xpos 1021
+   ypos 1158
+  }
+push $N94d13050
+  Grade {
+   channels Iblurmask
+   blackpoint {{(15/Stepswitch.which)}}
+   whitepoint {{(16/Stepswitch.which)}}
+   white_clamp true
+   name Grade9
+   xpos 1243
+   ypos 1078
+  }
+push $N94d1b090
+  Blur {
+   size {{PDfilter17.size*(16/Stepswitch.which)} {PDfilter17.size*(16/Stepswitch.which)}}
+   name PDfilter14
+   xpos 1021
+   ypos 1078
+  }
+push $N94d12cf0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(14/Stepswitch.which)}}
+   whitepoint {{(15/Stepswitch.which)}}
+   white_clamp true
+   name Grade10
+   xpos 1243
+   ypos 1000
+  }
+push $N94d17a90
+  Blur {
+   size {{PDfilter17.size*(15/Stepswitch.which)} {PDfilter17.size*(15/Stepswitch.which)}}
+   name PDfilter15
+   xpos 1021
+   ypos 1000
+  }
+push $N94d15f90
+  Grade {
+   channels Iblurmask
+   blackpoint {{(13/Stepswitch.which)}}
+   whitepoint {{(14/Stepswitch.which)}}
+   black_clamp false
+   white_clamp true
+   name Grade16
+   xpos 1243
+   ypos 924
+  }
+push $N94d173d0
+  Blur {
+   size {{PDfilter17.size*(14/Stepswitch.which)} {PDfilter17.size*(14/Stepswitch.which)}}
+   name PDfilter16
+   xpos 1021
+   ypos 924
+  }
+push $N94d0cb10
+  Grade {
+   channels Iblurmask
+   blackpoint {{(12/Stepswitch.which)}}
+   whitepoint {{(13/Stepswitch.which)}}
+   white_clamp true
+   name Grade17
+   xpos 1243
+   ypos 846
+  }
+push $N94d16d10
+  Blur {
+   size {{PDfilter17.size*(13/Stepswitch.which)} {PDfilter17.size*(13/Stepswitch.which)}}
+   name PDfilter18
+   xpos 1023
+   ypos 846
+  }
+push $N94d122d0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(11/Stepswitch.which)}}
+   whitepoint {{(12/Stepswitch.which)}}
+   white_clamp true
+   name Grade18
+   xpos 1243
+   ypos 774
+  }
+push $N94d169b0
+  Blur {
+   size {{PDfilter17.size*(12/Stepswitch.which)} {PDfilter17.size*(12/Stepswitch.which)}}
+   name PDfilter19
+   xpos 1023
+   ypos 774
+  }
+push $N94d0f6f0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(10/Stepswitch.which)}}
+   whitepoint {{(11/Stepswitch.which)}}
+   white_clamp true
+   name Grade19
+   xpos 1243
+   ypos 705
+  }
+push $N94d16650
+  Blur {
+   size {{PDfilter17.size*(11/Stepswitch.which)} {PDfilter17.size*(11/Stepswitch.which)}}
+   name PDfilter20
+   xpos 1023
+   ypos 705
+  }
+push $N94d11c10
+  Grade {
+   channels Iblurmask
+   blackpoint {{(9/Stepswitch.which)}}
+   whitepoint {{(10/Stepswitch.which)}}
+   white_clamp true
+   name Grade20
+   xpos 1243
+   ypos 630
+  }
+push $N94d162f0
+  Blur {
+   size {{PDfilter17.size*(10/Stepswitch.which)} {PDfilter17.size*(10/Stepswitch.which)}}
+   name PDfilter21
+   xpos 1023
+   ypos 630
+  }
+push $N94d0e610
+  Grade {
+   channels Iblurmask
+   blackpoint {{(8/Stepswitch.which)}}
+   whitepoint {{(9/Stepswitch.which)}}
+   white_clamp true
+   name Grade1
+   xpos 1243
+   ypos 546
+  }
+push $N94d15c30
+  Blur {
+   size {{PDfilter17.size*(9/Stepswitch.which) x207 0} {PDfilter17.size*(9/Stepswitch.which)}}
+   name PDfilter1
+   xpos 1021
+   ypos 546
+  }
+push $N94d0c7b0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(7/Stepswitch.which)}}
+   whitepoint {{(8/Stepswitch.which)}}
+   white_clamp true
+   name Grade2
+   xpos 1243
+   ypos 448
+  }
+push $N94d158d0
+  Blur {
+   size {{PDfilter17.size*(8/Stepswitch.which)} {PDfilter17.size*(8/Stepswitch.which)}}
+   name PDfilter2
+   xpos 1021
+   ypos 448
+  }
+push $N94d12990
+  Grade {
+   channels Iblurmask
+   blackpoint {{(6/Stepswitch.which)}}
+   whitepoint {{(7/Stepswitch.which)}}
+   white_clamp true
+   name Grade3
+   xpos 1243
+   ypos 365
+  }
+push $N94d15570
+  Blur {
+   size {{PDfilter17.size*(7/Stepswitch.which)} {PDfilter17.size*(7/Stepswitch.which)}}
+   name PDfilter3
+   xpos 1021
+   ypos 365
+  }
+push $N94d09bd0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(5/Stepswitch.which)}}
+   whitepoint {{(6/Stepswitch.which)}}
+   white_clamp true
+   name Grade4
+   xpos 1243
+   ypos 285
+  }
+push $N94d14eb0
+  Blur {
+   size {{PDfilter17.size*(6/Stepswitch.which)} {PDfilter17.size*(6/Stepswitch.which)}}
+   name PDfilter4
+   xpos 1021
+   ypos 285
+  }
+push $N94d0df50
+  Grade {
+   channels Iblurmask
+   blackpoint {{(4/Stepswitch.which)}}
+   whitepoint {{(5/Stepswitch.which)}}
+   white_clamp true
+   name Grade5
+   xpos 1243
+   ypos 207
+  }
+push $N94d14b50
+  Blur {
+   size {{PDfilter17.size*(5/Stepswitch.which)} {PDfilter17.size*(5/Stepswitch.which)}}
+   name PDfilter5
+   xpos 1021
+   ypos 207
+  }
+push $N94d0b010
+  Grade {
+   channels Iblurmask
+   blackpoint {{(3/Stepswitch.which)}}
+   whitepoint {{(4/Stepswitch.which)}}
+   white_clamp true
+   name Grade11
+   xpos 1243
+   ypos 131
+  }
+push $N94d147f0
+  Blur {
+   size {{PDfilter17.size*(4/Stepswitch.which)} {PDfilter17.size*(4/Stepswitch.which)}}
+   name PDfilter6
+   xpos 1021
+   ypos 131
+  }
+push $N94d118b0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(2/Stepswitch.which)}}
+   whitepoint {{(3/Stepswitch.which)}}
+   white_clamp true
+   name Grade12
+   xpos 1243
+   ypos 53
+  }
+push $N94d0f030
+  Blur {
+   size {{PDfilter17.size*(3/Stepswitch.which)} {PDfilter17.size*(3/Stepswitch.which)}}
+   name PDfilter7
+   xpos 1023
+   ypos 53
+  }
+push $N94d0c0f0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(1/Stepswitch.which)}}
+   whitepoint {{(2/Stepswitch.which)}}
+   white_clamp true
+   name Grade13
+   xpos 1243
+   ypos -19
+  }
+push $N94d13dd0
+  Blur {
+   size {{PDfilter17.size*(2/Stepswitch.which)} {PDfilter17.size*(2/Stepswitch.which)}}
+   name PDfilter8
+   xpos 1023
+   ypos -19
+  }
+push $N94d0dbf0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(.5/Stepswitch.which)}}
+   whitepoint {{(1/Stepswitch.which)}}
+   white_clamp true
+   name Grade14
+   xpos 1243
+   ypos -94
+  }
+push $N94d14130
+  Blur {
+   size {{PDfilter17.size*(1/Stepswitch.which)} {PDfilter17.size*(1/Stepswitch.which)}}
+   name PDfilter9
+   xpos 1023
+   ypos -94
+  }
+push $N94d0c450
+  Grade {
+   channels Iblurmask
+   blackpoint {{(.25/Stepswitch.which)}}
+   whitepoint {{(.5/Stepswitch.which)}}
+   white_clamp true
+   name Grade15
+   xpos 1243
+   ypos -165
+  }
+push $N94d15210
+  Blur {
+   size {{PDfilter17.size*(.5/Stepswitch.which)} {PDfilter17.size*(.5/Stepswitch.which)}}
+   name PDfilter10
+   xpos 1023
+   ypos -165
+  }
+push $N94d10110
+  Grade {
+   channels Iblurmask
+   whitepoint {{(.25/Stepswitch.which)}}
+   white_clamp true
+   name Grade22
+   xpos 1243
+   ypos -235
+  }
+push $N94d13a70
+  Blur {
+   size {{PDfilter17.size*(.25/Stepswitch.which)} {PDfilter17.size*(.25/Stepswitch.which)}}
+   name PDfilter23
+   xpos 1023
+   ypos -235
+  }
+push $N94d0fa50
+  Dot {
+   name Dot39
+   xpos 1167
+   ypos -334
+  }
+set N94cfe590 [stack 0]
+  Keymix {
+   inputs 3
+   channels rgba
+   maskChannel Iblurmask.a
+   name Keymix3
+   xpos 1133
+   ypos -235
+  }
+  set C94d00090 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos -165
+   selected false
+  }
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos -94
+   selected false
+  }
+set N94d03330 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos -19
+   selected false
+  }
+set N94cfcdf0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos 53
+   selected false
+  }
+set N94cfc730 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 131
+   selected false
+  }
+set N94d01b90 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 207
+   selected false
+  }
+set N94d02fd0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 285
+   selected false
+  }
+set N94d03690 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 365
+   selected false
+  }
+set N94d039f0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 448
+   selected false
+  }
+set N94d040b0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 546
+   selected false
+  }
+set N94d04410 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos 630
+   selected false
+  }
+set N94d04770 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos 705
+   selected false
+  }
+set N94cfca90 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos 774
+   selected false
+  }
+set N94d04ad0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1133
+   ypos 846
+   selected false
+  }
+set N94d04e30 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 924
+   selected false
+  }
+set N94d05190 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1000
+   selected false
+  }
+set N94d06ff0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1078
+   selected false
+  }
+set N94d054f0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1158
+   selected false
+  }
+set N94d08af0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1241
+   selected false
+  }
+set N94d05850 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1339
+   selected false
+  }
+set N94d05bb0 [stack 0]
+clone $C94d00090 {
+   inputs 3
+   xpos 1131
+   ypos 1427
+   selected false
+  }
+push $N94d05bb0
+push $N94d05850
+push $N94d08af0
+push $N94d054f0
+push $N94d06ff0
+push $N94d05190
+push $N94d04e30
+push $N94d04ad0
+push $N94cfca90
+push $N94d04770
+push $N94d04410
+push $N94d040b0
+push $N94d039f0
+push $N94d03690
+push $N94d02fd0
+push $N94d01b90
+push $N94cfc730
+push $N94cfcdf0
+push $N94d03330
+push $N94cfe590
+  Switch {
+   inputs 21
+   which {{Steps}}
+   name Stepswitch
+   xpos 2093
+   ypos -337
+  }
+set N7633b7d0 [stack 0]
+  Dot {
+   name Dot34
+   xpos 3483
+   ypos 1661
+  }
+push $N94d13710
+  Dot {
+   name Dot33
+   xpos 751
+   ypos 1661
+  }
+  Switch {
+   inputs 2
+   which {{HighQuality}}
+   name Switch1
+   xpos 3266
+   ypos 1656
+  }
+  Remove {
+   channels Iblurmask
+   name Remove1
+   xpos 3266
+   ypos 1711
+  }
+  Output {
+   name Output1
+   xpos 3266
+   ypos 1802
+  }
+  Blur {
+   inputs 0
+   size 40
+   name PDfilter17
+   xpos 383
+   ypos 465
+  }
+push $N7633b7d0
+  Viewer {
+   frame 100
+   channels {rgba.red rgba.green rgba.blue Iblurmask.a}
+   input_process false
+   name Viewer1
+   xpos 2529
+   ypos 1559
+  }
+ end_group
+ Unpremult {
+  name Unpremult_pushback_color
+  xpos 581
+  ypos -650
+ }
+ set C764a94e0 [stack 0]
+set N764a94e0 [stack 0]
+push $N764a94e0
+push $N5a9e5a90
+push $N5a9e1dd0
+ Input {
+  inputs 0
+  name InputTexture
+  xpos 981
+  ypos -1262
+  number 2
+ }
+clone $C5a9e7230 {
+  xpos 981
+  ypos -1102
+  selected false
+ }
+set N764a9f00 [stack 0]
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  invert_mask true
+  name Multiply_cookiecut
+  xpos 863
+  ypos -902
+ }
+set N764aa260 [stack 0]
+ Group {
+  inputs 2
+  name Iblur2CopyHighpass
+  xpos 863
+  ypos -735
+  addUserKnob {20 User}
+  addUserKnob {41 channels T Keymix3.channels}
+  addUserKnob {41 Blursize T PDfilter17.size}
+  addUserKnob {41 Blurchannel T Shuffle6.in}
+  addUserKnob {41 subchannel T Shuffle6.red}
+  addUserKnob {6 HighQuality l INVISIBLE +INVISIBLE +STARTLINE}
+  HighQuality true
+  addUserKnob {3 Steps}
+  Steps 8
+ }
+  Input {
+   inputs 0
+   name InputControl
+   xpos 1338
+   ypos -517
+   number 1
+  }
+  AddChannels {
+   channels Iblurmask
+   name AddChannels1
+   xpos 1338
+   ypos -444
+  }
+  Shuffle {
+   red alpha
+   out Iblurmask
+   name Shuffle6
+   xpos 1338
+   ypos -394
+  }
+  Dot {
+   name Dot41
+   xpos 1372
+   ypos -277
+  }
+  Dot {
+   name Dot49
+   xpos 1372
+   ypos -225
+  }
+set N94d08430 [stack 0]
+  Dot {
+   name Dot16
+   xpos 1372
+   ypos -155
+  }
+set N94d08790 [stack 0]
+  Dot {
+   name Dot17
+   xpos 1372
+   ypos -84
+  }
+set N94d08e50 [stack 0]
+  Dot {
+   name Dot18
+   xpos 1372
+   ypos -9
+  }
+set N94d091b0 [stack 0]
+  Dot {
+   name Dot19
+   xpos 1372
+   ypos 63
+  }
+set N94d09510 [stack 0]
+  Dot {
+   name Dot20
+   xpos 1372
+   ypos 141
+  }
+set N958d7a50 [stack 0]
+  Dot {
+   name Dot1
+   xpos 1372
+   ypos 217
+  }
+set N958d7db0 [stack 0]
+  Dot {
+   name Dot2
+   xpos 1372
+   ypos 295
+  }
+set N958d51d0 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1372
+   ypos 375
+  }
+set N958d2950 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1372
+   ypos 458
+  }
+set N958d8110 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1372
+   ypos 556
+  }
+set N958d8470 [stack 0]
+  Dot {
+   name Dot10
+   xpos 1372
+   ypos 640
+  }
+set N958d3a30 [stack 0]
+  Dot {
+   name Dot11
+   xpos 1372
+   ypos 715
+  }
+set N958d9550 [stack 0]
+  Dot {
+   name Dot12
+   xpos 1372
+   ypos 784
+  }
+set N958d76f0 [stack 0]
+  Dot {
+   name Dot13
+   xpos 1372
+   ypos 856
+  }
+set N958d87d0 [stack 0]
+  Dot {
+   name Dot14
+   xpos 1372
+   ypos 934
+  }
+set N958d4450 [stack 0]
+  Dot {
+   name Dot24
+   xpos 1372
+   ypos 1010
+  }
+set N958d1f30 [stack 0]
+  Dot {
+   name Dot25
+   xpos 1372
+   ypos 1088
+  }
+set N958d8e90 [stack 0]
+  Dot {
+   name Dot26
+   xpos 1372
+   ypos 1168
+  }
+set N958d91f0 [stack 0]
+  Dot {
+   name Dot27
+   xpos 1372
+   ypos 1251
+  }
+set N958d8b30 [stack 0]
+  Dot {
+   name Dot28
+   xpos 1372
+   ypos 1349
+  }
+set N958d4b10 [stack 0]
+  Dot {
+   name Dot47
+   xpos 1372
+   ypos 1437
+  }
+  Grade {
+   channels Iblurmask
+   blackpoint {{(19/Stepswitch.which)}}
+   whitepoint {{(20/Stepswitch.which)}}
+   white_clamp true
+   name Grade21
+   xpos 1243
+   ypos 1427
+  }
+  Input {
+   inputs 0
+   name InputSrc
+   xpos 717
+   ypos -517
+  }
+  Dot {
+   name Dot37
+   xpos 751
+   ypos -334
+  }
+set N958d1870 [stack 0]
+  Dot {
+   name Dot38
+   xpos 948
+   ypos -334
+  }
+set N958d98b0 [stack 0]
+  Dot {
+   name Dot50
+   xpos 948
+   ypos -225
+  }
+set N958d3d90 [stack 0]
+  Dot {
+   name Dot21
+   xpos 948
+   ypos -155
+  }
+set N958d5bf0 [stack 0]
+  Dot {
+   name Dot22
+   xpos 948
+   ypos -84
+  }
+set N958d5f50 [stack 0]
+  Dot {
+   name Dot23
+   xpos 948
+   ypos -9
+  }
+set N958d2290 [stack 0]
+  Dot {
+   name Dot31
+   xpos 948
+   ypos 63
+  }
+set N958d25f0 [stack 0]
+  Dot {
+   name Dot32
+   xpos 946
+   ypos 141
+  }
+set N958d3010 [stack 0]
+  Dot {
+   name Dot6
+   xpos 946
+   ypos 217
+  }
+set N958d1bd0 [stack 0]
+  Dot {
+   name Dot7
+   xpos 946
+   ypos 295
+  }
+set N958d47b0 [stack 0]
+  Dot {
+   name Dot8
+   xpos 946
+   ypos 375
+  }
+set N958d9c10 [stack 0]
+  Dot {
+   name Dot9
+   xpos 946
+   ypos 458
+  }
+set N958d5530 [stack 0]
+  Dot {
+   name Dot15
+   xpos 946
+   ypos 556
+  }
+set N958d3370 [stack 0]
+  Dot {
+   name Dot29
+   xpos 948
+   ypos 640
+  }
+set N958d62b0 [stack 0]
+  Dot {
+   name Dot30
+   xpos 948
+   ypos 715
+  }
+set N958d6610 [stack 0]
+  Dot {
+   name Dot35
+   xpos 948
+   ypos 784
+  }
+set N958d9f70 [stack 0]
+  Dot {
+   name Dot36
+   xpos 948
+   ypos 856
+  }
+set N958d5890 [stack 0]
+  Dot {
+   name Dot40
+   xpos 946
+   ypos 934
+  }
+set N958d6970 [stack 0]
+  Dot {
+   name Dot42
+   xpos 946
+   ypos 1010
+  }
+set N958da2d0 [stack 0]
+  Dot {
+   name Dot43
+   xpos 946
+   ypos 1088
+  }
+set N958d7030 [stack 0]
+  Dot {
+   name Dot44
+   xpos 946
+   ypos 1168
+  }
+set N958da630 [stack 0]
+  Dot {
+   name Dot45
+   xpos 946
+   ypos 1251
+  }
+set N958db3b0 [stack 0]
+  Dot {
+   name Dot46
+   xpos 946
+   ypos 1349
+  }
+set N958da990 [stack 0]
+  Dot {
+   name Dot48
+   xpos 946
+   ypos 1437
+  }
+  Blur {
+   size {{PDfilter17.size*(20/Stepswitch.which) x207 0} {PDfilter17.size*(20/Stepswitch.which)}}
+   name PDfilter22
+   xpos 1021
+   ypos 1427
+  }
+push $N958d4b10
+  Grade {
+   channels Iblurmask
+   blackpoint {{(18/Stepswitch.which)}}
+   whitepoint {{(19/Stepswitch.which)}}
+   white_clamp true
+   name Grade6
+   xpos 1243
+   ypos 1339
+  }
+push $N958da990
+  Blur {
+   size {{PDfilter17.size*(19/Stepswitch.which) x207 0} {PDfilter17.size*(19/Stepswitch.which)}}
+   name PDfilter11
+   xpos 1021
+   ypos 1339
+  }
+push $N958d8b30
+  Grade {
+   channels Iblurmask
+   blackpoint {{(17/Stepswitch.which)}}
+   whitepoint {{(18/Stepswitch.which)}}
+   white_clamp true
+   name Grade7
+   xpos 1243
+   ypos 1241
+  }
+push $N958db3b0
+  Blur {
+   size {{PDfilter17.size*(18/Stepswitch.which)} {PDfilter17.size*(18/Stepswitch.which)}}
+   name PDfilter12
+   xpos 1021
+   ypos 1241
+  }
+push $N958d91f0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(16/Stepswitch.which)}}
+   whitepoint {{(17/Stepswitch.which)}}
+   white_clamp true
+   name Grade8
+   xpos 1243
+   ypos 1158
+  }
+push $N958da630
+  Blur {
+   size {{PDfilter17.size*(17/Stepswitch.which)} {PDfilter17.size*(17/Stepswitch.which)}}
+   name PDfilter13
+   xpos 1021
+   ypos 1158
+  }
+push $N958d8e90
+  Grade {
+   channels Iblurmask
+   blackpoint {{(15/Stepswitch.which)}}
+   whitepoint {{(16/Stepswitch.which)}}
+   white_clamp true
+   name Grade9
+   xpos 1243
+   ypos 1078
+  }
+push $N958d7030
+  Blur {
+   size {{PDfilter17.size*(16/Stepswitch.which)} {PDfilter17.size*(16/Stepswitch.which)}}
+   name PDfilter14
+   xpos 1021
+   ypos 1078
+  }
+push $N958d1f30
+  Grade {
+   channels Iblurmask
+   blackpoint {{(14/Stepswitch.which)}}
+   whitepoint {{(15/Stepswitch.which)}}
+   white_clamp true
+   name Grade10
+   xpos 1243
+   ypos 1000
+  }
+push $N958da2d0
+  Blur {
+   size {{PDfilter17.size*(15/Stepswitch.which)} {PDfilter17.size*(15/Stepswitch.which)}}
+   name PDfilter15
+   xpos 1021
+   ypos 1000
+  }
+push $N958d4450
+  Grade {
+   channels Iblurmask
+   blackpoint {{(13/Stepswitch.which)}}
+   whitepoint {{(14/Stepswitch.which)}}
+   black_clamp false
+   white_clamp true
+   name Grade16
+   xpos 1243
+   ypos 924
+  }
+push $N958d6970
+  Blur {
+   size {{PDfilter17.size*(14/Stepswitch.which)} {PDfilter17.size*(14/Stepswitch.which)}}
+   name PDfilter16
+   xpos 1021
+   ypos 924
+  }
+push $N958d87d0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(12/Stepswitch.which)}}
+   whitepoint {{(13/Stepswitch.which)}}
+   white_clamp true
+   name Grade17
+   xpos 1243
+   ypos 846
+  }
+push $N958d5890
+  Blur {
+   size {{PDfilter17.size*(13/Stepswitch.which)} {PDfilter17.size*(13/Stepswitch.which)}}
+   name PDfilter18
+   xpos 1023
+   ypos 846
+  }
+push $N958d76f0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(11/Stepswitch.which)}}
+   whitepoint {{(12/Stepswitch.which)}}
+   white_clamp true
+   name Grade18
+   xpos 1243
+   ypos 774
+  }
+push $N958d9f70
+  Blur {
+   size {{PDfilter17.size*(12/Stepswitch.which)} {PDfilter17.size*(12/Stepswitch.which)}}
+   name PDfilter19
+   xpos 1023
+   ypos 774
+  }
+push $N958d9550
+  Grade {
+   channels Iblurmask
+   blackpoint {{(10/Stepswitch.which)}}
+   whitepoint {{(11/Stepswitch.which)}}
+   white_clamp true
+   name Grade19
+   xpos 1243
+   ypos 705
+  }
+push $N958d6610
+  Blur {
+   size {{PDfilter17.size*(11/Stepswitch.which)} {PDfilter17.size*(11/Stepswitch.which)}}
+   name PDfilter20
+   xpos 1023
+   ypos 705
+  }
+push $N958d3a30
+  Grade {
+   channels Iblurmask
+   blackpoint {{(9/Stepswitch.which)}}
+   whitepoint {{(10/Stepswitch.which)}}
+   white_clamp true
+   name Grade20
+   xpos 1243
+   ypos 630
+  }
+push $N958d62b0
+  Blur {
+   size {{PDfilter17.size*(10/Stepswitch.which)} {PDfilter17.size*(10/Stepswitch.which)}}
+   name PDfilter21
+   xpos 1023
+   ypos 630
+  }
+push $N958d8470
+  Grade {
+   channels Iblurmask
+   blackpoint {{(8/Stepswitch.which)}}
+   whitepoint {{(9/Stepswitch.which)}}
+   white_clamp true
+   name Grade1
+   xpos 1243
+   ypos 546
+  }
+push $N958d3370
+  Blur {
+   size {{PDfilter17.size*(9/Stepswitch.which) x207 0} {PDfilter17.size*(9/Stepswitch.which)}}
+   name PDfilter1
+   xpos 1021
+   ypos 546
+  }
+push $N958d8110
+  Grade {
+   channels Iblurmask
+   blackpoint {{(7/Stepswitch.which)}}
+   whitepoint {{(8/Stepswitch.which)}}
+   white_clamp true
+   name Grade2
+   xpos 1243
+   ypos 448
+  }
+push $N958d5530
+  Blur {
+   size {{PDfilter17.size*(8/Stepswitch.which)} {PDfilter17.size*(8/Stepswitch.which)}}
+   name PDfilter2
+   xpos 1021
+   ypos 448
+  }
+push $N958d2950
+  Grade {
+   channels Iblurmask
+   blackpoint {{(6/Stepswitch.which)}}
+   whitepoint {{(7/Stepswitch.which)}}
+   white_clamp true
+   name Grade3
+   xpos 1243
+   ypos 365
+  }
+push $N958d9c10
+  Blur {
+   size {{PDfilter17.size*(7/Stepswitch.which)} {PDfilter17.size*(7/Stepswitch.which)}}
+   name PDfilter3
+   xpos 1021
+   ypos 365
+  }
+push $N958d51d0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(5/Stepswitch.which)}}
+   whitepoint {{(6/Stepswitch.which)}}
+   white_clamp true
+   name Grade4
+   xpos 1243
+   ypos 285
+  }
+push $N958d47b0
+  Blur {
+   size {{PDfilter17.size*(6/Stepswitch.which)} {PDfilter17.size*(6/Stepswitch.which)}}
+   name PDfilter4
+   xpos 1021
+   ypos 285
+  }
+push $N958d7db0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(4/Stepswitch.which)}}
+   whitepoint {{(5/Stepswitch.which)}}
+   white_clamp true
+   name Grade5
+   xpos 1243
+   ypos 207
+  }
+push $N958d1bd0
+  Blur {
+   size {{PDfilter17.size*(5/Stepswitch.which)} {PDfilter17.size*(5/Stepswitch.which)}}
+   name PDfilter5
+   xpos 1021
+   ypos 207
+  }
+push $N958d7a50
+  Grade {
+   channels Iblurmask
+   blackpoint {{(3/Stepswitch.which)}}
+   whitepoint {{(4/Stepswitch.which)}}
+   white_clamp true
+   name Grade11
+   xpos 1243
+   ypos 131
+  }
+push $N958d3010
+  Blur {
+   size {{PDfilter17.size*(4/Stepswitch.which)} {PDfilter17.size*(4/Stepswitch.which)}}
+   name PDfilter6
+   xpos 1021
+   ypos 131
+  }
+push $N94d09510
+  Grade {
+   channels Iblurmask
+   blackpoint {{(2/Stepswitch.which)}}
+   whitepoint {{(3/Stepswitch.which)}}
+   white_clamp true
+   name Grade12
+   xpos 1243
+   ypos 53
+  }
+push $N958d25f0
+  Blur {
+   size {{PDfilter17.size*(3/Stepswitch.which)} {PDfilter17.size*(3/Stepswitch.which)}}
+   name PDfilter7
+   xpos 1023
+   ypos 53
+  }
+push $N94d091b0
+  Grade {
+   channels Iblurmask
+   blackpoint {{(1/Stepswitch.which)}}
+   whitepoint {{(2/Stepswitch.which)}}
+   white_clamp true
+   name Grade13
+   xpos 1243
+   ypos -19
+  }
+push $N958d2290
+  Blur {
+   size {{PDfilter17.size*(2/Stepswitch.which)} {PDfilter17.size*(2/Stepswitch.which)}}
+   name PDfilter8
+   xpos 1023
+   ypos -19
+  }
+push $N94d08e50
+  Grade {
+   channels Iblurmask
+   blackpoint {{(.5/Stepswitch.which)}}
+   whitepoint {{(1/Stepswitch.which)}}
+   white_clamp true
+   name Grade14
+   xpos 1243
+   ypos -94
+  }
+push $N958d5f50
+  Blur {
+   size {{PDfilter17.size*(1/Stepswitch.which)} {PDfilter17.size*(1/Stepswitch.which)}}
+   name PDfilter9
+   xpos 1023
+   ypos -94
+  }
+push $N94d08790
+  Grade {
+   channels Iblurmask
+   blackpoint {{(.25/Stepswitch.which)}}
+   whitepoint {{(.5/Stepswitch.which)}}
+   white_clamp true
+   name Grade15
+   xpos 1243
+   ypos -165
+  }
+push $N958d5bf0
+  Blur {
+   size {{PDfilter17.size*(.5/Stepswitch.which)} {PDfilter17.size*(.5/Stepswitch.which)}}
+   name PDfilter10
+   xpos 1023
+   ypos -165
+  }
+push $N94d08430
+  Grade {
+   channels Iblurmask
+   whitepoint {{(.25/Stepswitch.which)}}
+   white_clamp true
+   name Grade22
+   xpos 1243
+   ypos -235
+  }
+push $N958d3d90
+  Blur {
+   size {{PDfilter17.size*(.25/Stepswitch.which)} {PDfilter17.size*(.25/Stepswitch.which)}}
+   name PDfilter23
+   xpos 1023
+   ypos -235
+  }
+push $N958d98b0
+  Dot {
+   name Dot39
+   xpos 1167
+   ypos -334
+  }
+set N958e3750 [stack 0]
+  Keymix {
+   inputs 3
+   channels rgba
+   maskChannel Iblurmask.a
+   name Keymix3
+   xpos 1133
+   ypos -235
+  }
+  set C958ca910 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos -165
+   selected false
+  }
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos -94
+   selected false
+  }
+set N958cb9f0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos -19
+   selected false
+  }
+set N958cac70 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos 53
+   selected false
+  }
+set N958c9b90 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 131
+   selected false
+  }
+set N958c79d0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 207
+   selected false
+  }
+set N958c7d30 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 285
+   selected false
+  }
+set N958c83f0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 365
+   selected false
+  }
+set N958c6c50 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 448
+   selected false
+  }
+set N958c4a90 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 546
+   selected false
+  }
+set N958c5b70 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos 630
+   selected false
+  }
+set N958ca250 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos 705
+   selected false
+  }
+set N958c8750 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos 774
+   selected false
+  }
+set N958c8ab0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1133
+   ypos 846
+   selected false
+  }
+set N958c5ed0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 924
+   selected false
+  }
+set N958cb330 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1000
+   selected false
+  }
+set N958c8e10 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1078
+   selected false
+  }
+set N958c9170 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1158
+   selected false
+  }
+set N958c94d0 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1241
+   selected false
+  }
+set N958c6230 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1339
+   selected false
+  }
+set N958c9830 [stack 0]
+clone $C958ca910 {
+   inputs 3
+   xpos 1131
+   ypos 1427
+   selected false
+  }
+push $N958c9830
+push $N958c6230
+push $N958c94d0
+push $N958c9170
+push $N958c8e10
+push $N958cb330
+push $N958c5ed0
+push $N958c8ab0
+push $N958c8750
+push $N958ca250
+push $N958c5b70
+push $N958c4a90
+push $N958c6c50
+push $N958c83f0
+push $N958c7d30
+push $N958c79d0
+push $N958c9b90
+push $N958cac70
+push $N958cb9f0
+push $N958e3750
+  Switch {
+   inputs 21
+   which {{Steps}}
+   name Stepswitch
+   xpos 2093
+   ypos -337
+  }
+set N7633d450 [stack 0]
+  Dot {
+   name Dot34
+   xpos 3483
+   ypos 1661
+  }
+push $N958d1870
+  Dot {
+   name Dot33
+   xpos 751
+   ypos 1661
+  }
+  Switch {
+   inputs 2
+   which {{HighQuality}}
+   name Switch1
+   xpos 3266
+   ypos 1656
+  }
+  Remove {
+   channels Iblurmask
+   name Remove1
+   xpos 3266
+   ypos 1711
+  }
+  Output {
+   name Output1
+   xpos 3266
+   ypos 1802
+  }
+  Blur {
+   inputs 0
+   size 40
+   name PDfilter17
+   xpos 383
+   ypos 465
+  }
+push $N7633d450
+  Viewer {
+   frame 100
+   channels {rgba.red rgba.green rgba.blue Iblurmask.a}
+   input_process false
+   name Viewer1
+   xpos 2529
+   ypos 1559
+  }
+ end_group
+clone $C764a94e0 {
+  xpos 863
+  ypos -650
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name DIVIDE_to_flatfield
+  xpos 863
+  ypos -567
+ }
+push $N764a9f00
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Multiply_to_match
+  xpos 975
+  ypos -457
+ }
+set N94d10470 [stack 0]
+ Group {
+  inputs 2
+  name mixTexture
+  xpos 807
+  ypos -411
+  addUserKnob {20 User}
+  addUserKnob {41 channels T Mix.channels}
+  addUserKnob {7 mix}
+  mix 1
+ }
+  Input {
+   inputs 0
+   name B
+   xpos 792
+   ypos -275
+   number 1
+  }
+  Input {
+   inputs 0
+   name A
+   xpos 565
+   ypos -268
+  }
+  Blend {
+   inputs 2
+   weight0 {{mix}}
+   weight1 {{1-weight0}}
+   normalize false
+   name Mix
+   xpos 683
+   ypos -161
+  }
+  Output {
+   name Output1
+   xpos 683
+   ypos 141
+  }
+ end_group
+push $N764a94e0
+ Switch {
+  inputs 2
+  which {{Texture}}
+  name usetexture
+  xpos 581
+  ypos -405
+ }
+push $N5a9e6ed0
+ Keymix {
+  inputs 3
+  channels rgb
+  name Keymix_patch_it_on
+  xpos 411
+  ypos -405
+ }
+ Switch {
+  inputs 2
+  which {{InspectMatte}}
+  name check_fillmask
+  xpos 581
+  ypos -252
+ }
+push $N5a9e6ed0
+ Dot {
+  name Dot2
+  xpos 370
+  ypos -1050
+ }
+ ShuffleCopy {
+  inputs 2
+  in rgb
+  red red
+  green green
+  blue blue
+  out rgb
+  name ShuffleCopy1
+  xpos 336
+  ypos -140
+ }
+ Output {
+  name Output1
+  xpos 336
+  ypos -40
+ }
+push $N764a94e0
+push $N94d10470
+ Mix {
+  inputs 2
+  name TextureStrength
+  xpos 810
+  ypos -509
+  channels all
+  mix 1
+ }
+push $N764aa260
+ Viewer {
+  input_process false
+  name Viewer1
+  selected true
+  xpos 981
+  ypos -381
+ }
+end_group

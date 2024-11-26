@@ -1,0 +1,134 @@
+#! C:/Program Files/Nuke6.3v2/Nuke6.3.exe -nx
+version 6.3 v2
+Group {
+name ZmergeAll
+ inputs 2
+ tile_color 0x4b5ec6ff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 Z_Merge}
+ addUserKnob {7 Zfalloff R 0 10}
+ addUserKnob {7 Zbias R -100 100}
+ addUserKnob {6 Bias_in_result l "Bias in Z result" +STARTLINE}
+ addUserKnob {26 info l "" +STARTLINE T "\nZ-data derived from the Z_Depth.Y channel."}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 315
+  ypos -383
+ }
+ Dot {
+  name Dot2
+  xpos 349
+  ypos -305
+ }
+set N4d26d70 [stack 0]
+add_layer {Z_Depth Z_Depth.Y Z_Depth.red Z_Depth.green Z_Depth.blue}
+ Add {
+  channels Z_Depth
+  value {{Zbias i}}
+  name ZMergeAllAddA
+  xpos 373
+  ypos -314
+ }
+ Dot {
+  name Dot4
+  xpos 466
+  ypos -305
+ }
+set N4d25ce0 [stack 0]
+ Input {
+  inputs 0
+  name Input2
+  xpos 626
+  ypos -384
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 660
+  ypos -306
+ }
+set N49c38d0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 550
+  ypos -306
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels {Z_Depth.Y -Z_Depth.red -Z_Depth.green none}
+  Bchannels {Z_Depth.Y -Z_Depth.red -Z_Depth.green none}
+  output {Z_Depth.Y -Z_Depth.red -Z_Depth.green none}
+  name ZMergeAllmask
+  xpos 474
+  ypos -258
+ }
+ Multiply {
+  channels {Z_Depth.Y -Z_Depth.red -Z_Depth.green none}
+  value {{1/Zfalloff i}}
+  name ZMergeAllfalloff
+  xpos 474
+  ypos -222
+  addUserKnob {20 User}
+ }
+ Clamp {
+  channels {Z_Depth.Y -Z_Depth.red -Z_Depth.green none}
+  name ZMergeAllClamp
+  xpos 474
+  ypos -186
+ }
+push $N49c38d0
+ Dot {
+  name ZMergeAllA
+  xpos 659
+  ypos -223
+ }
+set N4b7db60 [stack 0]
+push $N4d25ce0
+push $N4d26d70
+ Switch {
+  inputs 2
+  which {{Bias_in_result i}}
+  name ZMergeAllBias_affects_z
+  selected true
+  xpos 315
+  ypos -267
+ }
+ Dot {
+  name ZMergeAllB
+  xpos 349
+  ypos -225
+ }
+set N4b80d10 [stack 0]
+ Merge2 {
+  inputs 2
+  operation under
+  name ZMergeAllUnder
+  xpos 415
+  ypos -101
+ }
+push $N4b80d10
+push $N4b7db60
+ Merge2 {
+  inputs 2
+  operation under
+  name ZMergeAllUnder2
+  xpos 534
+  ypos -103
+ }
+ Keymix {
+  inputs 3
+  maskChannel Z_Depth.Y
+  name ZMergeAllKeymix
+  xpos 474
+  ypos -22
+ }
+ Output {
+  name Output1
+  xpos 474
+  ypos 78
+ }
+end_group

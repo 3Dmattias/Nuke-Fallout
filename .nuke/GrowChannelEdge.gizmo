@@ -1,0 +1,159 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name GrowChannelEdge
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {41 SourceChannel T GCinputchan.in}
+ addUserKnob {41 Destinationchannel T destinationchannel.out}
+ addUserKnob {41 Iterations T iterations.iterate}
+ addUserKnob {41 Resize t "Lower value makes for faster comping. " T undersample.scale}
+ addUserKnob {26 Info l "" +STARTLINE T "\nNeeds Binary channel to work..."}
+ addUserKnob {41 Binarymask T GCgetmask.in}
+ addUserKnob {41 Subchannel T GCgetmask.red}
+}
+ Input {
+  inputs 0
+  name InputBinary
+  xpos -366
+  ypos -323
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputSrc
+  xpos -57
+  ypos -318
+ }
+ Dot {
+  name Dot1
+  xpos -23
+  ypos -243
+ }
+set N62372c00 [stack 0]
+add_layer {GrowChan GrowChan.X GrowChan.Y GrowChan.Z}
+ Shuffle {
+  in none
+  out GrowChan
+  name GCinputchan
+  xpos -265
+  ypos -295
+ }
+add_layer {TMPBool TMPBool.InOut}
+ ShuffleCopy {
+  inputs 2
+  in none
+  red off
+  out TMPBool
+  name GCgetmask
+  xpos -265
+  ypos -249
+ }
+Multiply {
+ channels GrowChan
+ value 0
+ maskChannelInput TMPBool.InOut
+ invert_mask true
+ name Cut_out_edges
+ xpos -265
+ ypos -244
+}
+ Reformat {
+  type scale
+  format "320 180 0 0 320 180 1 quart"
+  filter Impulse
+  name undersample
+  xpos -265
+  ypos -221
+ }
+ Clamp {
+  channels TMPBool
+  name GCClampmask
+  xpos -265
+  ypos -195
+ }
+ SYN_Convolve {
+  channels {GrowChan.X GrowChan.Y GrowChan.Z TMPBool.InOut}
+  filter Expand
+  name GC_grow_itr1
+  xpos -265
+  ypos -157
+ }
+set N62376b60 [stack 0]
+ SYN_Convolve {
+  channels {GrowChan.X GrowChan.Y GrowChan.Z TMPBool.InOut}
+  filter Expand
+  name GC_grow_itr2
+  xpos -348
+  ypos -103
+ }
+set N62377040 [stack 0]
+ SYN_Convolve {
+  channels {GrowChan.X GrowChan.Y GrowChan.Z TMPBool.InOut}
+  filter {{parent.GC_grow_itr3_filter}}
+  name GC_grow_itr3
+  xpos -399
+  ypos -50
+ }
+push $N62377040
+push $N62376b60
+ Switch {
+  inputs 3
+  which {{iterate-1}}
+  name iterations
+  xpos -265
+  ypos 12
+  addUserKnob {20 User}
+  addUserKnob {3 iterate}
+  iterate 1
+ }
+ Unpremult {
+  channels GrowChan
+  alpha TMPBool.InOut
+  name Gc_unpremultsrc
+  xpos -265
+  ypos 82
+ }
+ Remove {
+  channels TMPBool
+  name GCkilltmp
+  xpos -265
+  ypos 120
+ }
+ Reformat {
+  type "to box"
+  format "1920 1080 0 0 1920 1080 1 HD"
+  box_width {{InputSrc.width i}}
+  box_height {{InputSrc.height i}}
+  box_fixed true
+  resize distort
+  filter Notch
+  name GC_setoriginal_resoultion
+  selected true
+  xpos -265
+  ypos 184
+ }
+push $N62372c00
+ ShuffleCopy {
+  inputs 2
+  in GrowChan
+  red red
+  green green
+  blue blue
+  out none
+  name destinationchannel
+  xpos -57
+  ypos 184
+ }
+ Remove {
+  channels GrowChan
+  name GCRemoveGrowchan
+  xpos -57
+  ypos 230
+ }
+ Output {
+  name Output1
+  xpos -57
+  ypos 330
+ }
+end_group

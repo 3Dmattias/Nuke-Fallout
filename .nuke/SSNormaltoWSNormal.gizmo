@@ -1,0 +1,152 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name SSNormaltoWSNormal
+ inputs 2
+ tile_color 0x162d41ff
+ addUserKnob {20 User}
+ addUserKnob {41 in l "Normal channel" T whatZ.in}
+ addUserKnob {41 out l "Normal out" T wherePOS.out}
+}
+ Input {
+  inputs 0
+  name InputNormal
+  xpos 641
+  ypos -345
+ }
+set N2e8aa810 [stack 0]
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in TMP
+  red black
+  green black
+  blue black
+  alpha black
+  out TMP
+  name matrixbase
+  xpos 432
+  ypos -261
+ }
+set N2e8aab80 [stack 0]
+ Add {
+  channels TMP
+  value {{TM1.world_matrix.0} {TM1.world_matrix.4} {TM1.world_matrix.8} {curve}}
+  name Mrow1
+  selected true
+  xpos 326
+  ypos -158
+ }
+push $N2e8aa810
+ Shuffle {
+  in Normal
+  out TMP
+  name whatZ
+  xpos 641
+  ypos -110
+ }
+set N2e8ab260 [stack 0]
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.X
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.X
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.X
+  name mulmergeX
+  xpos 326
+  ypos -9
+ }
+push 0
+push $N2e8aab80
+ Add {
+  channels TMP
+  value {{TM1.world_matrix.1} {TM1.world_matrix.5} {TM1.world_matrix.9} {curve}}
+  name Mrow2
+  xpos 432
+  ypos -159
+ }
+push $N2e8ab260
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.Y
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.Y
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.Y
+  name mulmergeY
+  xpos 432
+  ypos -7
+ }
+push $N2e8aab80
+ Add {
+  channels TMP
+  value {{TM1.world_matrix.2} {TM1.world_matrix.6} {TM1.world_matrix.10} {curve}}
+  name Mrow3
+  xpos 531
+  ypos -161
+ }
+push $N2e8ab260
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.Z
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.Z
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.Z
+  channel3 none
+  name mulmergeZ
+  xpos 531
+  ypos -5
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name Addarall
+  xpos 432
+  ypos 77
+ }
+ Shuffle {
+  in TMP
+  alpha black
+  out Normal
+  name wherePOS
+  xpos 432
+  ypos 168
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 432
+  ypos 251
+ }
+ Output {
+  name Output1
+  xpos 432
+  ypos 306
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 239
+  ypos -346
+  number 1
+ }
+ Axis2 {
+  matrix {
+      {0 0 0 0}
+      {0 0 0 0}
+      {0 0 0 0}
+      {0 0 0 0}
+    }
+  name TM1
+  xpos 249
+  ypos -282
+ }
+end_group

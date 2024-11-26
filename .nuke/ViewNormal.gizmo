@@ -1,0 +1,97 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+add_layer {pos pos.X pos.Y pos.Z}
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name ViewNormal
+ inputs 2
+ tile_color 0x162d41ff
+ addUserKnob {20 User}
+ addUserKnob {41 SurfacePosition T whatZ.in}
+ addUserKnob {41 out l "Normal out" T wherePOS.out}
+}
+ Input {
+  inputs 0
+  name InputPos
+  xpos 768
+  ypos -354
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in pos
+  out TMP
+  name whatZ
+  xpos 768
+  ypos -305
+ }
+set N15153ef0 [stack 0]
+ Shuffle {
+  in TMP
+  red black
+  green black
+  blue black
+  alpha black
+  out TMP
+  name matrixbase
+  xpos 658
+  ypos -257
+ }
+ Add {
+  channels TMP
+  value {{TM1.world_matrix.3} {TM1.world_matrix.7} {TM1.world_matrix.11} {curve}}
+  name Mrow1
+  xpos 658
+  ypos -210
+ }
+push $N15153ef0
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 (A.TMP.X-B.TMP.X)/sqrt((B.TMP.X-A.TMP.X)*(B.TMP.X-A.TMP.X)+(B.TMP.Y-A.TMP.Y)*(B.TMP.Y-A.TMP.Y)+(B.TMP.Z-A.TMP.Z)*(B.TMP.Z-A.TMP.Z))
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 (A.TMP.Y-B.TMP.Y)/sqrt((B.TMP.X-A.TMP.X)*(B.TMP.X-A.TMP.X)+(B.TMP.Y-A.TMP.Y)*(B.TMP.Y-A.TMP.Y)+(B.TMP.Z-A.TMP.Z)*(B.TMP.Z-A.TMP.Z))
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 (A.TMP.Z-B.TMP.Z)/sqrt((B.TMP.X-A.TMP.X)*(B.TMP.X-A.TMP.X)+(B.TMP.Y-A.TMP.Y)*(B.TMP.Y-A.TMP.Y)+(B.TMP.Z-A.TMP.Z)*(B.TMP.Z-A.TMP.Z))
+  channel3 none
+  name MergeExpression1
+  xpos 768
+  ypos -134
+ }
+ Shuffle {
+  in TMP
+  alpha black
+  out Normal
+  name wherePOS
+  xpos 768
+  ypos -70
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 768
+  ypos -24
+ }
+ Output {
+  name Output1
+  xpos 768
+  ypos 77
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 548
+  ypos -360
+  number 1
+ }
+ Axis2 {
+  matrix {
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+    }
+  name TM1
+  xpos 558
+  ypos -281
+ }
+end_group

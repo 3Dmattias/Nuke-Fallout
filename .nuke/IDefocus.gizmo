@@ -1,0 +1,665 @@
+#! C:/Program Files/Nuke6.3v4/Nuke6.3.exe -nx
+version 6.3 v4
+Group {
+name IDefocus
+ inputs 2
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 IDefocus}
+ addUserKnob {41 channels T Keymix3.channels}
+ addUserKnob {41 defocus T DefocusGEN.defocus}
+ addUserKnob {41 ratio l "aspect ratio" T DefocusGEN.ratio}
+ addUserKnob {41 Blurchannel T Shuffle6.in}
+ addUserKnob {41 subchannel T Shuffle6.red}
+ addUserKnob {6 HighQuality l "High Quality" +STARTLINE}
+ HighQuality true
+}
+ Input {
+  inputs 0
+  name InputControl
+  xpos 1032
+  ypos -517
+  number 1
+ }
+add_layer {Iblurmask Iblurmask.a}
+ AddChannels {
+  channels Iblurmask
+  name AddChannels1
+  xpos 1032
+  ypos -444
+ }
+ Shuffle {
+  out Iblurmask
+  name Shuffle6
+  xpos 1032
+  ypos -394
+ }
+ Dot {
+  name Dot41
+  xpos 1066
+  ypos -277
+ }
+set N233db080 [stack 0]
+ Dot {
+  name Dot42
+  xpos 1372
+  ypos -277
+ }
+ Dot {
+  name Dot16
+  xpos 1372
+  ypos -153
+ }
+set N233db6e0 [stack 0]
+ Dot {
+  name Dot17
+  xpos 1372
+  ypos -115
+ }
+set N233dba10 [stack 0]
+ Dot {
+  name Dot18
+  xpos 1372
+  ypos -77
+ }
+set N233dbd40 [stack 0]
+ Dot {
+  name Dot19
+  xpos 1372
+  ypos -39
+ }
+set N233dc070 [stack 0]
+ Dot {
+  name Dot20
+  xpos 1372
+  ypos -3
+ }
+set N233dc3a0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 1372
+  ypos 35
+ }
+set N233dc6d0 [stack 0]
+ Dot {
+  name Dot2
+  xpos 1372
+  ypos 73
+ }
+set N234af5b0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 1372
+  ypos 111
+ }
+set N234af8e0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1372
+  ypos 149
+ }
+set N234afc10 [stack 0]
+ Dot {
+  name Dot5
+  xpos 1372
+  ypos 187
+ }
+ Grade {
+  channels Iblurmask
+  blackpoint 0.9
+  white_clamp true
+  name Grade1
+  xpos 1243
+  ypos 177
+ }
+ Input {
+  inputs 0
+  name InputSrc
+  xpos 717
+  ypos -517
+ }
+ Dot {
+  name Dot37
+  xpos 751
+  ypos -334
+ }
+set N234b08d0 [stack 0]
+ Dot {
+  name Dot38
+  xpos 948
+  ypos -334
+ }
+set N234b0c00 [stack 0]
+ Dot {
+  name Dot21
+  xpos 948
+  ypos -159
+ }
+set N234b0f30 [stack 0]
+ Dot {
+  name Dot22
+  xpos 948
+  ypos -121
+ }
+set N234b1260 [stack 0]
+ Dot {
+  name Dot23
+  xpos 948
+  ypos -83
+ }
+set N234b1590 [stack 0]
+ Dot {
+  name Dot31
+  xpos 948
+  ypos -45
+ }
+set N234b18c0 [stack 0]
+ Dot {
+  name Dot32
+  xpos 946
+  ypos -9
+ }
+set N234b1bf0 [stack 0]
+ Dot {
+  name Dot6
+  xpos 946
+  ypos 29
+ }
+set N234b1f20 [stack 0]
+ Dot {
+  name Dot7
+  xpos 946
+  ypos 67
+ }
+set N234b2250 [stack 0]
+ Dot {
+  name Dot8
+  xpos 946
+  ypos 105
+ }
+set N234b2580 [stack 0]
+ Dot {
+  name Dot9
+  xpos 946
+  ypos 143
+ }
+set N234b28b0 [stack 0]
+ Dot {
+  name Dot15
+  xpos 946
+  ypos 181
+ }
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH10
+  xpos 1004
+  ypos 177
+ }
+push $N234afc10
+ Grade {
+  channels Iblurmask
+  blackpoint 0.8
+  whitepoint 0.9
+  white_clamp true
+  name Grade2
+  xpos 1243
+  ypos 139
+ }
+push $N234b28b0
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(9/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH9
+  xpos 1005
+  ypos 139
+ }
+push $N234af8e0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.7
+  whitepoint 0.8
+  white_clamp true
+  name Grade3
+  xpos 1243
+  ypos 101
+ }
+push $N234b2580
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(8/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH8
+  xpos 1007
+  ypos 101
+ }
+push $N234af5b0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.6
+  whitepoint 0.7
+  white_clamp true
+  name Grade4
+  xpos 1243
+  ypos 63
+ }
+push $N234b2250
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(7/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH7
+  xpos 1002
+  ypos 64
+ }
+push $N233dc6d0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.5
+  whitepoint 0.6
+  white_clamp true
+  name Grade5
+  xpos 1243
+  ypos 25
+ }
+push $N234b1f20
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(6/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH6
+  xpos 1000
+  ypos 25
+ }
+push $N233dc3a0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.4
+  whitepoint 0.5
+  white_clamp true
+  name Grade11
+  xpos 1243
+  ypos -13
+ }
+push $N234b1bf0
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(5/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH5
+  xpos 1002
+  ypos -13
+ }
+push $N233dc070
+ Grade {
+  channels Iblurmask
+  blackpoint 0.3
+  whitepoint 0.4
+  white_clamp true
+  name Grade12
+  xpos 1243
+  ypos -49
+ }
+push $N234b18c0
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(4/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH4
+  xpos 1009
+  ypos -55
+ }
+push $N233dbd40
+ Grade {
+  channels Iblurmask
+  blackpoint 0.2
+  whitepoint 0.3
+  white_clamp true
+  name Grade13
+  xpos 1243
+  ypos -87
+ }
+push $N234b1590
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(3/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH3
+  xpos 1007
+  ypos -91
+ }
+push $N233dba10
+ Grade {
+  channels Iblurmask
+  blackpoint 0.1
+  whitepoint 0.2
+  white_clamp true
+  name Grade14
+  xpos 1243
+  ypos -125
+ }
+push $N234b1260
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(2/10) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name DefocusH2
+  xpos 1001
+  ypos -123
+ }
+push $N233db6e0
+ Grade {
+  channels Iblurmask
+  whitepoint 0.1
+  white_clamp true
+  name Grade15
+  xpos 1243
+  ypos -163
+ }
+push $N234b0f30
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(1/10)}}
+  ratio {{parent.DefocusGEN.ratio}}
+  name DefocusH1
+  selected true
+  xpos 1003
+  ypos -163
+ }
+push $N234b0c00
+ Dot {
+  name Dot39
+  xpos 1167
+  ypos -334
+ }
+ Keymix {
+  inputs 3
+  channels rgba
+  maskChannel Iblurmask.a
+  name Keymix3
+  xpos 1133
+  ypos -163
+ }
+ set C23508f10 [stack 0]
+clone $C23508f10 {
+  inputs 3
+  xpos 1133
+  ypos -125
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1133
+  ypos -87
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1133
+  ypos -49
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos -13
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos 25
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos 63
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos 101
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos 139
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 1131
+  ypos 177
+  selected false
+ }
+ Dot {
+  name Dot34
+  xpos 1165
+  ypos 314
+ }
+push $N233db080
+ Dot {
+  name Dot40
+  xpos 721
+  ypos -277
+ }
+ Dot {
+  name Dot10
+  xpos 721
+  ypos -188
+ }
+set N235cd590 [stack 0]
+ Dot {
+  name Dot11
+  xpos 721
+  ypos -79
+ }
+set N235cd8c0 [stack 0]
+ Dot {
+  name Dot24
+  xpos 721
+  ypos 24
+ }
+set N235cdbf0 [stack 0]
+ Dot {
+  name Dot26
+  xpos 721
+  ypos 136
+ }
+set N235cdf20 [stack 0]
+ Dot {
+  name Dot28
+  xpos 721
+  ypos 237
+ }
+ Grade {
+  channels Iblurmask
+  blackpoint 0.8
+  white_clamp true
+  name Grade10
+  xpos 592
+  ypos 227
+ }
+push $N234b08d0
+ Dot {
+  name Dot36
+  xpos 519
+  ypos -334
+ }
+set N235ce8b0 [stack 0]
+ Dot {
+  name Dot13
+  xpos 297
+  ypos -334
+ }
+ Dot {
+  name Dot12
+  xpos 297
+  ypos -188
+ }
+set N235cef10 [stack 0]
+ Dot {
+  name Dot14
+  xpos 297
+  ypos -79
+ }
+set N235cf240 [stack 0]
+ Dot {
+  name Dot25
+  xpos 297
+  ypos 24
+ }
+set N2362d5b0 [stack 0]
+ Dot {
+  name Dot27
+  xpos 297
+  ypos 136
+ }
+set N2362d8e0 [stack 0]
+ Dot {
+  name Dot29
+  xpos 297
+  ypos 237
+ }
+ Defocus {
+  channels rgba
+  defocus 0
+  name DefocusGEN
+  xpos 348
+  ypos 234
+ }
+push $N235cdf20
+ Grade {
+  channels Iblurmask
+  blackpoint 0.6
+  whitepoint 0.8
+  white_clamp true
+  name Grade9
+  xpos 592
+  ypos 126
+ }
+push $N2362d8e0
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(4/5) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name Defocus4
+  xpos 349
+  ypos 133
+ }
+push $N235cdbf0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.4
+  whitepoint 0.6
+  white_clamp true
+  name Grade8
+  xpos 592
+  ypos 14
+ }
+push $N2362d5b0
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(3/5) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name Defocus3
+  xpos 351
+  ypos 21
+ }
+push $N235cd8c0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.2
+  whitepoint 0.4
+  white_clamp true
+  name Grade7
+  xpos 592
+  ypos -89
+ }
+push $N235cf240
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(2/5) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name Defocus2
+  xpos 353
+  ypos -89
+ }
+push $N235cd590
+ Grade {
+  channels Iblurmask
+  whitepoint 0.2
+  white_clamp true
+  name Grade6
+  xpos 592
+  ypos -198
+ }
+push $N235cef10
+ Defocus {
+  channels rgba
+  defocus {{DefocusGEN.defocus*(1/5) i}}
+  ratio {{parent.DefocusGEN.ratio i}}
+  name Defocus1
+  xpos 349
+  ypos -192
+ }
+push $N235ce8b0
+clone $C23508f10 {
+  inputs 3
+  xpos 482
+  ypos -198
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 482
+  ypos -89
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 482
+  ypos 14
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 482
+  ypos 126
+  selected false
+ }
+clone $C23508f10 {
+  inputs 3
+  xpos 482
+  ypos 227
+  selected false
+ }
+ Dot {
+  name Dot33
+  xpos 516
+  ypos 314
+ }
+ Switch {
+  inputs 2
+  which {{parent.HighQuality}}
+  name Switch1
+  xpos 796
+  ypos 310
+ }
+ Remove {
+  channels Iblurmask
+  name Remove1
+  xpos 796
+  ypos 365
+ }
+ Output {
+  name Output1
+  xpos 796
+  ypos 456
+ }
+end_group

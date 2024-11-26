@@ -1,0 +1,100 @@
+#! C:/Program Files/Nuke7.0v4/Nuke7.0.exe -nx
+version 7.0 v4
+Group {
+name HueCompress
+ tile_color 0x769cb8ff
+ addUserKnob {20 HueCompression}
+ addUserKnob {41 Color T HUEpick.COLOR}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 range T CompressHue.range}
+ addUserKnob {41 falloff T CompressHue.falloff}
+ addUserKnob {41 compression T CompressHue.compression}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -153
+  ypos 127
+ }
+ Dot {
+  name Dot1
+  xpos -119
+  ypos 167
+ }
+set Nf45b8ae0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -229
+  ypos 222
+ }
+ NoOp {
+  name HUEpick
+  xpos -263
+  ypos 343
+  addUserKnob {20 User}
+  addUserKnob {7 HUE}
+  HUE {{"COLOR.r==COLOR.g&&COLOR.r==COLOR.b?0:(fmod(((COLOR.r==max(COLOR.r,COLOR.g,COLOR.b)?(COLOR.g-COLOR.b)/(max(COLOR.r,COLOR.g,COLOR.b)-min(COLOR.r,COLOR.g,COLOR.b)):COLOR.g==max(COLOR.r,COLOR.g,COLOR.b)?2+(COLOR.b-COLOR.r)/(max(COLOR.r,COLOR.g,COLOR.b)-min(COLOR.r,COLOR.g,COLOR.b)):4+(COLOR.r-COLOR.g)/(max(COLOR.r,COLOR.g,COLOR.b)-min(COLOR.r,COLOR.g,COLOR.b)))*60/360+1),1))\n"}}
+  addUserKnob {18 COLOR}
+  COLOR {0.3234832883 0.1194650903 0.04514125735}
+ }
+push $Nf45b8ae0
+ Dot {
+  name Dot4
+  xpos -42
+  ypos 240
+ }
+ Dot {
+  name Dot3
+  xpos -42
+  ypos 456
+ }
+push $Nf45b8ae0
+ Colorspace {
+  colorspace_in sRGB
+  colorspace_out HSV
+  name convertToHue
+  xpos -153
+  ypos 248
+ }
+ Expression {
+  expr0 fmod((r+1-HUEpick.HUE+0.5),1)
+  name CenterHue
+  xpos -153
+  ypos 284
+ }
+ Expression {
+  expr0 "r<(0.5-range/2-falloff)?r:r>(0.5-range/2-falloff)&&r<(0.5-range/2)?     (0.5-range/2-falloff)+(r-(0.5-range/2-falloff))*((((0.5-range/2)*(1-compression))+0.5*compression)-(0.5-range/2-falloff))/falloff     :r>(0.5+range/2)&&r<(0.5+range/2+falloff)?    (0.5+range/2+falloff)+(r-(0.5+range/2+falloff))*((((0.5-range/2)*(1-compression))+0.5*compression)-(0.5-range/2-falloff))/falloff    :r>(0.5+range/2+falloff)?r:(r*(1-compression))+0.5*compression"
+  name CompressHue
+  xpos -124
+  ypos 348
+  addUserKnob {20 User}
+  addUserKnob {7 range}
+  addUserKnob {7 falloff}
+  addUserKnob {7 compression}
+ }
+ Expression {
+  expr0 fmod((r+1+HUEpick.HUE+0.5),1)
+  name ReshuffleHue
+  xpos -153
+  ypos 403
+ }
+ Colorspace {
+  colorspace_in HSV
+  colorspace_out sRGB
+  name converttoRGB
+  xpos -153
+  ypos 445
+ }
+ Switch {
+  inputs 2
+  which {{parent.CompressHue.range==0?1:0}}
+  name ifnotinuse
+  xpos -153
+  ypos 511
+ }
+ Output {
+  name Output1
+  xpos -153
+  ypos 611
+ }
+end_group

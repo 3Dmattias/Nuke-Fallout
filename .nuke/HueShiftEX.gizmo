@@ -1,0 +1,457 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name HueShiftEX
+inputs 2
+tile_color 0x55bfffff
+addUserKnob {20 HUE_EX l "Hue Extended"}
+addUserKnob {41 channels T ColorMatrixHUE.channels}
+addUserKnob {41 hueval T huespin.hueval}
+addUserKnob {41 saturation T huespin.saturation}
+addUserKnob {7 luminance R 0 3}
+luminance 1
+addUserKnob {41 whitepoint T whitepointaxis.whitepoint}
+addUserKnob {26 s l "" +STARTLINE T " "}
+addUserKnob {26 ExtendedSaturationControl l "" +STARTLINE T "Extended Saturation"}
+addUserKnob {26 satctrl l "" -STARTLINE}
+addUserKnob {41 saturationaxis T satdiraxis1.saturationaxis}
+addUserKnob {41 saturationX l "saturation along axis" T saturationAxis.saturationX}
+addUserKnob {41 saturationY l "saturation off axis" T saturationAxis.saturationY}
+addUserKnob {41 redHUE T redHUEspin.redHUE}
+addUserKnob {41 redSAT T redHUEspin.redSAT}
+addUserKnob {41 greenHUE T GreenHUEspin.greenHUE}
+addUserKnob {41 greenSAT T GreenHUEspin.greenSAT}
+addUserKnob {41 blueHUE T BlueHUEspin.blueHUE}
+addUserKnob {41 blueSAT T BlueHUEspin.blueSAT}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T ColorMatrixHUE.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T ColorMatrixHUE.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T ColorMatrixHUE.invert_mask}
+addUserKnob {41 fringe -STARTLINE T ColorMatrixHUE.fringe}
+addUserKnob {41 unpremult l "(un)premult by" T ColorMatrixHUE.unpremult}
+addUserKnob {41 invert_unpremult l invert -STARTLINE T ColorMatrixHUE.invert_unpremult}
+addUserKnob {41 mix T ColorMatrixHUE.mix}
+}
+Input {
+inputs 0
+name mask
+xpos 620
+ypos 36
+number 1
+}
+Input {
+inputs 0
+name color
+xpos 730
+ypos 36
+}
+ColorMatrix {
+inputs 1+1
+matrix {
+    {{OutputMatrix.world_matrix.0} {OutputMatrix.world_matrix.1} {OutputMatrix.world_matrix.2}}
+    {{OutputMatrix.world_matrix.4} {OutputMatrix.world_matrix.5} {OutputMatrix.world_matrix.6}}
+    {{OutputMatrix.world_matrix.8} {OutputMatrix.world_matrix.9} {OutputMatrix.world_matrix.10}}
+  }
+name ColorMatrixHUE
+tile_color 0xe95600ff
+xpos 730
+ypos 132
+}
+Output {
+name Output1
+xpos 730
+ypos 228
+}
+Viewer {
+inputs 0
+frame_range 1319815-1319893
+fps 25
+name Viewer1
+xpos 730
+ypos 278
+}
+Axis2 {
+inputs 0
+display off
+selectable false
+useMatrix true
+matrix {
+    {{normalized.r} {(normalized.b*blu.g)-(normalized.g*blu.b)} {blu.r} 0}
+    {{normalized.g} {(normalized.r*blu.b)-(normalized.b*blu.r)} 0 0}
+    {{normalized.b} {(normalized.g*blu.r)-(normalized.r*blu.g)} {blu.b} 0}
+    {0 0 0 1}
+  }
+name whitepointaxis
+tile_color 0xe956ffff
+xpos 850
+ypos -702
+addUserKnob {20 User}
+addUserKnob {18 whitepoint}
+whitepoint {1 1 1}
+addUserKnob {6 whitepoint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 normalized}
+normalized {{whitepoint.r/(sqrt(whitepoint.r*whitepoint.r+whitepoint.g*whitepoint.g+whitepoint.b*whitepoint.b))} {whitepoint.g/(sqrt(whitepoint.r*whitepoint.r+whitepoint.g*whitepoint.g+whitepoint.b*whitepoint.b))} {whitepoint.b/(sqrt(whitepoint.r*whitepoint.r+whitepoint.g*whitepoint.g+whitepoint.b*whitepoint.b))}}
+addUserKnob {6 normalized_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 blu}
+blu {{-normalized.b} 0 {normalized.r}}
+addUserKnob {6 blu_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+set Ne1dd0000 [stack 0]
+Group {
+name InvertMatrixWP
+tile_color 0xe956ffff
+xpos 1170
+ypos -346
+addUserKnob {20 InvertedMatrix l "Inverted Matrix"}
+addUserKnob {41 world_matrix l "" -STARTLINE T invmatrix.world_matrix}
+}
+Input {
+inputs 0
+name Axis
+xpos 1170
+ypos -826
+}
+Axis2 {
+name SM
+tile_color 0xff540000
+xpos 1180
+ypos -750
+addUserKnob {20 User}
+addUserKnob {7 Determinant}
+Determinant {{world_matrix.0*(world_matrix.5*world_matrix.10-world_matrix.6*world_matrix.9)+world_matrix.1*(world_matrix.6*world_matrix.8-world_matrix.4*world_matrix.10)+world_matrix.2*(world_matrix.4*world_matrix.9-world_matrix.5*world_matrix.8)}}
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{1/SM.Determinant*(SM.world_matrix.5*SM.world_matrix.10-SM.world_matrix.6*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.9-SM.world_matrix.1*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.6-SM.world_matrix.2*SM.world_matrix.5)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.6*SM.world_matrix.8-SM.world_matrix.4*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.10-SM.world_matrix.2*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.4-SM.world_matrix.0*SM.world_matrix.6)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.4*SM.world_matrix.9-SM.world_matrix.5*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.8-SM.world_matrix.0*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.5-SM.world_matrix.1*SM.world_matrix.4)} 0}
+    {0 0 0 1}
+  }
+name rotscaleMX
+tile_color 0xff0000
+xpos 1290
+ypos -654
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{rotscaleMX.matrix.0} {rotscaleMX.matrix.1} {rotscaleMX.matrix.2} {-(SM.world_matrix.3*rotscaleMX.matrix.0+SM.world_matrix.7*rotscaleMX.matrix.1+SM.world_matrix.11*rotscaleMX.matrix.2)}}
+    {{rotscaleMX.matrix.4} {rotscaleMX.matrix.5} {rotscaleMX.matrix.6} {-(SM.world_matrix.3*rotscaleMX.matrix.4+SM.world_matrix.7*rotscaleMX.matrix.5+SM.world_matrix.11*rotscaleMX.matrix.6)}}
+    {{rotscaleMX.matrix.8} {rotscaleMX.matrix.9} {rotscaleMX.matrix.10} {-(SM.world_matrix.3*rotscaleMX.matrix.8+SM.world_matrix.7*rotscaleMX.matrix.9+SM.world_matrix.11*rotscaleMX.matrix.10)}}
+    {0 0 0 1}
+  }
+name invmatrix
+tile_color 0xff00
+xpos 1180
+ypos -558
+}
+Output {
+name Output1
+xpos 1170
+ypos -442
+}
+end_group
+push $Ne1dd0000
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {1 {normalized2d.r} 0 0}
+    {0 {normalized2d.g} {-normalized2d.b} 0}
+    {0 {normalized2d.b} {normalized2d.g} 0}
+    {0 0 0 1}
+  }
+name spintosatdir
+tile_color 0x55ffbfff
+xpos 850
+ypos -414
+addUserKnob {20 User}
+addUserKnob {18 normalized2d}
+normalized2d {0 {twodsatdir.g/sqrt(twodsatdir.g*twodsatdir.g+twodsatdir.b*twodsatdir.b)} {twodsatdir.b/sqrt(twodsatdir.g*twodsatdir.g+twodsatdir.b*twodsatdir.b)}}
+addUserKnob {6 normalized2d_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 twodsatdir}
+twodsatdir {{satdiraxis1.world_matrix.0} {satdiraxis1.world_matrix.4} {satdiraxis1.world_matrix.8}}
+addUserKnob {6 twodsatdir_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Axis2 {
+display off
+selectable false
+scaling {1 {saturationX} {saturationY}}
+name saturationAxis
+tile_color 0xff9fff
+xpos 960
+ypos -366
+addUserKnob {20 User}
+addUserKnob {7 saturationX l "saturation along axis" R 0 3}
+saturationX 1
+addUserKnob {7 saturationY l "saturation off axis" R 0 3}
+saturationY 1
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix}}
+    {{InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix}}
+    {{InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix}}
+    {{InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix} {InvertMatrixSATDIR.world_matrix}}
+  }
+name unspinsatdir
+tile_color 0x55ffbfff
+xpos 850
+ypos -318
+}
+Axis2 {
+display off
+selectable false
+rotate {{huespin.hueval} 0 0}
+scaling {{luminance} {saturation} {saturation}}
+name huespin
+tile_color 0xe9569eff
+xpos 960
+ypos -270
+addUserKnob {20 User}
+addUserKnob {7 saturation R 0 3}
+saturation 1
+addUserKnob {7 hueval R -360 360}
+}
+set N5b296800 [stack 0]
+Axis2 {
+display off
+selectable false
+rotate {{blueHUE} 0 0}
+scaling {1 {blueSAT} {blueSAT}}
+name BlueHUEspin
+tile_color 0xff00
+xpos 1070
+ypos -174
+addUserKnob {20 User}
+addUserKnob {7 blueSAT R 0 4}
+blueSAT 1
+addUserKnob {7 blueHUE R -120 120}
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+  }
+name inversewhitepoint4
+tile_color 0xe956ffff
+xpos 1070
+ypos -78
+}
+push $N5b296800
+Axis2 {
+display off
+selectable false
+rotate {{greenHUE} 0 0}
+scaling {1 {greenSAT} {greenSAT}}
+name GreenHUEspin
+tile_color 0xff0000
+xpos 960
+ypos -174
+addUserKnob {20 User}
+addUserKnob {7 greenSAT R 0 4}
+greenSAT 1
+addUserKnob {7 greenHUE R -120 120}
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+  }
+name inversewhitepoint3
+tile_color 0xe956ffff
+xpos 960
+ypos -78
+}
+push $N5b296800
+Axis2 {
+display off
+selectable false
+rotate {{redHUE} 0 0}
+scaling {1 {redSAT} {redSAT}}
+name redHUEspin
+tile_color 0xff000000
+xpos 850
+ypos -174
+addUserKnob {20 User}
+addUserKnob {7 redSAT R 0 4}
+redSAT 1
+addUserKnob {7 redHUE R -120 120}
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+  }
+name inversewhitepoint2
+tile_color 0xe956ffff
+xpos 850
+ypos -78
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix}}
+    {{spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix}}
+    {{spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix}}
+    {{spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix} {spintosatdir.matrix}}
+  }
+name localspinsatdir
+tile_color 0x55ffbfff
+xpos 740
+ypos -462
+}
+Group {
+name InvertMatrixSATDIR
+tile_color 0x55ffbfff
+xpos 730
+ypos -346
+addUserKnob {20 InvertedMatrix l "Inverted Matrix"}
+addUserKnob {41 world_matrix l "" -STARTLINE T invmatrix.world_matrix}
+}
+Input {
+inputs 0
+name Axis
+xpos 1170
+ypos -826
+}
+Axis2 {
+name SM
+tile_color 0xff540000
+xpos 1180
+ypos -750
+addUserKnob {20 User}
+addUserKnob {7 Determinant}
+Determinant {{world_matrix.0*(world_matrix.5*world_matrix.10-world_matrix.6*world_matrix.9)+world_matrix.1*(world_matrix.6*world_matrix.8-world_matrix.4*world_matrix.10)+world_matrix.2*(world_matrix.4*world_matrix.9-world_matrix.5*world_matrix.8)}}
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{1/SM.Determinant*(SM.world_matrix.5*SM.world_matrix.10-SM.world_matrix.6*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.9-SM.world_matrix.1*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.6-SM.world_matrix.2*SM.world_matrix.5)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.6*SM.world_matrix.8-SM.world_matrix.4*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.10-SM.world_matrix.2*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.4-SM.world_matrix.0*SM.world_matrix.6)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.4*SM.world_matrix.9-SM.world_matrix.5*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.8-SM.world_matrix.0*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.5-SM.world_matrix.1*SM.world_matrix.4)} 0}
+    {0 0 0 1}
+  }
+name rotscaleMX
+tile_color 0xff0000
+xpos 1290
+ypos -654
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{rotscaleMX.matrix.0} {rotscaleMX.matrix.1} {rotscaleMX.matrix.2} {-(SM.world_matrix.3*rotscaleMX.matrix.0+SM.world_matrix.7*rotscaleMX.matrix.1+SM.world_matrix.11*rotscaleMX.matrix.2)}}
+    {{rotscaleMX.matrix.4} {rotscaleMX.matrix.5} {rotscaleMX.matrix.6} {-(SM.world_matrix.3*rotscaleMX.matrix.4+SM.world_matrix.7*rotscaleMX.matrix.5+SM.world_matrix.11*rotscaleMX.matrix.6)}}
+    {{rotscaleMX.matrix.8} {rotscaleMX.matrix.9} {rotscaleMX.matrix.10} {-(SM.world_matrix.3*rotscaleMX.matrix.8+SM.world_matrix.7*rotscaleMX.matrix.9+SM.world_matrix.11*rotscaleMX.matrix.10)}}
+    {0 0 0 1}
+  }
+name invmatrix
+tile_color 0xff00
+xpos 1180
+ypos -558
+}
+Output {
+name Output1
+xpos 1170
+ypos -442
+}
+end_group
+Axis2 {
+inputs 0
+display off
+selectable false
+scaling {0 1 1}
+name projecttoflat
+tile_color 0x55ffbfff
+xpos 1180
+ypos -702
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+    {{InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix} {InvertMatrixWP.world_matrix}}
+  }
+name inversewhitepoint1
+tile_color 0xe956ffff
+xpos 1180
+ypos -558
+}
+Axis2 {
+display off
+selectable false
+useMatrix true
+matrix {
+    {{normalized.r} {(normalized.b*blu.g)-(normalized.g*blu.b)} {blu.r} 0}
+    {{normalized.g} {(normalized.r*blu.b)-(normalized.b*blu.r)} 0 0}
+    {{normalized.b} {(normalized.g*blu.r)-(normalized.r*blu.g)} {blu.b} 0}
+    {0 0 0 1}
+  }
+name satdiraxis1
+tile_color 0x55ffbfff
+xpos 960
+ypos -462
+addUserKnob {20 User}
+addUserKnob {18 saturationaxis}
+saturationaxis {1 0.33 0}
+addUserKnob {6 saturationaxis_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 normalized}
+normalized {{saturationaxis.r/(sqrt(saturationaxis.r*saturationaxis.r+saturationaxis.g*saturationaxis.g+saturationaxis.b*saturationaxis.b))} {saturationaxis.g/(sqrt(saturationaxis.r*saturationaxis.r+saturationaxis.g*saturationaxis.g+saturationaxis.b*saturationaxis.b))} {saturationaxis.b/(sqrt(saturationaxis.r*saturationaxis.r+saturationaxis.g*saturationaxis.g+saturationaxis.b*saturationaxis.b))}}
+addUserKnob {6 normalized_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 blu}
+blu {{-normalized.b} 0 {normalized.r}}
+addUserKnob {6 blu_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Axis2 {
+inputs 0
+display off
+selectable false
+useMatrix true
+matrix {
+    {{inversewhitepoint2.world_matrix.0} {inversewhitepoint3.world_matrix.1} {inversewhitepoint4.world_matrix.2} 0}
+    {{inversewhitepoint2.world_matrix.4} {inversewhitepoint3.world_matrix.5} {inversewhitepoint4.world_matrix.6} 0}
+    {{inversewhitepoint2.world_matrix.8} {inversewhitepoint3.world_matrix.9} {inversewhitepoint4.world_matrix.10} 0}
+    {0 0 0 1}
+  }
+name COMBIENRGBHUES
+tile_color 0xffffff00
+xpos 960
+ypos 18
+}
+Axis2 {
+selectable false
+name OutputMatrix
+tile_color 0xe95600ff
+xpos 960
+ypos 114
+}
+end_group

@@ -1,0 +1,66 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name PowerStabilizer
+ tile_color 0x4c0000ff
+ note_font Verdana
+ addUserKnob {20 User}
+ addUserKnob {41 offsetTime l "Position reference frame" T PowerStabilizer.offsetTime}
+ addUserKnob {41 offset T PowerStabilizer.offset}
+ addUserKnob {41 Source_Motion T PowerStabilizer.Source_Motion}
+ addUserKnob {41 Destination_Motion T PowerStabilizer.Destination_Motion}
+ addUserKnob {41 Destination_Weight T PowerStabilizer.Destination_Weight}
+ addUserKnob {26 ""}
+ addUserKnob {41 RotRefTime l "Rotation reference frame" T PowerStabilizer.RotRefTime}
+ addUserKnob {41 RotationOffset T PowerStabilizer.RotationOffset}
+ addUserKnob {41 SourceAim T PowerStabilizer.SourceAim}
+ addUserKnob {41 Aim T PowerStabilizer.Aim}
+ addUserKnob {41 AimWeight T PowerStabilizer.AimWeight}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 scale T PowerStabilizer.scale}
+ addUserKnob {41 filter T PowerStabilizer.filter}
+ addUserKnob {41 clamp T PowerStabilizer.clamp}
+ addUserKnob {41 black_outside l "black outside" T PowerStabilizer.black_outside}
+ addUserKnob {41 motionblur T PowerStabilizer.motionblur}
+ addUserKnob {41 shutter T PowerStabilizer.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T PowerStabilizer.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T PowerStabilizer.shuttercustomoffset}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 485
+  ypos -120
+ }
+ Transform {
+  translate {{-Source_Motion+(1-Destination_Weight)*Source_Motion+(Destination_Weight)*(Destination_Motion+offset) i} {-Source_Motion+(1-Destination_Weight)*Source_Motion+(Destination_Weight)*(Destination_Motion+offset) i}}
+  rotate {{(AimWeight)*(((SourceAim.x-Source_Motion.x)>=0?-(degrees(atan((SourceAim.y-Source_Motion.y)/(SourceAim.x-Source_Motion.x)))-RotationOffset):-(degrees(atan((SourceAim.y-Source_Motion.y)/(SourceAim.x-Source_Motion.x)))+180-RotationOffset))+((Aim.x-center.x-translate.x)>=0?degrees(atan((Aim.y-center.y-translate.x)/(Aim.x-center.x-translate.x))):(degrees(atan((Aim.y-center.y-translate.x)/(Aim.x-center.x-translate.x)))+180))) i}}
+  center {{Source_Motion i} {Source_Motion i}}
+  name PowerStabilizer
+  tile_color 0xc40002ff
+  note_font_size 15
+  xpos 485
+  ypos -80
+  addUserKnob {20 User}
+  addUserKnob {3 offsetTime l "Position reference frame"}
+  addUserKnob {12 offset}
+  offset {{Source_Motion(offsetTime)-Destination_Motion(offsetTime) i} {Source_Motion(offsetTime)-Destination_Motion(offsetTime) i}}
+  addUserKnob {12 Source_Motion}
+  addUserKnob {12 Destination_Motion}
+  addUserKnob {7 Destination_Weight}
+  addUserKnob {26 ""}
+  addUserKnob {3 RotRefTime l "Rotation reference frame"}
+  addUserKnob {7 RotationOffset R -180 180}
+  RotationOffset {{-(((SourceAim.x(RotRefTime)-Source_Motion.x(RotRefTime))>=0?-degrees(atan((SourceAim.y(RotRefTime)-Source_Motion.y(RotRefTime))/(SourceAim.x(RotRefTime)-Source_Motion.x(RotRefTime)))):-degrees(atan((SourceAim.y(RotRefTime)-Source_Motion.y(RotRefTime))/(SourceAim.x(RotRefTime)-Source_Motion.x(RotRefTime))))+180)+((Aim.x(RotRefTime)-center.x(RotRefTime)-translate.x(RotRefTime))>=0?degrees(atan((Aim.y(RotRefTime)-center.y(RotRefTime)-translate.x(RotRefTime))/(Aim.x(RotRefTime)-center.x(RotRefTime)-translate.x(RotRefTime)))):(degrees(atan((Aim.y(RotRefTime)-center.y(RotRefTime)-translate.x(RotRefTime))/(Aim.x(RotRefTime)-center.x(RotRefTime)-translate.x(RotRefTime))))+180)))}}
+  addUserKnob {12 SourceAim}
+  SourceAim {10 0}
+  addUserKnob {12 Aim}
+  Aim {10 0}
+  addUserKnob {7 AimWeight}
+ }
+ Output {
+  name Output1
+  xpos 485
+  ypos 20
+ }
+end_group

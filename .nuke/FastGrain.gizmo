@@ -1,0 +1,95 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name FastGrain
+ tile_color 0x6e4c9bff
+ addUserKnob {20 User}
+ addUserKnob {7 Amount}
+ Amount 0.08
+ addUserKnob {41 Saturation T grainsaturation5.saturation}
+ addUserKnob {18 GrainColor l " GrainColor " t "usually a bit more grain in red and blue channels" -STARTLINE}
+ GrainColor {0.6 0.4 1}
+ addUserKnob {41 size l GrainSize T grainsize.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 maskChannelInput l "" +STARTLINE T addgrain.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T addgrain.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T addgrain.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T addgrain.fringe}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 206
+  ypos 88
+ }
+ Gamma {
+  channels rgb
+  value 2.2
+  name Gingrain
+  xpos 206
+  ypos 244
+ }
+set N1b32b300 [stack 0]
+ Expression {
+  expr0 random(x,y,(frame-5))-.5
+  expr1 random(x,y,frame)-.5
+  expr2 random(x,y,(frame+10))-.5
+  channel3 none
+  name graingenerator
+  xpos 350
+  ypos 152
+ }
+ Saturation {
+  saturation 0.3
+  mode Average
+  name grainsaturation5
+  xpos 350
+  ypos 178
+ }
+ Multiply {
+  channels rgb
+  value {{max(GrainColor.r,GrainColor.g,GrainColor.b)==0?Amount:Amount*GrainColor.r/max(GrainColor.r,GrainColor.g,GrainColor.b) i} {max(GrainColor.r,GrainColor.g,GrainColor.b)==0?Amount:Amount*GrainColor.g/max(GrainColor.r,GrainColor.g,GrainColor.b) i} {max(GrainColor.r,GrainColor.g,GrainColor.b)==0?Amount:Amount*GrainColor.b/max(GrainColor.r,GrainColor.g,GrainColor.b) i} {curve i}}
+  name grainamount
+  xpos 350
+  ypos 204
+ }
+ Blur {
+  channels rgb
+  size 1.25
+  name grainsize
+  xpos 350
+  ypos 242
+ }
+push $N1b32b300
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  maskChannelInput rgba.alpha
+  name addgrain
+  xpos 285
+  ypos 289
+ }
+set N1b0e8810 [stack 0]
+ Gamma {
+  channels rgb
+  value {{1/Gingrain.value i}}
+  name Goutgrain
+  xpos 206
+  ypos 334
+ }
+ Output {
+  name Output1
+  xpos 206
+  ypos 482
+ }
+push $N1b0e8810
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos 206
+  ypos 375
+ }
+end_group

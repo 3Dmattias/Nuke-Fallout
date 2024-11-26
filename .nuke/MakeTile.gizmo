@@ -1,0 +1,295 @@
+#! C:/Program Files/Nuke7.0v4/Nuke7.0.exe -nx
+version 7.0 v4
+Group {
+name MakeTile
+ tile_color 0xbfff3bff
+ addUserKnob {20 MakeTile}
+ addUserKnob {14 Large t "Match large scale patterns" R 0 100}
+ Large 200
+ addUserKnob {14 Small t "Match small" R 0 100}
+ Small 10
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -871
+  ypos 206
+ }
+ Shuffle {
+  alpha white
+  name Mtile_Shuffle1
+  xpos -871
+  ypos 277
+ }
+ Dot {
+  name Dot1
+  xpos -837
+  ypos 416
+ }
+set N18c79c60 [stack 0]
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  name Mtile_Reformat1
+  xpos -871
+  ypos 684
+ }
+set N18c79fd0 [stack 0]
+push $N18c79c60
+ Dot {
+  name Dot2
+  xpos -698
+  ypos 416
+ }
+set N18c7a340 [stack 0]
+ Dot {
+  name Dot3
+  xpos -588
+  ypos 416
+ }
+set N18c7a6b0 [stack 0]
+ Dot {
+  name Dot4
+  xpos -506
+  ypos 416
+ }
+set N18c7aa20 [stack 0]
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  black_outside true
+  name Mtile_Reformat3
+  xpos -540
+  ypos 606
+ }
+push $N18c7aa20
+ Expression {
+  expr0 ((x/width))<(y/height)?1:0
+  name Mtile_Expression1
+  xpos -383
+  ypos 410
+ }
+set N45260790 [stack 0]
+ Mirror {
+  Horizontal true
+  name Mtile_Mirror1
+  xpos -238
+  ypos 410
+ }
+push $N45260790
+ Merge2 {
+  inputs 2
+  operation difference
+  name Mtile_Merge1
+  xpos -383
+  ypos 504
+ }
+push $N18c7a340
+ Mirror {
+  Horizontal true
+  name Mtile_Mirror2
+  xpos -732
+  ypos 450
+ }
+push $N18c7a6b0
+ Mirror {
+  Vertical true
+  name Mtile_Mirror3
+  xpos -622
+  ypos 449
+ }
+ Keymix {
+  inputs 3
+  maskChannel rgba.red
+  name Mtile_Keymix1
+  xpos -684
+  ypos 493
+ }
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  name Mtile_Reformat2
+  xpos -684
+  ypos 606
+ }
+ Merge2 {
+  inputs 2
+  name Mtile_Merge2
+  xpos -634
+  ypos 686
+ }
+push $N18c79fd0
+ Merge2 {
+  inputs 2
+  operation divide
+  name Mtile_Merge3
+  xpos -751
+  ypos 801
+ }
+ Blur {
+  size {{parent.Large}}
+  name Mtile_Blur_detailbig
+  xpos -751
+  ypos 863
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Mtile_Merge4
+  xpos -871
+  ypos 943
+ }
+ Reformat {
+  type scale
+  scale 0.3333333333
+  resize none
+  filter Impulse
+  name Mtile_Reformat4
+  xpos -871
+  ypos 1008
+ }
+ Dot {
+  name Dot5
+  xpos -837
+  ypos 1269
+ }
+set N45415540 [stack 0]
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  name Mtile_Reformat6
+  xpos -871
+  ypos 1537
+ }
+set N454158b0 [stack 0]
+push $N45415540
+ Dot {
+  name Dot6
+  xpos -698
+  ypos 1269
+ }
+set N45415c20 [stack 0]
+ Dot {
+  name Dot7
+  xpos -588
+  ypos 1269
+ }
+set N45415f90 [stack 0]
+ Dot {
+  name Dot8
+  xpos -506
+  ypos 1269
+ }
+set N45451410 [stack 0]
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  black_outside true
+  name Mtile_Reformat7
+  xpos -540
+  ypos 1459
+ }
+push $N45451410
+ Expression {
+  expr0 ((x/width))<(y/height)?1:0
+  name EMtile_xpression2
+  xpos -383
+  ypos 1263
+ }
+set N45451af0 [stack 0]
+ Mirror {
+  Horizontal true
+  name Mtile_Mirror4
+  xpos -238
+  ypos 1263
+ }
+push $N45451af0
+ Merge2 {
+  inputs 2
+  operation difference
+  name vMerge5
+  xpos -383
+  ypos 1357
+ }
+push $N45415c20
+ Mirror {
+  Horizontal true
+  name Mtile_Mirror5
+  xpos -732
+  ypos 1303
+ }
+push $N45415f90
+ Mirror {
+  Vertical true
+  name Mtile_Mirror6
+  xpos -622
+  ypos 1302
+ }
+ Keymix {
+  inputs 3
+  maskChannel rgba.red
+  name Mtile_Keymix2
+  xpos -684
+  ypos 1346
+ }
+ Reformat {
+  type scale
+  scale 3
+  resize none
+  filter Impulse
+  name Mtile_Reformat8
+  xpos -684
+  ypos 1459
+ }
+ Merge2 {
+  inputs 2
+  name Mtile_Merge6
+  xpos -634
+  ypos 1539
+ }
+push $N454158b0
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge7
+  xpos -751
+  ypos 1654
+ }
+ Blur {
+  size {{parent.Small}}
+  name Mtile_Blur_detail
+  xpos -751
+  ypos 1716
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Mtile_Merge8
+  xpos -871
+  ypos 1796
+ }
+ Reformat {
+  type scale
+  scale 0.3333333333
+  resize none
+  filter Impulse
+  name Mtile_Reformat9
+  xpos -871
+  ypos 1861
+ }
+ Output {
+  name Output1
+  xpos -871
+  ypos 1951
+ }
+end_group

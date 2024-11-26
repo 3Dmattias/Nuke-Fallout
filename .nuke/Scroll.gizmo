@@ -1,0 +1,156 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name Scroll
+ tile_color 0x50b205ff
+ addUserKnob {20 User}
+ addUserKnob {12 Scroll}
+ addUserKnob {41 filter T Reformat1.filter}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -37
+  ypos -287
+ }
+set N5a9f2a0 [stack 0]
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 57
+  ypos -195
+ }
+ Dot {
+  name Dot4
+  xpos 91
+  ypos -111
+ }
+set N5aa0d70 [stack 0]
+ Transform {
+  translate {{parent.Scroll>0?fmod(parent.Scroll,width):fmod(parent.Scroll,width)+width i} {parent.Scroll.y>0?fmod(parent.Scroll.y,height):fmod(parent.Scroll.y,height)+height i}}
+  center {{width/2 i} {height/2 i}}
+  filter {{Reformat1.filter i}}
+  name Transform1
+  xpos 57
+  ypos -27
+ }
+ set C5aa0fe0 [stack 0]
+push $N5a9f2a0
+ Dot {
+  name Dot3
+  xpos -3
+  ypos -161
+ }
+set N5aa1730 [stack 0]
+clone $C5aa0fe0 {
+  xpos -37
+  ypos -27
+  selected false
+ }
+push $N5aa0d70
+ Dot {
+  name Dot5
+  xpos 274
+  ypos -111
+ }
+set N8f89860 [stack 0]
+ Transform {
+  translate {{parent.Scroll>0?fmod(parent.Scroll,width)-width:fmod(parent.Scroll,width) i} {parent.Scroll.y>0?fmod(parent.Scroll.y,height)-height:fmod(parent.Scroll.y,height) i}}
+  center {{width/2 i} {height/2 i}}
+  filter {{Reformat1.filter i}}
+  name Transform2
+  xpos 240
+  ypos -26
+ }
+ set C8f89ad0 [stack 0]
+push $N5aa1730
+ Dot {
+  name Dot1
+  xpos 184
+  ypos -161
+ }
+set N8f8a220 [stack 0]
+clone $C8f89ad0 {
+  xpos 150
+  ypos -27
+  selected false
+ }
+push $N8f89860
+ Dot {
+  name Dot6
+  xpos 454
+  ypos -111
+ }
+ Transform {
+  translate {{parent.Scroll>0?fmod(parent.Scroll,width):fmod(parent.Scroll,width)+width i} {parent.Scroll.y>0?fmod(parent.Scroll.y,height)-height:fmod(parent.Scroll.y,height) i}}
+  center {{width/2 i} {height/2 i}}
+  filter {{Reformat1.filter}}
+  name Transform4
+  xpos 420
+  ypos -24
+ }
+ set C8f8ae50 [stack 0]
+push $N8f8a220
+ Dot {
+  name Dot7
+  xpos 364
+  ypos -161
+ }
+set N8f8b5a0 [stack 0]
+clone $C8f8ae50 {
+  xpos 330
+  ypos -22
+  selected false
+ }
+push $N8f8b5a0
+ Dot {
+  name Dot2
+  xpos 544
+  ypos -161
+ }
+ Transform {
+  translate {{parent.Scroll>0?fmod(parent.Scroll,width)-width:fmod(parent.Scroll,width)} {parent.Scroll.y>0?fmod(parent.Scroll.y,height):fmod(parent.Scroll.y,height)+height}}
+  center {{width/2} {height/2}}
+  filter {{Reformat1.filter}}
+  name Transform3
+  xpos 510
+  ypos -24
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 420
+  ypos 52
+ }
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos 240
+  ypos 115
+ }
+ Keymix {
+  inputs 3
+  name Keymix3
+  xpos 57
+  ypos 185
+ }
+ Crop {
+  box {{curve i} {curve i} {width i} {height i}}
+  name Crop1
+  xpos 57
+  ypos 255
+ }
+ Output {
+  name Output1
+  xpos 57
+  ypos 302
+ }
+ Reformat {
+  inputs 0
+  name Reformat1
+  selected true
+  filter Impulse
+  xpos -109
+  ypos -118
+ }
+end_group

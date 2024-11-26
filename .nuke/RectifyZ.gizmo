@@ -1,0 +1,48 @@
+#! C:/Program Files/Nuke6.0v1/Nuke6.0.exe -nx
+version 6.0 v1
+Group {
+name RectifyZ
+ tile_color 0xaa49aaff
+ addUserKnob {20 User}
+ addUserKnob {7 Backplane R 0 70}
+ Backplane 24.576
+ addUserKnob {7 Lens R 0 100}
+ Lens 50
+ addUserKnob {7 Zmin R -1000 1000}
+ Zmin -60
+ addUserKnob {7 Zmax R -1000 1000}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -25
+  ypos 146
+ }
+ Expression {
+  temp_name0 ap
+  temp_expr0 parent.Backplane*0.5
+  temp_name3 fc
+  temp_expr3 parent.Lens
+  channel0 depth
+  expr0 "clamp(depth.Z/(fc/hypot  (fc, ap*hypot((x-(width*.5)),(y-(height*.5)))/(width*.5))),parent.Zmin,parent.Zmax)"
+  name Expression2
+  selected true
+  xpos -25
+  ypos 186
+ }
+set N53ddc1e0 [stack 0]
+ Output {
+  name Output1
+  xpos -25
+  ypos 312
+ }
+push $N53ddc1e0
+ Viewer {
+  frame 59
+  channels {rgba.red rgba.green rgba.blue depth.Z}
+  input_process false
+  name Viewer1
+  xpos -284
+  ypos 180
+ }
+end_group

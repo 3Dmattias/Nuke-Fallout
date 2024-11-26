@@ -1,0 +1,128 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name MirrorPoint
+inputs 2
+tile_color 0xd6ff0000
+addUserKnob {20 User}
+addUserKnob {41 world_matrix l MirroredPoint -STARTLINE T MirroredPoint.world_matrix}
+}
+Input {
+inputs 0
+name point
+xpos -40
+ypos -490
+}
+Axis2 {
+name PointToMirror
+xpos -30
+ypos -414
+}
+Input {
+inputs 0
+name mirror
+xpos -150
+ypos -490
+number 1
+}
+Axis2 {
+useMatrix true
+name Mirrorplane
+xpos -140
+ypos -414
+}
+set Nc8f92c00 [stack 0]
+Group {
+name InvertMatrix
+tile_color 0xa8000000
+xpos -150
+ypos -202
+addUserKnob {20 InvertedMatrix l "Inverted Matrix"}
+addUserKnob {41 world_matrix l "" -STARTLINE T invmatrix.world_matrix}
+}
+Input {
+inputs 0
+name Axis
+xpos 1170
+ypos -826
+}
+Axis2 {
+name SM
+tile_color 0xff540000
+xpos 1180
+ypos -750
+addUserKnob {20 User}
+addUserKnob {7 Determinant}
+Determinant {{world_matrix.0*(world_matrix.5*world_matrix.10-world_matrix.6*world_matrix.9)+world_matrix.1*(world_matrix.6*world_matrix.8-world_matrix.4*world_matrix.10)+world_matrix.2*(world_matrix.4*world_matrix.9-world_matrix.5*world_matrix.8)}}
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{1/SM.Determinant*(SM.world_matrix.5*SM.world_matrix.10-SM.world_matrix.6*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.9-SM.world_matrix.1*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.6-SM.world_matrix.2*SM.world_matrix.5)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.6*SM.world_matrix.8-SM.world_matrix.4*SM.world_matrix.10)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.10-SM.world_matrix.2*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.2*SM.world_matrix.4-SM.world_matrix.0*SM.world_matrix.6)} 0}
+    {{1/SM.Determinant*(SM.world_matrix.4*SM.world_matrix.9-SM.world_matrix.5*SM.world_matrix.8)} {1/SM.Determinant*(SM.world_matrix.1*SM.world_matrix.8-SM.world_matrix.0*SM.world_matrix.9)} {1/SM.Determinant*(SM.world_matrix.0*SM.world_matrix.5-SM.world_matrix.1*SM.world_matrix.4)} 0}
+    {0 0 0 1}
+  }
+name rotscaleMX
+tile_color 0xff0000
+xpos 1290
+ypos -654
+}
+Axis2 {
+inputs 0
+useMatrix true
+matrix {
+    {{rotscaleMX.matrix.0} {rotscaleMX.matrix.1} {rotscaleMX.matrix.2} {-(SM.world_matrix.3*rotscaleMX.matrix.0+SM.world_matrix.7*rotscaleMX.matrix.1+SM.world_matrix.11*rotscaleMX.matrix.2)}}
+    {{rotscaleMX.matrix.4} {rotscaleMX.matrix.5} {rotscaleMX.matrix.6} {-(SM.world_matrix.3*rotscaleMX.matrix.4+SM.world_matrix.7*rotscaleMX.matrix.5+SM.world_matrix.11*rotscaleMX.matrix.6)}}
+    {{rotscaleMX.matrix.8} {rotscaleMX.matrix.9} {rotscaleMX.matrix.10} {-(SM.world_matrix.3*rotscaleMX.matrix.8+SM.world_matrix.7*rotscaleMX.matrix.9+SM.world_matrix.11*rotscaleMX.matrix.10)}}
+    {0 0 0 1}
+  }
+name invmatrix
+tile_color 0xff00
+xpos 1180
+ypos -558
+}
+Output {
+name Output1
+xpos 1170
+ypos -442
+}
+end_group
+Axis2 {
+useMatrix true
+matrix {
+    {{PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix}}
+    {{PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix}}
+    {{PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix}}
+    {{PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix} {PointToMirror.world_matrix}}
+  }
+name camera_in_coordsys_mirror
+xpos -30
+ypos -174
+}
+push $Nc8f92c00
+Axis2 {
+scaling {1 -1 1}
+name mirrorflip
+xpos 80
+ypos -318
+}
+Axis2 {
+useMatrix true
+matrix {
+    {{camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix}}
+    {{camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix}}
+    {{camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix}}
+    {{camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix} {camera_in_coordsys_mirror.world_matrix}}
+  }
+name MirroredPoint
+xpos 80
+ypos -126
+}
+Output {
+name Output1
+xpos 70
+ypos -10
+}
+end_group

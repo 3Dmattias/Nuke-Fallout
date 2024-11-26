@@ -1,0 +1,82 @@
+#! C:/Program Files/Nuke6.2v2/Nuke6.2.exe -nx
+version 6.2 v2
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name CrossProduct
+ inputs 2
+ tile_color 0x172e41ff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 User}
+ addUserKnob {41 NormalA T Shuffle5.in}
+ addUserKnob {41 NormalB T Shuffle6.in}
+ addUserKnob {41 Destination T Shuffle7.out}
+ addUserKnob {26 info l "" +STARTLINE T "\nKeeps Channels from B"}
+}
+ Input {
+  inputs 0
+  name InputA
+  xpos 594
+  ypos -432
+  number 1
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle5
+  xpos 594
+  ypos -378
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos 687
+  ypos -432
+ }
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle6
+  xpos 687
+  ypos -377
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.Y*B.TMP.Z-A.TMP.Z*B.TMP.Y
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Z*B.TMP.X-A.TMP.X*B.TMP.Z
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.X*B.TMP.Y-A.TMP.Y*B.TMP.X
+  channel3 none
+  name Merge_Crossprod
+  xpos 635
+  ypos -331
+ }
+ Shuffle {
+  in TMP
+  out rgb
+  name Shuffle7
+  xpos 635
+  ypos -283
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 635
+  ypos -257
+ }
+ Output {
+  name Output1
+  xpos 635
+  ypos -192
+ }
+ Viewer {
+  input_process false
+  name Viewer1
+  selected true
+  xpos 865
+  ypos -234
+ }
+end_group

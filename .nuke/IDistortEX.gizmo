@@ -1,0 +1,138 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name IDistortEX
+ inputs 2
+ tile_color 0xa57aaaff
+ addUserKnob {20 IDistortEX}
+ addUserKnob {41 channels T DISTORTION.channels}
+ addUserKnob {41 in l UVchannel T Shuffle1.in}
+ addUserKnob {41 reverse T ReverseSwitch.reverse}
+ addUserKnob {41 perpendicular T PerpSwitch.perpendicular}
+ addUserKnob {41 uv_scale l Distortion T DISTORTION.uv_scale}
+ addUserKnob {41 blur l "blur channel" T DISTORTION.blur}
+ addUserKnob {41 blur_scale l "blur scale" T DISTORTION.blur_scale}
+ addUserKnob {41 maskChannel l "mask channel" T DISTORTION.maskChannel}
+ addUserKnob {41 invert_mask l invert -STARTLINE T DISTORTION.invert_mask}
+ addUserKnob {41 premultiplied -STARTLINE T DISTORTION.premultiplied}
+ addUserKnob {41 filter T DISTORTION.filter}
+}
+ Input {
+  inputs 0
+  name UV
+  xpos -40
+  ypos -346
+  number 1
+ }
+add_layer {IDistortDistortionChan IDistortDistortionChan.Xdist IDistortDistortionChan.Ydist}
+ AddChannels {
+  channels IDistortDistortionChan
+  name AddChannels2
+  tile_color 0x55ff7fff
+  xpos -40
+  ypos -305
+ }
+ Shuffle {
+  in rgb
+  out IDistortDistortionChan
+  name Shuffle1
+  tile_color 0x55ff7fff
+  xpos -40
+  ypos -247
+ }
+set N32fd000 [stack 0]
+ Multiply {
+  channels IDistortDistortionChan
+  value -1
+  name Reversedistortion
+  tile_color 0x55bfffff
+  xpos -150
+  ypos -209
+ }
+push $N32fd000
+ Switch {
+  inputs 2
+  which {{1-reverse}}
+  name ReverseSwitch
+  tile_color 0x55bfffff
+  xpos -40
+  ypos -154
+  addUserKnob {20 User}
+  addUserKnob {6 reverse +STARTLINE}
+ }
+set Na0bcac00 [stack 0]
+ Shuffle {
+  in IDistortDistortionChan
+  red green
+  green red
+  out IDistortDistortionChan
+  name FlipChannels
+  tile_color 0xe955ffff
+  xpos -150
+  ypos -106
+ }
+ Multiply {
+  channels IDistortDistortionChan
+  value {1 -1 1 1}
+  name ReverseOne
+  tile_color 0xe955ffff
+  xpos -150
+  ypos -65
+ }
+push $Na0bcac00
+ Switch {
+  inputs 2
+  which {{perpendicular}}
+  name PerpSwitch
+  tile_color 0xe955ffff
+  xpos -40
+  ypos -10
+  addUserKnob {20 User}
+  addUserKnob {6 perpendicular +STARTLINE}
+ }
+ Input {
+  inputs 0
+  name src
+  xpos 180
+  ypos -346
+ }
+ AddChannels {
+  channels IDistortDistortionChan
+  name AddChannels1
+  tile_color 0x55ff7fff
+  xpos 180
+  ypos -305
+ }
+ ShuffleCopy {
+  inputs 2
+  in IDistortDistortionChan
+  red red
+  green green
+  out IDistortDistortionChan
+  name ShuffleCopy1
+  tile_color 0x55ff7fff
+  xpos 180
+  ypos 86
+ }
+ IDistort {
+  uv IDistortDistortionChan
+  uv_scale 5
+  filter Rifman
+  name DISTORTION
+  tile_color 0xff0000ff
+  xpos 70
+  ypos 127
+ }
+ Remove {
+  channels IDistortDistortionChan
+  name Remove1
+  tile_color 0x55ff7fff
+  xpos 180
+  ypos 175
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos 230
+ }
+end_group

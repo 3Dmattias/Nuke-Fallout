@@ -1,0 +1,423 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name ColorEX
+ tile_color 0x55ffffff
+ addUserKnob {20 ColorEX}
+ addUserKnob {20 Hue n 1}
+ addUserKnob {41 Reds T colormagickmachine.Reds}
+ addUserKnob {41 Oranges T colormagickmachine.Oranges}
+ addUserKnob {41 Yellows T colormagickmachine.Yellows}
+ addUserKnob {41 Greens T colormagickmachine.Greens}
+ addUserKnob {41 Aquas T colormagickmachine.Aquas}
+ addUserKnob {41 Blues T colormagickmachine.Blues}
+ addUserKnob {41 Purples T colormagickmachine.Purples}
+ addUserKnob {41 Magentas T colormagickmachine.Magentas}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 Saturation n 1}
+ addUserKnob {41 SaturationReds l Reds T colormagickmachine.SaturationReds}
+ addUserKnob {41 SaturationOranges l Oranges T colormagickmachine.SaturationOranges}
+ addUserKnob {41 SaturationYellows l Yellows T colormagickmachine.SaturationYellows}
+ addUserKnob {41 SaturationGreens l Greens T colormagickmachine.SaturationGreens}
+ addUserKnob {41 SaturationAquas l Aquas T colormagickmachine.SaturationAquas}
+ addUserKnob {41 SaturationBlues l Blues T colormagickmachine.SaturationBlues}
+ addUserKnob {41 SaturationPurples l Purples T colormagickmachine.SaturationPurples}
+ addUserKnob {41 SaturationMagentas l Magentas T colormagickmachine.SaturationMagentas}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 Gain n 1}
+ addUserKnob {41 GainReds l Reds T colormagickmachine.GainReds}
+ addUserKnob {41 GainOranges l Oranges T colormagickmachine.GainOranges}
+ addUserKnob {41 GainYellows l Yellows T colormagickmachine.GainYellows}
+ addUserKnob {41 GainGreens l Greens T colormagickmachine.GainGreens}
+ addUserKnob {41 GainAquas l Aquas T colormagickmachine.GainAquas}
+ addUserKnob {41 GainBlues l Blues T colormagickmachine.GainBlues}
+ addUserKnob {41 GainPurples l Purples T colormagickmachine.GainPurples}
+ addUserKnob {41 GainMagentas l Magentas T colormagickmachine.GainMagentas}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input1
+  selected true
+  xpos 400
+  ypos -106
+ }
+set N34c59400 [stack 0]
+ Group {
+  name OKlab
+  tile_color 0xea8ee500
+  xpos 620
+  ypos -106
+  addUserKnob {20 OKlab}
+  addUserKnob {6 fromOKlab l "from OKlab" +STARTLINE}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -1360
+   ypos -586
+  }
+set N7e8cd800 [stack 0]
+  ColorMatrix {
+   matrix {
+       {0.2104542553 0.793617785 -0.0040720468}
+       {1.977998495 -2.428592205 0.4505937099}
+       {0.0259040371 0.7827717662 -0.80867577}
+     }
+   invert true
+   name ColorMatrix7
+   xpos -1250
+   ypos -490
+  }
+  Expression {
+   expr0 r*r*r
+   expr1 g*g*g
+   expr2 b*b*b
+   name Expression71
+   xpos -1250
+   ypos -440
+  }
+  ColorMatrix {
+   matrix {
+       {0.4122214708 0.5363325363 0.0514459929}
+       {0.2119034982 0.6806995451 0.1073969566}
+       {0.0883024619 0.2817188376 0.6299787005}
+     }
+   invert true
+   name ColorMatrix8
+   xpos -1250
+   ypos -392
+  }
+push $N7e8cd800
+  ColorMatrix {
+   matrix {
+       {0.4122214708 0.5363325363 0.0514459929}
+       {0.2119034982 0.6806995451 0.1073969566}
+       {0.0883024619 0.2817188376 0.6299787005}
+     }
+   name ColorMatrix1
+   xpos -1470
+   ypos -490
+  }
+  Expression {
+   expr0 pow(r,(1/3))
+   expr1 pow(g,(1/3))
+   expr2 pow(b,(1/3))
+   name Expression65
+   xpos -1470
+   ypos -442
+  }
+  ColorMatrix {
+   matrix {
+       {0.2104542553 0.793617785 -0.0040720468}
+       {1.977998495 -2.428592205 0.4505937099}
+       {0.0259040371 0.7827717662 -0.80867577}
+     }
+   name ColorMatrix2
+   xpos -1470
+   ypos -394
+  }
+  Switch {
+   inputs 2
+   which {{fromOKlab}}
+   name Switch1
+   selected true
+   xpos -1360
+   ypos -298
+  }
+  Output {
+   name Output1
+   xpos -1360
+   ypos -154
+  }
+ end_group
+ Group {
+  name OKlab2OKhsl
+  tile_color 0xea519eff
+  xpos 620
+  ypos -58
+  addUserKnob {20 OKhsltab l Okhsl}
+  addUserKnob {6 fromOKhsl +STARTLINE}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -1470
+   ypos -490
+  }
+set N91d50c00 [stack 0]
+  Expression {
+   expr0 b
+   expr1 g*cos((r-.5)*2*PI)
+   expr2 g*sin((r-.5)*2*PI)
+   name toOKlab
+   xpos -1382
+   ypos -442
+   addUserKnob {20 User}
+   addUserKnob {7 L}
+   L 0.6
+   addUserKnob {7 C}
+   C 0.1
+  }
+push $N91d50c00
+  Expression {
+   expr0 (atan2((b),(g))/2/PI)+.5
+   expr1 sqrt(g*g+b*b)
+   expr2 r
+   name toOKhsl
+   xpos -1580
+   ypos -442
+   addUserKnob {20 User}
+   addUserKnob {7 L}
+   L 0.6
+   addUserKnob {7 C}
+   C 0.1
+  }
+  Switch {
+   inputs 2
+   which {{fromOKhsl}}
+   name Switch1
+   selected true
+   xpos -1470
+   ypos -394
+  }
+  Output {
+   name Output1
+   xpos -1470
+   ypos -346
+  }
+ end_group
+ Expression {
+  expr0 fmod(r+amt,1)
+  name Expression1
+  xpos 510
+  ypos -58
+  addUserKnob {20 User}
+  addUserKnob {7 amt R -1 1}
+  amt 0.4188
+ }
+ Expression {
+  expr0 "(0<=r&&r<(1/12))?r+(Reds/6)*(1-fmod(r*12,1))+(Oranges/12)*(fmod(r*12,1)):\n((1/12)<=r&&r<(1/6))?r+(Oranges/12)*(1-fmod(r*12,1))+(Yellows/6)*(fmod(r*12,1)):\n((1/6)<=r&&r<(2/6))?r+(Yellows/6)*(1-fmod(r*6,1))+(Greens/6)*(fmod(r*6,1)):\n((2/6)<=r&&r<(3/6))?r+(Greens/6)*(1-fmod(r*6,1))+(Aquas/6)*(fmod(r*6,1)):\n((3/6)<=r&&r<(4/6))?r+(Aquas/6)*(1-fmod(r*6,1))+(Blues/6)*(fmod(r*6,1)):\n((4/6)<=r&&r<(9/12))?r+(Blues/6)*(1-fmod(r*12,1))+(Purples/12)*(fmod(r*12,1)):\n((9/12)<=r&&r<(5/6))?r+(Purples/12)*(1-fmod(r*12,1))+(Magentas/6)*(fmod(r*12,1)):\nr+(Magentas/6)*(1-fmod(r*6,1))+(Reds/6)*(fmod(r*6,1))"
+  expr1 "(0<=r&&r<(1/12))?g*((SaturationReds)*(1-fmod(r*12,1))+(SaturationOranges)*(fmod(r*12,1))):\n((1/12)<=r&&r<(1/6))?g*((SaturationOranges)*(1-fmod(r*12,1))+(SaturationYellows)*(fmod(r*12,1))):\n((1/6)<=r&&r<(2/6))?g*((SaturationYellows)*(1-fmod(r*6,1))+(SaturationGreens)*(fmod(r*6,1))):\n((2/6)<=r&&r<(3/6))?g*((SaturationGreens)*(1-fmod(r*6,1))+(SaturationAquas)*(fmod(r*6,1))):\n((3/6)<=r&&r<(4/6))?g*((SaturationAquas)*(1-fmod(r*6,1))+(SaturationBlues)*(fmod(r*6,1))):\n((4/6)<=r&&r<(9/12))?g*((SaturationBlues)*(1-fmod(r*12,1))+(SaturationPurples)*(fmod(r*12,1))):\n((9/12)<=r&&r<(5/6))?g*((SaturationPurples)*(1-fmod(r*12,1))+(SaturationMagentas)*(fmod(r*12,1))):\ng*((SaturationMagentas)*(1-fmod(r*6,1))+(SaturationReds)*(fmod(r*6,1)))"
+  expr2 "(0<=r&&r<(1/12))?b*((GainReds)*(1-fmod(r*12,1))+(GainOranges)*(fmod(r*12,1))):\n((1/12)<=r&&r<(1/6))?b*((GainOranges)*(1-fmod(r*12,1))+(GainYellows)*(fmod(r*12,1))):\n((1/6)<=r&&r<(2/6))?b*((GainYellows)*(1-fmod(r*6,1))+(GainGreens)*(fmod(r*6,1))):\n((2/6)<=r&&r<(3/6))?b*((GainGreens)*(1-fmod(r*6,1))+(GainAquas)*(fmod(r*6,1))):\n((3/6)<=r&&r<(4/6))?b*((GainAquas)*(1-fmod(r*6,1))+(GainBlues)*(fmod(r*6,1))):\n((4/6)<=r&&r<(9/12))?b*((GainBlues)*(1-fmod(r*12,1))+(GainPurples)*(fmod(r*12,1))):\n((9/12)<=r&&r<(5/6))?b*((GainPurples)*(1-fmod(r*12,1))+(GainMagentas)*(fmod(r*12,1))):\nb*((GainMagentas)*(1-fmod(r*6,1))+(GainReds)*(fmod(r*6,1)))"
+  name colormagickmachine
+  xpos 400
+  ypos -10
+  addUserKnob {20 Hue}
+  addUserKnob {7 Reds R -1 1}
+  addUserKnob {7 Oranges R -1 1}
+  addUserKnob {7 Yellows R -1 1}
+  addUserKnob {7 Greens R -1 1}
+  addUserKnob {7 Aquas R -1 1}
+  addUserKnob {7 Blues R -1 1}
+  addUserKnob {7 Purples R -1 1}
+  addUserKnob {7 Magentas R -1 1}
+  addUserKnob {20 Saturation}
+  addUserKnob {7 SaturationReds l Reds R 0 2}
+  SaturationReds 1
+  addUserKnob {7 SaturationOranges l Oranges R 0 2}
+  SaturationOranges 1
+  addUserKnob {7 SaturationYellows l Yellows R 0 2}
+  SaturationYellows 1
+  addUserKnob {7 SaturationGreens l Greens R 0 2}
+  SaturationGreens 1
+  addUserKnob {7 SaturationAquas l Aquas R 0 2}
+  SaturationAquas 1
+  addUserKnob {7 SaturationBlues l Blues R 0 2}
+  SaturationBlues 1
+  addUserKnob {7 SaturationPurples l Purples R 0 2}
+  SaturationPurples 1
+  addUserKnob {7 SaturationMagentas l Magentas R 0 2}
+  SaturationMagentas 1
+  addUserKnob {20 Gain}
+  addUserKnob {7 GainReds l Reds R 0 2}
+  GainReds 1
+  addUserKnob {7 GainOranges l Oranges R 0 2}
+  GainOranges 1
+  addUserKnob {7 GainYellows l Yellows R 0 2}
+  GainYellows 1
+  addUserKnob {7 GainGreens l Greens R 0 2}
+  GainGreens 1
+  addUserKnob {7 GainAquas l Aquas R 0 2}
+  GainAquas 1
+  addUserKnob {7 GainBlues l Blues R 0 2}
+  GainBlues 1
+  addUserKnob {7 GainPurples l Purples R 0 2}
+  GainPurples 1
+  addUserKnob {7 GainMagentas l Magentas R 0 2}
+  GainMagentas 1
+  addUserKnob {20 User}
+ }
+ Expression {
+  expr0 fmod(r+amt,1)
+  name Expression2
+  xpos 510
+  ypos 38
+  addUserKnob {20 User}
+  addUserKnob {7 amt R -1 1}
+  amt {{-parent.Expression1.amt}}
+ }
+ Group {
+  name OKlab2OKhsl1
+  tile_color 0xea519eff
+  xpos 620
+  ypos 40
+  addUserKnob {20 OKhsltab l Okhsl}
+  addUserKnob {6 fromOKhsl +STARTLINE}
+  fromOKhsl true
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -1470
+   ypos -490
+  }
+set Na293800 [stack 0]
+  Expression {
+   expr0 b
+   expr1 g*cos((r-.5)*2*PI)
+   expr2 g*sin((r-.5)*2*PI)
+   name toOKlab
+   xpos -1382
+   ypos -442
+   addUserKnob {20 User}
+   addUserKnob {7 L}
+   L 0.6
+   addUserKnob {7 C}
+   C 0.1
+  }
+push $Na293800
+  Expression {
+   expr0 (atan2((b),(g))/2/PI)+.5
+   expr1 sqrt(g*g+b*b)
+   expr2 r
+   name toOKhsl
+   xpos -1580
+   ypos -442
+   addUserKnob {20 User}
+   addUserKnob {7 L}
+   L 0.6
+   addUserKnob {7 C}
+   C 0.1
+  }
+  Switch {
+   inputs 2
+   which {{fromOKhsl}}
+   name Switch1
+   selected true
+   xpos -1470
+   ypos -394
+  }
+  Output {
+   name Output1
+   xpos -1470
+   ypos -346
+  }
+ end_group
+ Group {
+  name OKlab1
+  tile_color 0xea8ee500
+  xpos 620
+  ypos 86
+  addUserKnob {20 OKlab}
+  addUserKnob {6 fromOKlab l "from OKlab" +STARTLINE}
+  fromOKlab true
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -1360
+   ypos -586
+  }
+set N68476c00 [stack 0]
+  ColorMatrix {
+   matrix {
+       {0.2104542553 0.793617785 -0.0040720468}
+       {1.977998495 -2.428592205 0.4505937099}
+       {0.0259040371 0.7827717662 -0.80867577}
+     }
+   invert true
+   name ColorMatrix7
+   xpos -1250
+   ypos -490
+  }
+  Expression {
+   expr0 r*r*r
+   expr1 g*g*g
+   expr2 b*b*b
+   name Expression71
+   xpos -1250
+   ypos -440
+  }
+  ColorMatrix {
+   matrix {
+       {0.4122214708 0.5363325363 0.0514459929}
+       {0.2119034982 0.6806995451 0.1073969566}
+       {0.0883024619 0.2817188376 0.6299787005}
+     }
+   invert true
+   name ColorMatrix8
+   xpos -1250
+   ypos -392
+  }
+push $N68476c00
+  ColorMatrix {
+   matrix {
+       {0.4122214708 0.5363325363 0.0514459929}
+       {0.2119034982 0.6806995451 0.1073969566}
+       {0.0883024619 0.2817188376 0.6299787005}
+     }
+   name ColorMatrix1
+   xpos -1470
+   ypos -490
+  }
+  Expression {
+   expr0 pow(r,(1/3))
+   expr1 pow(g,(1/3))
+   expr2 pow(b,(1/3))
+   name Expression65
+   xpos -1470
+   ypos -442
+  }
+  ColorMatrix {
+   matrix {
+       {0.2104542553 0.793617785 -0.0040720468}
+       {1.977998495 -2.428592205 0.4505937099}
+       {0.0259040371 0.7827717662 -0.80867577}
+     }
+   name ColorMatrix2
+   xpos -1470
+   ypos -394
+  }
+  Switch {
+   inputs 2
+   which {{fromOKlab}}
+   name Switch1
+   selected true
+   xpos -1360
+   ypos -298
+  }
+  Output {
+   name Output1
+   xpos -1360
+   ypos -154
+  }
+ end_group
+ Output {
+  name Output1
+  xpos 400
+  ypos 86
+ }
+push $N34c59400
+push $N34c59400
+ Viewer {
+  inputs 2
+  frame_range 1-55
+  fps 25
+  name Viewer1
+  xpos 967
+  ypos 20
+ }
+end_group

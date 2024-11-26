@@ -1,0 +1,46 @@
+#! C:/Program Files/Nuke6.0v1/Nuke6.0.exe -nx
+version 6.0 v1
+Group {
+name AnaglyphGM
+ addUserKnob {20 User}
+ addUserKnob {41 Lview l "Left view" T OneView1.view}
+ addUserKnob {41 Rview l "Right view" T OneView2.view}
+ addUserKnob {41 saturation T Saturation1.saturation}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 299
+  ypos -38
+ }
+ Saturation {
+  name Saturation1
+  xpos 299
+  ypos 2
+ }
+set N1e850430 [stack 0]
+ OneView {
+  name OneView1
+  xpos 344
+  ypos 40
+ }
+push $N1e850430
+ OneView {
+  view right
+  name OneView2
+  xpos 249
+  ypos 40
+ }
+ ShuffleCopy {
+  inputs 2
+  green green
+  name ShuffleCopy1
+  xpos 295
+  ypos 83
+ }
+ Output {
+  name Output1
+  xpos 295
+  ypos 183
+ }
+end_group

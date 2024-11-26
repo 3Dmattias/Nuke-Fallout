@@ -1,0 +1,127 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name NoiseGen
+ inputs 2
+ tile_color 0x172e41ff
+ addUserKnob {20 User}
+ addUserKnob {4 NoiseType M {fBm turbulence noise}}
+ addUserKnob {41 XYZ T Shuffle5.in}
+ addUserKnob {41 Param T Shuffle6.in}
+ addUserKnob {41 Destination T Shuffle7.out}
+ addUserKnob {26 info l "" +STARTLINE T "\nKeeps Channels from XYZ input"}
+}
+ Input {
+  inputs 0
+  name XYZ
+  xpos 510
+  ypos -297
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in rgb
+  out TMP
+  name Shuffle6
+  xpos 510
+  ypos -249
+ }
+set N5e7e7800 [stack 0]
+ Expression {
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 noise(TMP.X,TMP.Y,TMP.Z)
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 noise(TMP.X+10000,TMP.Y,TMP.Z)
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 noise(TMP.X-10000,TMP.Y,TMP.Z)
+  channel3 none
+  name Expression1
+  xpos 840
+  ypos -154
+ }
+push $N5e7e7800
+ Input {
+  inputs 0
+  name Param
+  xpos 730
+  ypos -345
+  number 1
+ }
+ Shuffle {
+  in rgb
+  out TMP
+  name Shuffle5
+  xpos 730
+  ypos -297
+ }
+ Clamp {
+  channels {TMP.X -TMP.Y -TMP.Z}
+  maximum 10
+  name Clamp1
+  xpos 730
+  ypos -255
+ }
+set N571c5800 [stack 0]
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 turbulence(A.TMP.X-344.346,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 turbulence(A.TMP.X+100.331,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 turbulence(A.TMP.X+333.331,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel3 none
+  name Merge_turb
+  xpos 730
+  ypos -154
+ }
+push $N5e7e7800
+push $N571c5800
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 fBm(A.TMP.X-344.346,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 fBm(A.TMP.X+100.331,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 fBm(A.TMP.X+333.331,A.TMP.Y,A.TMP.Z,B.TMP.X,B.TMP.Y,B.TMP.Z)
+  channel3 none
+  name Merge_FBM
+  xpos 620
+  ypos -154
+ }
+ Switch {
+  inputs 3
+  which {{NoiseType}}
+  name Switchnoisetype
+  xpos 620
+  ypos -59
+ }
+ Shuffle {
+  in TMP
+  out rgb
+  name Shuffle7
+  xpos 620
+  ypos -10
+ }
+set N571c4c00 [stack 0]
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 620
+  ypos 31
+ }
+ Output {
+  name Output1
+  xpos 620
+  ypos 85
+ }
+push $N571c4c00
+ Viewer {
+  frame_range 1-55
+  fps 25
+  input_process false
+  name Viewer1
+  xpos 510
+  ypos -201
+ }
+end_group

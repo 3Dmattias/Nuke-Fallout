@@ -1,0 +1,62 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name CoronaZfix
+ inputs 2
+ tile_color 0x3975a9ff
+ addUserKnob {20 User}
+}
+ Input {
+  inputs 0
+  name InputZ
+  xpos 730
+  ypos -682
+ }
+set N72355ea0 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle5
+  xpos 842
+  ypos -573
+ }
+ Dot {
+  name Dot4
+  xpos 876
+  ypos -521
+ }
+ Add {
+  channels rgb
+  value {{Inputcam.parent.input1.focal} {(height/width)} {Inputcam.parent.input1.haperture/2.0} {curve}}
+  name camparam
+  xpos 842
+  ypos -450
+ }
+push $N72355ea0
+add_layer {Z_Depth Z_Depth.Y Z_Depth.red Z_Depth.green Z_Depth.blue}
+ MergeExpression {
+  inputs 2
+  channel0 {Z_Depth.Y Z_Depth.red Z_Depth.green none}
+  expr0 CGeometry_ZDepth.red==0?-1000000000:(100*(CGeometry_ZDepth.red-1))*cos(atan(((sqrt((x/(width/2)-1)*(x/(width/2)-1)+((y/(height/2)-1)*A.g)*((y/(height/2)-1)*A.g)))*A.b)/A.r))
+  channel1 none
+  channel2 none
+  channel3 none
+  name MergeExpression1
+  xpos 730
+  ypos -346
+ }
+ Output {
+  name Output1
+  xpos 730
+  ypos -202
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 950
+  ypos -682
+  number 1
+ }
+end_group

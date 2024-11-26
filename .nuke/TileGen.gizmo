@@ -1,0 +1,469 @@
+#! C:/Program Files/Nuke15.0v2/nuke-15.0.2.dll -nx
+version 15.0 v2
+Group {
+name TileGen
+tile_color 0xffabff
+gl_color 0xffabff
+addUserKnob {20 TileGenerator l "Tile Generator"}
+addUserKnob {4 TileType M {Both Horizontal Vertical "" ""}}
+addUserKnob {6 test l "Test Tiling" +STARTLINE}
+}
+Input {
+inputs 0
+name Input1
+xpos -1580
+ypos -441
+}
+Dot {
+name Dot6
+xpos -1546
+ypos -294
+}
+set N5b3a4000 [stack 0]
+Dot {
+name Dot10
+xpos -1656
+ypos -198
+}
+Dot {
+name Dot7
+xpos -2096
+ypos -198
+}
+set N8e882c00 [stack 0]
+Group {
+name UVGen
+xpos -2130
+ypos -105
+}
+Input {
+inputs 0
+name Input1
+xpos 509
+ypos -194
+}
+Expression {
+expr0 (x+0.5)/width
+expr1 (y+0.5)/height
+expr2 0
+channel3 none
+name GenerateUV
+xpos 509
+ypos -154
+}
+Output {
+name Output1
+xpos 509
+ypos -54
+}
+end_group
+set N1e62c000 [stack 0]
+Expression {
+expr0 atan(r,g)/PI*2
+name Expression1
+xpos -2130
+ypos -9
+}
+set N8e282c00 [stack 0]
+Mirror2 {
+flip true
+name Mirror2_2
+xpos -2240
+ypos 39
+}
+push $N8e282c00
+Merge2 {
+inputs 2
+operation max
+name Merge5
+xpos -2130
+ypos 87
+}
+set N8e283000 [stack 0]
+Mirror2 {
+flop true
+name Mirror2_3
+xpos -2240
+ypos 135
+}
+push $N8e283000
+Merge2 {
+inputs 2
+operation min
+name Merge6
+xpos -2130
+ypos 183
+}
+set N42a29800 [stack 0]
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+name Shuffle17
+xpos -2130
+ypos 471
+}
+Crop {
+box {1 1 {width-1} {height-1}}
+name Crop18
+xpos -2130
+ypos 615
+}
+set N4f10b000 [stack 0]
+push $N1e62c000
+push $N8e882c00
+Dot {
+name Dot4
+xpos -1766
+ypos -102
+}
+set N4f10b800 [stack 0]
+Crop {
+box {0 {height-1} {width} {height}}
+crop false
+name Crop7
+xpos -1910
+ypos -9
+}
+push $N4f10b800
+Crop {
+box {0 0 {width} 1}
+crop false
+name Crop6
+xpos -1690
+ypos -9
+}
+Keymix {
+inputs 3
+maskChannel rgba.green
+name Keymix3
+xpos -1800
+ypos 81
+}
+set N620e7c00 [stack 0]
+Dot {
+name Dot5
+xpos -2206
+ypos 330
+}
+set N4a49bc00 [stack 0]
+Dot {
+name Dot1
+xpos -2206
+ypos 474
+}
+push $N1e62c000
+push $N8e882c00
+Dot {
+name Dot3
+xpos -2426
+ypos -102
+}
+set N620e7000 [stack 0]
+Crop {
+box {{width-1} 0 {width} {height}}
+crop false
+name Crop4
+xpos -2350
+ypos -9
+}
+push $N620e7000
+Crop {
+box {0 0 1 {height}}
+crop false
+name Crop3
+xpos -2570
+ypos -9
+}
+Keymix {
+inputs 3
+maskChannel rgba.red
+name Keymix2
+xpos -2460
+ypos 81
+}
+set N620e6c00 [stack 0]
+Dot {
+name Dot11
+xpos -2426
+ypos 186
+}
+set N4b6dfc00 [stack 0]
+push $N42a29800
+push $N4a49bc00
+push $N4b6dfc00
+Keymix {
+inputs 3
+maskChannel rgba.red
+name Keymix4
+xpos -2460
+ypos 417
+}
+Switch {
+inputs 3
+which {{parent.TileType}}
+name Switch2
+selected true
+xpos -2350
+ypos 567
+}
+set C622d5800 [stack 0]
+Inpaint2 {
+inputs 2
+fillRegion "Matte Alpha"
+center {1440 960}
+name Inpaint3
+xpos -2350
+ypos 663
+}
+Blur {
+size {{parent.smolblur.size}}
+name smolblur2
+xpos -2350
+ypos 705
+}
+push $N4f10b000
+push $N620e7c00
+Mirror2 {
+flip true
+name Mirror2_1
+xpos -1800
+ypos 183
+}
+set N60822800 [stack 0]
+push $N620e6c00
+Mirror2 {
+flop true
+name Mirror2_4
+xpos -2020
+ypos 327
+}
+set N60823000 [stack 0]
+Dot {
+name Dot2
+xpos -1986
+ypos 474
+}
+push $N42a29800
+push $N60822800
+push $N60823000
+Keymix {
+inputs 3
+maskChannel rgba.red
+name Keymix5
+xpos -1800
+ypos 417
+}
+clone $C622d5800 {
+inputs 3
+xpos -1910
+ypos 567
+selected false
+}
+Inpaint2 {
+inputs 2
+fillRegion "Matte Alpha"
+center {1440 960}
+name Inpaint2
+xpos -1910
+ypos 663
+}
+Blur {
+size 3
+name smolblur
+xpos -1910
+ypos 705
+}
+Group {
+inputs 2
+name divide
+tile_color 0x5151bcff
+xpos -2130
+ypos 759
+addUserKnob {20 User l Divide}
+addUserKnob {6 red +STARTLINE}
+red true
+addUserKnob {6 green +STARTLINE}
+green true
+addUserKnob {6 blue +STARTLINE}
+blue true
+addUserKnob {26 ""}
+addUserKnob {6 alpha +STARTLINE}
+}
+Input {
+inputs 0
+name Input2
+xpos 1280
+ypos 374
+number 1
+}
+Input {
+inputs 0
+name Input1
+xpos 1500
+ypos 374
+}
+set N6065d800 [stack 0]
+MergeExpression {
+inputs 2
+expr0 B.r/A.r
+expr1 B.g/A.g
+expr2 B.b/A.b
+channel3 alpha
+expr3 B.a/A.a
+name divider
+xpos 1390
+ypos 422
+}
+Dot {
+name Dot3
+xpos 1314
+ypos 474
+}
+set N8e385400 [stack 0]
+Dot {
+name Dot2
+xpos 1314
+ypos 570
+}
+set N8e385800 [stack 0]
+Dot {
+name Dot1
+xpos 1314
+ypos 666
+}
+set N8e384c00 [stack 0]
+Dot {
+name Dot5
+xpos 1314
+ypos 762
+}
+push $N8e384c00
+push $N8e385800
+push $N8e385400
+push $N6065d800
+Dot {
+name Dot4
+xpos 1534
+ypos 474
+}
+set N4a497000 [stack 0]
+Switch {
+inputs 2
+which {{parent.red}}
+name Switch1
+xpos 1390
+ypos 518
+}
+push $N4a497000
+ShuffleCopy {
+inputs 2
+red red
+alpha alpha2
+name ShuffleCopy2
+xpos 1500
+ypos 566
+}
+set N4a496000 [stack 0]
+Switch {
+inputs 2
+which {{parent.green}}
+name Switch2
+xpos 1390
+ypos 614
+}
+push $N4a496000
+ShuffleCopy {
+inputs 2
+green green
+alpha alpha2
+name ShuffleCopy3
+xpos 1500
+ypos 662
+}
+set N4a497800 [stack 0]
+Switch {
+inputs 2
+which {{parent.blue}}
+name Switch3
+xpos 1390
+ypos 710
+}
+push $N4a497800
+ShuffleCopy {
+inputs 2
+blue blue
+alpha alpha2
+name ShuffleCopy4
+xpos 1500
+ypos 758
+}
+set N8e41c800 [stack 0]
+Switch {
+inputs 2
+which {{parent.alpha}}
+name Switch4
+xpos 1390
+ypos 806
+}
+push $N8e41c800
+ShuffleCopy {
+inputs 2
+name ShuffleCopy5
+xpos 1500
+ypos 854
+}
+Output {
+name Output1
+xpos 1500
+ypos 950
+}
+end_group
+push $N5b3a4000
+Dot {
+name Dot8
+xpos -1546
+ypos 762
+}
+Dot {
+name Dot9
+xpos -1656
+ypos 858
+}
+Merge2 {
+inputs 2
+operation multiply
+mix 0.5
+name Multiply
+xpos -2130
+ypos 855
+}
+Crop {
+box {0 0 {width} {height}}
+crop false
+name Crop5
+xpos -2130
+ypos 903
+}
+set N4b650400 [stack 0]
+Tile {
+rows 3
+columns 3
+name Tile1
+xpos -2020
+ypos 951
+}
+push $N4b650400
+Switch {
+inputs 2
+which {{parent.test}}
+name checkresult
+xpos -2130
+ypos 999
+}
+Output {
+name Output1
+xpos -2130
+ypos 1099
+}
+end_group

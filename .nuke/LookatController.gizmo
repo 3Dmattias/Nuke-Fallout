@@ -1,0 +1,217 @@
+#! C:/Program Files/Nuke7.0v4/Nuke7.0.exe -nx
+version 7.0 v4
+Group {
+name LookatController
+ inputs 3
+ tile_color 0xff0000ff
+ gl_color 0xff
+ addUserKnob {20 UpNode}
+ addUserKnob {4 UpVector M {World Lookat "Axis Align" ""}}
+}
+ Axis2 {
+  inputs 0
+  useMatrix true
+  matrix {
+      {1 0 0 {look.world_matrix.3-point.world_matrix.3}}
+      {0 1 0 {look.world_matrix.7-point.world_matrix.7}}
+      {0 0 1 {look.world_matrix.11-point.world_matrix.11}}
+      {0 0 0 1}
+    }
+  name aimVector
+  xpos 626
+  ypos 37
+ }
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 516
+  ypos -117
+  number 1
+ }
+ Axis2 {
+  display off
+  name point
+  xpos 526
+  ypos -42
+ }
+ Input {
+  inputs 0
+  name InputLook
+  xpos 708
+  ypos -119
+ }
+ Axis2 {
+  display off
+  name look
+  xpos 718
+  ypos -41
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {Upvector.world_matrix.3-point.world_matrix.3}}
+      {0 1 0 {Upvector.world_matrix.7-point.world_matrix.7}}
+      {0 0 1 {Upvector.world_matrix.11-point.world_matrix.11}}
+      {0 0 0 1}
+    }
+  name UpaimVector
+  xpos 1089
+  ypos 17
+ }
+ Input {
+  inputs 0
+  name InputUpVector
+  xpos 1203
+  ypos -119
+  number 2
+ }
+ Axis2 {
+  display off
+  name Upvector
+  xpos 1213
+  ypos -50
+ }
+ Axis2 {
+  inputs 0
+  display off
+  translate {0 0 0.2}
+  useMatrix true
+  matrix {
+      {1 0 0 {aimVector.world_matrix.3/sqrt(aimVector.world_matrix.3*aimVector.world_matrix.3+aimVector.world_matrix.7*aimVector.world_matrix.7+aimVector.world_matrix.11*aimVector.world_matrix.11)}}
+      {0 1 0 {aimVector.world_matrix.7/sqrt(aimVector.world_matrix.3*aimVector.world_matrix.3+aimVector.world_matrix.7*aimVector.world_matrix.7+aimVector.world_matrix.11*aimVector.world_matrix.11)}}
+      {0 0 1 {aimVector.world_matrix.11/sqrt(aimVector.world_matrix.3*aimVector.world_matrix.3+aimVector.world_matrix.7*aimVector.world_matrix.7+aimVector.world_matrix.11*aimVector.world_matrix.11)}}
+      {0 0 0 1}
+    }
+  name V
+  xpos 625
+  ypos 205
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {Upvector.world_matrix.1}}
+      {0 1 0 {Upvector.world_matrix.5}}
+      {0 0 1 {Upvector.world_matrix.9}}
+      {0 0 0 1}
+    }
+  name Axisalign
+  xpos 1196
+  ypos 110
+ }
+ Axis2 {
+  inputs 0
+  display off
+  translate {0 0 0.2}
+  useMatrix true
+  matrix {
+      {1 0 0 {UpaimVector.world_matrix.3/sqrt(UpaimVector.world_matrix.3*UpaimVector.world_matrix.3+UpaimVector.world_matrix.7*UpaimVector.world_matrix.7+UpaimVector.world_matrix.11*UpaimVector.world_matrix.11)}}
+      {0 1 0 {UpaimVector.world_matrix.7/sqrt(UpaimVector.world_matrix.3*UpaimVector.world_matrix.3+UpaimVector.world_matrix.7*UpaimVector.world_matrix.7+UpaimVector.world_matrix.11*UpaimVector.world_matrix.11)}}
+      {0 0 1 {UpaimVector.world_matrix.11/sqrt(UpaimVector.world_matrix.3*UpaimVector.world_matrix.3+UpaimVector.world_matrix.7*UpaimVector.world_matrix.7+UpaimVector.world_matrix.11*UpaimVector.world_matrix.11)}}
+      {0 0 0 1}
+    }
+  name Specific_UP
+  xpos 1087
+  ypos 103
+ }
+ Axis2 {
+  inputs 0
+  display off
+  selectable false
+  translate {0 1 0}
+  name WorldUp
+  xpos 981
+  ypos 105
+ }
+ Switch {
+  inputs 3
+  which {{parent.UpVector}}
+  name Switch1
+  xpos 1016
+  ypos 199
+ }
+ Axis2 {
+  display off
+  name Up
+  xpos 865
+  ypos 238
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {Up.world_matrix.7*V.world_matrix.11-Up.world_matrix.11*V.world_matrix.7}}
+      {0 1 0 {Up.world_matrix.11*V.world_matrix.3-Up.world_matrix.3*V.world_matrix.11}}
+      {0 0 1 {Up.world_matrix.3*V.world_matrix.7-Up.world_matrix.7*V.world_matrix.3}}
+      {0 0 0 1}
+    }
+  name cTan
+  xpos 777
+  ypos 272
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {cTan.world_matrix.3/sqrt(cTan.world_matrix.3*cTan.world_matrix.3+cTan.world_matrix.7*cTan.world_matrix.7+cTan.world_matrix.11*cTan.world_matrix.11)}}
+      {0 1 0 {cTan.world_matrix.7/sqrt(cTan.world_matrix.3*cTan.world_matrix.3+cTan.world_matrix.7*cTan.world_matrix.7+cTan.world_matrix.11*cTan.world_matrix.11)}}
+      {0 0 1 {cTan.world_matrix.11/sqrt(cTan.world_matrix.3*cTan.world_matrix.3+cTan.world_matrix.7*cTan.world_matrix.7+cTan.world_matrix.11*cTan.world_matrix.11)}}
+      {0 0 0 1}
+    }
+  name Tan
+  xpos 775
+  ypos 366
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {V.world_matrix.7*Tan.world_matrix.11-V.world_matrix.11*Tan.world_matrix.7}}
+      {0 1 0 {V.world_matrix.11*Tan.world_matrix.3-V.world_matrix.3*Tan.world_matrix.11}}
+      {0 0 1 {V.world_matrix.3*Tan.world_matrix.7-V.world_matrix.7*Tan.world_matrix.3}}
+      {0 0 0 1}
+    }
+  name cUpn
+  xpos 706
+  ypos 412
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {1 0 0 {cUpn.world_matrix.3/sqrt(cUpn.world_matrix.3*cUpn.world_matrix.3+cUpn.world_matrix.7*cUpn.world_matrix.7+cUpn.world_matrix.11*cUpn.world_matrix.11)}}
+      {0 1 0 {cUpn.world_matrix.7/sqrt(cUpn.world_matrix.3*cUpn.world_matrix.3+cUpn.world_matrix.7*cUpn.world_matrix.7+cUpn.world_matrix.11*cUpn.world_matrix.11)}}
+      {0 0 1 {cUpn.world_matrix.11/sqrt(cUpn.world_matrix.3*cUpn.world_matrix.3+cUpn.world_matrix.7*cUpn.world_matrix.7+cUpn.world_matrix.11*cUpn.world_matrix.11)}}
+      {0 0 0 1}
+    }
+  name Upn
+  xpos 705
+  ypos 505
+ }
+ Axis2 {
+  inputs 0
+  display off
+  useMatrix true
+  matrix {
+      {{Tan.world_matrix.3} {Upn.world_matrix.3} {V.world_matrix.3} {point.world_matrix.3}}
+      {{Tan.world_matrix.7} {Upn.world_matrix.7} {V.world_matrix.7} {point.world_matrix.7}}
+      {{Tan.world_matrix.11} {Upn.world_matrix.11} {V.world_matrix.11} {point.world_matrix.11}}
+      {0 0 0 1}
+    }
+  name Axis1
+  xpos 707
+  ypos 726
+ }
+ Output {
+  name Output1
+  xpos 697
+  ypos 846
+ }
+end_group

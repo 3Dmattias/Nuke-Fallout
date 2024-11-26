@@ -1,0 +1,183 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name BlurGlare
+inputs 2
+tile_color 0xcc6c2dff
+addUserKnob {20 BlurGlare}
+addUserKnob {41 channels T masterblur.channels}
+addUserKnob {41 size T masterblur.size}
+addUserKnob {41 filter T masterblur.filter}
+addUserKnob {41 quality l "" -STARTLINE T masterblur.quality}
+addUserKnob {41 crop l "crop to format" -STARTLINE T masterblur.crop}
+addUserKnob {26 "" l mask}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T masterblur.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T masterblur.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T masterblur.invert_mask}
+addUserKnob {41 fringe -STARTLINE T masterblur.fringe}
+addUserKnob {41 mix T masterblur.mix}
+addUserKnob {41 which l layers T Switch3.which}
+}
+Input {
+inputs 0
+name mask
+xpos 1390
+ypos -730
+number 1
+}
+Dot {
+name Dot186
+xpos 1424
+ypos -486
+}
+set N74d92000 [stack 0]
+push $N74d92000
+push $N74d92000
+push $N74d92000
+push $N74d92000
+push $N74d92000
+push $N74d92000
+Input {
+inputs 0
+name Input
+xpos 950
+ypos -730
+}
+Blur {
+inputs 1+1
+size 100
+maskChannelMask none
+mix 0.11
+name masterblur
+xpos 950
+ypos -641
+}
+set N74d95c00 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/2}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur47
+tile_color 0xa3cce500
+xpos 950
+ypos -593
+}
+set N74d95800 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/4}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur48
+tile_color 0xa3cce500
+xpos 950
+ypos -545
+}
+set N74d95400 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/8}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur49
+tile_color 0xa3cce500
+xpos 950
+ypos -497
+}
+set N74d95000 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/16}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur50
+tile_color 0xa3cce500
+xpos 950
+ypos -449
+}
+set N74d94c00 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/32}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur51
+tile_color 0xa3cce500
+xpos 950
+ypos -401
+}
+set N74d94800 [stack 0]
+Blur {
+inputs 1+1
+channels {{{masterblur.channels}}}
+filter {{masterblur.filter}}
+size {{masterblur.size/64}}
+quality {{masterblur.quality}}
+crop {{masterblur.crop}}
+maskChannelInput {{{masterblur.maskChannelInput}}}
+inject {{masterblur.inject}}
+invert_mask {{masterblur.invert_mask}}
+fringe {{masterblur.fringe}}
+mix {{masterblur.mix}}
+name Blur52
+tile_color 0xa3cce500
+xpos 950
+ypos -353
+}
+set N74d94400 [stack 0]
+push $N74d94400
+push $N74d94800
+push $N74d94c00
+push $N74d95000
+push $N74d95400
+push $N74d95800
+push $N74d95c00
+Switch {
+inputs 8
+which 7
+name Switch3
+xpos 620
+ypos -490
+}
+Output {
+name Output1
+xpos 620
+ypos -202
+}
+end_group

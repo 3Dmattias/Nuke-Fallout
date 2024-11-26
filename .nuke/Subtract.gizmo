@@ -1,0 +1,145 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name Subtract
+inputs 2
+tile_color 0x5151bcff
+addUserKnob {20 User l Subtract}
+addUserKnob {6 red +STARTLINE}
+red true
+addUserKnob {6 green +STARTLINE}
+green true
+addUserKnob {6 blue +STARTLINE}
+blue true
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {6 alpha +STARTLINE}
+}
+Input {
+inputs 0
+name Input2
+xpos 1280
+ypos 374
+number 1
+}
+Input {
+inputs 0
+name Input1
+xpos 1500
+ypos 374
+}
+set Ncb699000 [stack 0]
+MergeExpression {
+inputs 2
+expr0 B.r-A.r
+expr1 B.g-A.g
+expr2 B.b-A.b
+channel3 alpha
+expr3 B.a-A.a
+name subtract
+xpos 1390
+ypos 422
+}
+Dot {
+name Dot3
+xpos 1314
+ypos 474
+}
+set Nf911c00 [stack 0]
+Dot {
+name Dot2
+xpos 1314
+ypos 570
+}
+set Nce4ac000 [stack 0]
+Dot {
+name Dot1
+xpos 1314
+ypos 666
+}
+set Nce4ac400 [stack 0]
+Dot {
+name Dot5
+xpos 1314
+ypos 762
+}
+push $Nce4ac400
+push $Nce4ac000
+push $Nf911c00
+push $Ncb699000
+Dot {
+name Dot4
+xpos 1534
+ypos 474
+}
+set Nf911800 [stack 0]
+Switch {
+inputs 2
+which {{parent.red}}
+name Switch1
+xpos 1390
+ypos 518
+}
+push $Nf911800
+ShuffleCopy {
+inputs 2
+red red
+alpha alpha2
+name ShuffleCopy2
+xpos 1500
+ypos 566
+}
+set Nce4adc00 [stack 0]
+Switch {
+inputs 2
+which {{parent.green}}
+name Switch2
+xpos 1390
+ypos 614
+}
+push $Nce4adc00
+ShuffleCopy {
+inputs 2
+green green
+alpha alpha2
+name ShuffleCopy3
+xpos 1500
+ypos 662
+}
+set Nce4ad800 [stack 0]
+Switch {
+inputs 2
+which {{parent.blue}}
+name Switch3
+xpos 1390
+ypos 710
+}
+push $Nce4ad800
+ShuffleCopy {
+inputs 2
+blue blue
+alpha alpha2
+name ShuffleCopy4
+xpos 1500
+ypos 758
+}
+set Nce4ad400 [stack 0]
+Switch {
+inputs 2
+which {{parent.alpha}}
+name Switch4
+xpos 1390
+ypos 806
+}
+push $Nce4ad400
+ShuffleCopy {
+inputs 2
+name ShuffleCopy5
+xpos 1500
+ypos 854
+}
+Output {
+name Output1
+xpos 1500
+ypos 950
+}
+end_group

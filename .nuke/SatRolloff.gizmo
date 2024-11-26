@@ -1,0 +1,125 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name SatRolloff
+ tile_color 0x9eff0000
+ addUserKnob {20 SaturationRolloff}
+ addUserKnob {41 rolloff T rolloffconstant.rolloff}
+}
+ Input {
+  inputs 0
+  name color
+  xpos -260
+  ypos -298
+ }
+ Dot {
+  name Dot4
+  xpos -226
+  ypos -248
+ }
+set N9b2b2000 [stack 0]
+ Dot {
+  name Dot2
+  xpos -6
+  ypos -198
+ }
+set N9b2b3000 [stack 0]
+ Dot {
+  name Dot3
+  xpos 104
+  ypos -198
+ }
+ Saturation {
+  saturation 0
+  mode Maximum
+  name maximumSAT
+  xpos 70
+  ypos -154
+ }
+set N9b2b2800 [stack 0]
+ Dot {
+  name Dot1
+  xpos 104
+  ypos -6
+ }
+push $N9b2b2800
+push $N9b2b3000
+ MergeExpression {
+  inputs 2
+  expr0 B.r/A.r
+  expr1 B.g/A.g
+  expr2 B.b/A.b
+  channel3 none
+  name Mergedivider
+  xpos -40
+  ypos -154
+ }
+set N8f8dd800 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffleblack
+  xpos -150
+  ypos -154
+ }
+ Add {
+  channels rgb
+  value {{rolloff} 0 0 0}
+  name rolloffconstant
+  xpos -150
+  ypos -58
+  addUserKnob {20 User}
+  addUserKnob {7 rolloff}
+  rolloff 0.2
+ }
+push $N8f8dd800
+ Expression {
+  expr0 isnan(r)?0:r
+  expr1 isnan(g)?0:g
+  expr2 isnan(b)?0:b
+  name Expression1
+  xpos -40
+  ypos -106
+ }
+ MergeExpression {
+  inputs 2
+  expr0 exp((B.r/A.r)-1)*A.r*(1-step(A.r,B.r))+B.r*step(A.r,B.r)
+  expr1 exp((B.g/A.r)-1)*A.r*(1-step(A.r,B.g))+B.g*step(A.r,B.g)
+  expr2 exp((B.b/A.r)-1)*A.r*(1-step(A.r,B.b))+B.b*step(A.r,B.b)
+  name ROLLOFFENGINE
+  xpos -40
+  ypos -58
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Mergemultiplier
+  xpos -40
+  ypos -10
+ }
+push $N9b2b2000
+ Switch {
+  inputs 2
+  which {{ceil(rolloffconstant.rolloff-0.02)}}
+  name Switch1
+  xpos -260
+  ypos 38
+ }
+set N7ea99c00 [stack 0]
+ Output {
+  name Output1
+  xpos -260
+  ypos 134
+ }
+push $N7ea99c00
+ Viewer {
+  frame_range 1-180
+  fps 25
+  clip_warning exposure
+  name Viewer1
+  selected true
+  xpos 180
+  ypos -31
+ }
+end_group

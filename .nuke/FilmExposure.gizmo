@@ -1,0 +1,44 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name FilmExposure
+tile_color 0x6d709eff
+addUserKnob {20 User}
+addUserKnob {7 Energy R -10 10}
+}
+Input {
+inputs 0
+name Input1
+xpos 180
+ypos -9
+}
+set N66e804a0 [stack 0]
+Multiply {
+value 0
+name settoblack
+tile_color 0xff
+xpos 290
+ypos 33
+}
+Add {
+value {{parent.Energy} {(1-exp(-1*r))} 0 0}
+name filmexposureparams
+xpos 290
+ypos 81
+}
+push $N66e804a0
+MergeExpression {
+inputs 2
+expr0 A.g==0?B.r:(1-exp(-(B.r*A.r)))/A.g
+expr1 A.g==0?B.g:(1-exp(-(B.g*A.r)))/A.g
+expr2 A.g==0?B.b:(1-exp(-(B.b*A.r)))/A.g
+name filmengine
+xpos 180
+ypos 87
+}
+Output {
+name Output1
+xpos 180
+ypos 183
+}
+end_group

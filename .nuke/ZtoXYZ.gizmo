@@ -1,0 +1,304 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+add_layer {Z_Depth Z_Depth.Y Z_Depth.red Z_Depth.green Z_Depth.blue}
+Group {
+name ZtoXYZ
+ inputs 2
+ tile_color 0x162d41ff
+ addUserKnob {20 User}
+ addUserKnob {41 in l "Z channel" T whatZ.in}
+ addUserKnob {41 out l "Position out" T wherePOS.out}
+}
+ Input {
+  inputs 0
+  name InputZ
+  xpos 708
+  ypos -672
+ }
+set N3a8c6970 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle5
+  xpos 842
+  ypos -573
+ }
+ Dot {
+  name Dot4
+  xpos 876
+  ypos -521
+ }
+set N3a8c7050 [stack 0]
+ Dot {
+  name Dot5
+  xpos 991
+  ypos -521
+ }
+ Dot {
+  name Dot6
+  xpos 991
+  ypos -292
+ }
+set N3a8c7730 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1119
+  ypos -292
+ }
+set N3a8c7aa0 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1236
+  ypos -292
+ }
+set N3a8c7e10 [stack 0]
+ Dot {
+  name Dot7
+  xpos 1407
+  ypos -292
+ }
+ Add {
+  channels rgb
+  value {{parent.TM1.world_matrix.3} {parent.TM1.world_matrix.7} {parent.TM1.world_matrix.11} {curve}}
+  name t1
+  xpos 1373
+  ypos -202
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  out TMP
+  name Shuffle12
+  xpos 1373
+  ypos -133
+ }
+ Dot {
+  name Dot10
+  xpos 1407
+  ypos 119
+ }
+push $N3a8c7e10
+ Add {
+  channels rgb
+  value {{parent.TM1.world_matrix.2} {parent.TM1.world_matrix.6} {parent.TM1.world_matrix.10} 0}
+  name r3
+  xpos 1202
+  ypos -206
+ }
+ Shuffle {
+  out TMP
+  name Shuffle11
+  xpos 1202
+  ypos -122
+ }
+push $N3a8c7050
+ Add {
+  channels {rgba.red rgba.green -rgba.blue}
+  value {{Inputcam.parent.input1.focal/(Inputcam.parent.input1.haperture/2)} {r*(width/height)} {curve} {curve}}
+  name camparam
+  xpos 842
+  ypos -450
+ }
+push $N3a8c6970
+ Shuffle {
+  in Z_Depth
+  green black
+  blue black
+  out TMP
+  name whatZ
+  xpos 708
+  ypos -619
+ }
+ Expression {
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 TMP.X<-100000000000000?-inf:TMP.X
+  name make_infinite_infinite
+  xpos 708
+  ypos -593
+ }
+ Shuffle {
+  in TMP
+  green red
+  blue red
+  out TMP
+  name Shuffle1
+  xpos 708
+  ypos -561
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 B.TMP.X*-((x/(width/2))-1)/A.r
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 B.TMP.Y*-((y/(height/2))-1)/A.g
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 B.TMP.Z
+  name MergeExpression1
+  xpos 708
+  ypos -444
+ }
+ Dot {
+  name Dot1
+  xpos 742
+  ypos -42
+ }
+set N3a8ca070 [stack 0]
+ Dot {
+  name Dot2
+  xpos 742
+  ypos 15
+ }
+set N3aac65d0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 742
+  ypos 77
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.Z
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.Z
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.Z
+  name MergeExpression4
+  xpos 1202
+  ypos 74
+ }
+push $N3a8c7aa0
+ Add {
+  channels rgb
+  value {{parent.TM1.world_matrix.1} {parent.TM1.world_matrix.5} {parent.TM1.world_matrix.9} {curve}}
+  name r2
+  xpos 1085
+  ypos -202
+ }
+ Shuffle {
+  out TMP
+  name Shuffle10
+  xpos 1085
+  ypos -124
+ }
+push $N3aac65d0
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.Y
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.Y
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.Y
+  name MergeExpression3
+  xpos 1085
+  ypos 12
+ }
+push $N3a8c7730
+ Add {
+  channels rgb
+  value {{parent.TM1.world_matrix.0} {parent.TM1.world_matrix.4} {parent.TM1.world_matrix.8} {curve}}
+  name r1
+  xpos 957
+  ypos -207
+ }
+ Shuffle {
+  out TMP
+  name Shuffle9
+  xpos 957
+  ypos -134
+ }
+push $N3a8ca070
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.X
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.X
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.X
+  name MergeExpression2
+  xpos 957
+  ypos -45
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name Merge4
+  xpos 1022
+  ypos 183
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name Merge6
+  xpos 1085
+  ypos 248
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name Merge5
+  selected true
+  xpos 1085
+  ypos 308
+ }
+ Expression {
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 isfinite(TMP.X)?TMP.X:-inf
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 isfinite(TMP.Y)?TMP.Y:-inf
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 isfinite(TMP.Z)?TMP.Z:-inf
+  channel3 none
+  name Expression3
+  xpos 1085
+  ypos 467
+ }
+ Shuffle {
+  in TMP
+  alpha black
+  out rgb
+  name wherePOS
+  xpos 1085
+  ypos 516
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 1085
+  ypos 540
+ }
+ Output {
+  name Output1
+  xpos 1085
+  ypos 597
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 1149
+  ypos -500
+  number 1
+ }
+ Axis2 {
+  matrix {
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+    }
+  name TM1
+  xpos 1159
+  ypos -420
+ }
+end_group

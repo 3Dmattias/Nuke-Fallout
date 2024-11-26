@@ -1,0 +1,66 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name DefocusGen
+ addUserKnob {20 Settings}
+ addUserKnob {41 FocusDist T DefocusControl.FocusDist}
+ addUserKnob {41 Horizontal l "Horizontal Aperture" T DefocusControl.Horizontal}
+ addUserKnob {41 FocalLength l "Focal Length" T DefocusControl.FocalLength}
+ addUserKnob {41 Defocus T DefocusControl.Defocus}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 414
+  ypos -373
+ }
+set N79888210 [stack 0]
+ Multiply {
+  value 0
+  name Multiply1
+  xpos 560
+  ypos -304
+ }
+ Add {
+  value {{DefocusControl.Defocus} {DefocusControl.FocusDist} 0 0}
+  name Add1
+  xpos 560
+  ypos -254
+ }
+push $N79888210
+add_layer {def def.def1 def.def2}
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  out def
+  name ShuffleCopy1
+  xpos 414
+  ypos -248
+ }
+ Expression {
+  expr0 "Z_Depth.Y<-100000?0:(abs(((-Z_Depth.Y-def.def2)/def.def2)*def.def1))/(sin ((atan((Horizontal/2)/FocalLength)))*-Z_Depth.Y)"
+  expr1 Z_Depth.Y<-100000?0:1
+  expr2 0
+  channel3 none
+  name DefocusControl
+  selected true
+  xpos 414
+  ypos -145
+  addUserKnob {20 Settings}
+  addUserKnob {7 FocusDist R 0.001 10000}
+  FocusDist 100
+  addUserKnob {7 Horizontal l "Horizontal Aperture" R 0 100}
+  Horizontal 24
+  addUserKnob {7 FocalLength l "Focal Length" R 0 300}
+  FocalLength 50
+  addUserKnob {7 Defocus R 0 20}
+  Defocus 5
+  addUserKnob {26 t l "" +STARTLINE T "\n\nRed Channel gets blur factor data.\nGreen Channel gets binary data for use with GrowChannelEdge."}
+ }
+ Output {
+  name Output1
+  xpos 414
+  ypos -38
+ }
+end_group

@@ -1,0 +1,120 @@
+#! C:/Program Files/Nuke6.3v2/Nuke6.3.exe -nx
+version 6.3 v2
+Gizmo {
+ tile_color 0xffff00ff
+ addUserKnob {20 VectorMap}
+ addUserKnob {41 in l Channel T NMwhatchannel.in}
+ addUserKnob {41 Result T NMoutputdata.out}
+ addUserKnob {41 size l Blur T NMblurit.size}
+ addUserKnob {7 Multiply R 0 100}
+ Multiply 1
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 685
+  ypos -13
+ }
+add_layer {NMdistort NMdistort.U NMdistort.V NMdistort.W}
+ Shuffle {
+  in rgb
+  out NMdistort
+  name NMwhatchannel
+  xpos 685
+  ypos 27
+ }
+ Shuffle {
+  in NMdistort
+  green red
+  out NMdistort
+  name NMmakesure
+  xpos 685
+  ypos 63
+ }
+ Blur {
+  channels NMdistort
+  name NMblurit
+  xpos 685
+  ypos 94
+ }
+ Transform {
+  translate {-0.5 -0.5}
+  center {960 540}
+  name NMmovebefore
+  xpos 685
+  ypos 152
+ }
+ Dot {
+  name Dot1
+  xpos 719
+  ypos 184
+ }
+set N5a80d8b0 [stack 0]
+ Transform {
+  translate {1 0}
+  center {960 540}
+  name NMmoveX
+  xpos 590
+  ypos 227
+ }
+push $N5a80d8b0
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels NMdistort
+  Bchannels NMdistort
+  output NMdistort
+  name NMMergeX
+  xpos 590
+  ypos 318
+ }
+push $N5a80d8b0
+ Transform {
+  translate {0 1}
+  center {960 540}
+  name NMmoveY
+  xpos 779
+  ypos 228
+ }
+push $N5a80d8b0
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels NMdistort
+  Bchannels NMdistort
+  output NMdistort
+  name NMMergeY
+  xpos 779
+  ypos 325
+ }
+ ShuffleCopy {
+  inputs 2
+  in NMdistort
+  in2 NMdistort
+  red red
+  out NMdistort
+  name NMShuffleX
+  xpos 693
+  ypos 409
+ }
+ Multiply {
+  channels NMdistort
+  value {{parent.Multiply x15 1} {parent.Multiply x15 1} 1 1}
+  name NMmultiply
+  xpos 693
+  ypos 433
+ }
+ Shuffle {
+  in NMdistort
+  blue black
+  out rgb
+  name NMoutputdata
+  xpos 693
+  ypos 485
+ }
+ Output {
+  name Nmexit
+  xpos 693
+  ypos 558
+ }
+end_group

@@ -1,0 +1,70 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name VDtimewarp
+ tile_color 0xff00b1ff
+ addUserKnob {20 VectorDistortedTimeWarp}
+ addUserKnob {41 lookup T VTDTimeWarp.lookup}
+ addUserKnob {26 abt l "" +STARTLINE T "\n\nUses the Velocity channel to warp images to blend better when timewarping"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 767
+  ypos -50
+ }
+ Dot {
+  name Dot46
+  xpos 801
+  ypos -10
+ }
+set N8eacde40 [stack 0]
+ TimeWarp {
+  lookup {{curve 0 L l x100 100}}
+  name VTDTimeWarp
+  xpos 767
+  ypos 89
+ }
+push $N8eacde40
+ FrameHold {
+  first_frame {{ceil(parent.VTDTimeWarp.lookup)}}
+  name VTDSecframeInput
+  xpos 882
+  ypos 27
+ }
+add_layer {Velocity Velocity.X Velocity.Y}
+ IDistort {
+  uv Velocity
+  uv_scale {{(((parent.VTDTimeWarp.lookup)-ceil(parent.VTDTimeWarp.lookup)))}}
+  name VTDSecframeDistort
+  xpos 882
+  ypos 151
+ }
+push $N8eacde40
+ FrameHold {
+  first_frame {{floor(parent.VTDTimeWarp.lookup)}}
+  name VTDFirstframeInput
+  xpos 652
+  ypos 31
+ }
+ IDistort {
+  uv Velocity
+  uv_scale {{(((parent.VTDTimeWarp.lookup)-floor(parent.VTDTimeWarp.lookup)))}}
+  name VTDFirstframeDistort
+  xpos 652
+  ypos 163
+ }
+ Mix {
+  inputs 2
+  name VTDframeblend
+  xpos 767
+  ypos 256
+  channels all
+  mix {{1-((parent.VTDTimeWarp.lookup)-floor(parent.VTDTimeWarp.lookup))}}
+ }
+ Output {
+  name Output1
+  xpos 767
+  ypos 356
+ }
+end_group

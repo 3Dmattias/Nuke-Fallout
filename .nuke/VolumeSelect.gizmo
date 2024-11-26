@@ -1,0 +1,124 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+add_layer {pos pos.X pos.Y pos.Z}
+Group {
+name VolumeSelect
+ inputs 2
+ tile_color 0x2c27ff
+ addUserKnob {20 User}
+ addUserKnob {41 PositionChannel T whatZ.in}
+ addUserKnob {41 matteradius T inputs.matteradius}
+ addUserKnob {41 falloff T inputs.falloff}
+ addUserKnob {41 MaskOutput T Shuffle1.out}
+}
+ Input {
+  inputs 0
+  name Inputxyz
+  xpos 286
+  ypos 78
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in pos
+  out TMP
+  name whatZ
+  xpos 286
+  ypos 136
+ }
+set N564d3ac0 [stack 0]
+ Multiply {
+  value 0
+  name Multiply1
+  xpos 403
+  ypos 130
+ }
+ Add {
+  channels TMP
+  value {{PT.world_matrix.3 x1 0} {PT.world_matrix.7 x1 0} {PT.world_matrix.11 x1 0} {curve x1 0}}
+  name Mrow1
+  xpos 403
+  ypos 204
+ }
+push $N564d3ac0
+ MergeExpression {
+  inputs 2
+  channel0 TMP
+  expr0 sqrt((B.TMP.X-A.TMP.X)*(B.TMP.X-A.TMP.X)+(B.TMP.Y-A.TMP.Y)*(B.TMP.Y-A.TMP.Y)+(B.TMP.Z-A.TMP.Z)*(B.TMP.Z-A.TMP.Z))
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  channel2 {-TMP.X -TMP.Y -TMP.Z}
+  channel3 none
+  name MergeExpression1
+  xpos 286
+  ypos 210
+ }
+ Add {
+  channels TMP
+  value {{-parent.inputs.matteradius}}
+  name Addradii
+  xpos 286
+  ypos 269
+ }
+ Multiply {
+  channels TMP
+  value {{1/parent.inputs.falloff}}
+  name Multiplyaddfalloff
+  xpos 286
+  ypos 316
+ }
+ Invert {
+  channels TMP
+  name Invert1it
+  xpos 286
+  ypos 367
+ }
+ Clamp {
+  channels TMP
+  name Clamp1ing
+  xpos 286
+  ypos 419
+ }
+ Shuffle {
+  in TMP
+  out rgb
+  name Shuffle1
+  xpos 286
+  ypos 484
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 286
+  ypos 538
+ }
+ Output {
+  name Output1
+  xpos 286
+  ypos 606
+ }
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 518
+  ypos 77
+  number 1
+ }
+ Axis2 {
+  name PT
+  xpos 528
+  ypos 125
+ }
+push $N564d3ac0
+ Expression {
+  channel0 none
+  channel1 none
+  channel2 none
+  channel3 none
+  name inputs
+  xpos 159
+  ypos 294
+  addUserKnob {20 User}
+  addUserKnob {7 matteradius R 0 100}
+  addUserKnob {7 falloff R 0.001 100}
+  falloff 7
+ }
+end_group

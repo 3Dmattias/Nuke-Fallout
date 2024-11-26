@@ -1,0 +1,167 @@
+#! C:/Program Files/Nuke7.0v4/Nuke7.0.exe -nx
+version 7.0 v4
+Group {
+name SimpleVectorMap
+ tile_color 0xffff00ff
+ addUserKnob {20 VectorMap}
+ addUserKnob {41 in l Channel T NMwhatchannel.in}
+ addUserKnob {41 Result T NMoutputdata.out}
+ addUserKnob {41 size l Blur T NMblurit.size}
+ addUserKnob {7 Multiply R 0 100}
+ Multiply 1
+ addUserKnob {6 AsNormal +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 685
+  ypos -13
+ }
+add_layer {NMdistort NMdistort.U NMdistort.V NMdistort.W}
+ Shuffle {
+  in rgb
+  blue black
+  out NMdistort
+  name NMwhatchannel
+  xpos 685
+  ypos 22
+ }
+ Shuffle {
+  in NMdistort
+  green red
+  blue red
+  out NMdistort
+  name NMmakesure
+  xpos 685
+  ypos 63
+ }
+ Blur {
+  channels NMdistort
+  name NMblurit
+  xpos 685
+  ypos 94
+ }
+ Transform {
+  translate {-0.5 -0.5}
+  center {960 540}
+  name NMmovebefore
+  xpos 685
+  ypos 152
+ }
+ Dot {
+  name Dot1
+  xpos 719
+  ypos 184
+ }
+set N2ae47290 [stack 0]
+ Transform {
+  translate {1 0}
+  center {960 540}
+  name NMmoveX
+  xpos 590
+  ypos 227
+ }
+push $N2ae47290
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels NMdistort
+  Bchannels NMdistort
+  output NMdistort
+  name NMMergeX
+  xpos 590
+  ypos 318
+ }
+push $N2ae47290
+ Transform {
+  translate {0 1}
+  center {960 540}
+  name NMmoveY
+  xpos 779
+  ypos 228
+ }
+push $N2ae47290
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels NMdistort
+  Bchannels NMdistort
+  output NMdistort
+  name NMMergeY
+  xpos 779
+  ypos 325
+ }
+ ShuffleCopy {
+  inputs 2
+  in NMdistort
+  in2 NMdistort
+  red red
+  blue black
+  out NMdistort
+  name NMShuffleX
+  xpos 693
+  ypos 409
+ }
+ Multiply {
+  channels NMdistort
+  value {{parent.Multiply x15 1} {parent.Multiply x15 1} 1 1}
+  name NMmultiply
+  xpos 693
+  ypos 454
+ }
+set N2b189280 [stack 0]
+ Dot {
+  name Dot2
+  xpos 912
+  ypos 463
+ }
+set N2b6626a0 [stack 0]
+ Add {
+  channels NMdistort
+  value {0 0 0.5 0}
+  name Add1
+  xpos 878
+  ypos 515
+ }
+push $N2b6626a0
+ Expression {
+  channel0 NMdistort
+  expr0 sqrt(NMdistort.U*NMdistort.U+NMdistort.V*NMdistort.V+0.5)
+  name Expression1
+  xpos 764
+  ypos 525
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  Achannels NMdistort
+  Bchannels NMdistort
+  output NMdistort
+  name Merge1
+  xpos 878
+  ypos 586
+ }
+push $N2b189280
+ Switch {
+  inputs 2
+  which {{parent.AsNormal}}
+  name Switch1
+  xpos 693
+  ypos 592
+  addUserKnob {20 User}
+  addUserKnob {6 test +STARTLINE}
+  test true
+ }
+ Shuffle {
+  in NMdistort
+  out rgb
+  name NMoutputdata
+  xpos 693
+  ypos 625
+ }
+ Output {
+  name Nmexit
+  xpos 693
+  ypos 675
+ }
+end_group

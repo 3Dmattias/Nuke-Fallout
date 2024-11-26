@@ -1,0 +1,44 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name MakeNeutral
+ addUserKnob {20 User}
+ addUserKnob {41 MakeNeutral T Multiply3.MakeNeutral}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 LuminanceWeights T Multiply3.LuminanceWeights}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -441
+  ypos 132
+ }
+ Multiply {
+  channels rgb
+  value {{1/MakeNeutral.r*(MakeNeutral.r*LuminanceWeights.r+MakeNeutral.g*LuminanceWeights.g+MakeNeutral.b*LuminanceWeights.b) i x1 0} {1/MakeNeutral.g*(MakeNeutral.r*LuminanceWeights.r+MakeNeutral.g*LuminanceWeights.g+MakeNeutral.b*LuminanceWeights.b) i x1 0} {1/MakeNeutral.b*(MakeNeutral.r*LuminanceWeights.r+MakeNeutral.g*LuminanceWeights.g+MakeNeutral.b*LuminanceWeights.b) i x1 0} {curve i x1 0}}
+  name Multiply3
+  selected true
+  xpos -441
+  ypos 190
+  addUserKnob {20 User}
+  addUserKnob {18 MakeNeutral}
+  MakeNeutral {1 1 1}
+  addUserKnob {26 "" +STARTLINE}
+  addUserKnob {26 LumaWeights l "" +STARTLINE T LumaWeights:}
+  addUserKnob {18 LuminanceWeights l "                          "}
+  LuminanceWeights {0.27 0.67 0.06}
+ }
+set N801510d0 [stack 0]
+ Output {
+  name Output1
+  xpos -441
+  ypos 272
+ }
+push $N801510d0
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos -294
+  ypos 162
+ }
+end_group

@@ -1,0 +1,50 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name SimpleRadial
+ addUserKnob {20 User}
+ addUserKnob {41 output T Radial2.output}
+ addUserKnob {41 premult T Radial2.premult}
+ addUserKnob {41 cliptype l "clip to" T Radial2.cliptype}
+ addUserKnob {41 replace -STARTLINE T Radial2.replace}
+ addUserKnob {41 invert -STARTLINE T Radial2.invert}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {14 radius R 0 100}
+ radius 100
+ addUserKnob {12 origin}
+ origin {640 360}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 opacity T Radial2.opacity}
+ addUserKnob {26 m l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Radial2.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Radial2.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Radial2.invert_mask}
+ addUserKnob {26 ""}
+ addUserKnob {41 softness T Radial2.softness}
+ addUserKnob {41 plinear l "perceptually linear" T Radial2.plinear}
+ addUserKnob {20 "" l Color}
+ addUserKnob {41 ramp T Radial2.ramp}
+ addUserKnob {41 color T Radial2.color}
+ addUserKnob {41 p1 l "point 1" T Radial2.p1}
+ addUserKnob {41 color0 l "color 0" T Radial2.color0}
+ addUserKnob {41 p0 l "point 0" T Radial2.p0}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 486
+  ypos -115
+ }
+ Radial {
+  area {{(origin.x)-radius.w i} {(origin.y)-radius.h i} {(origin.x)+radius.w i} {(origin.y)+radius.h i}}
+  name Radial2
+  selected true
+  xpos 486
+  ypos -54
+ }
+ Output {
+  name Output1
+  xpos 486
+  ypos 25
+ }
+end_group

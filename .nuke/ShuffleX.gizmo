@@ -1,0 +1,37 @@
+#! C:/Program Files/Nuke15.0v2/nuke-15.0.2.dll -nx
+version 15.0 v2
+Group {
+name ShuffleX
+inputs 2
+tile_color 0x9e3c63ff
+addUserKnob {20 Shuffle}
+addUserKnob {41 shuffle l "" -STARTLINE T ShuffleXinternal.shuffle}
+}
+Input {
+ inputs 0
+ name A
+ xpos -1690
+ ypos 183
+ number 1
+}
+Input {
+ inputs 0
+ name B
+ xpos -1580
+ ypos 183
+}
+Shuffle2 {
+ inputs 2
+ fromInput1 {{0} B A}
+ fromInput2 {{1} B A}
+ in2 rgba
+ name ShuffleXinternal
+ xpos -1580
+ ypos 279
+}
+Output {
+ name Output1
+ xpos -1599
+ ypos 390
+}
+end_group

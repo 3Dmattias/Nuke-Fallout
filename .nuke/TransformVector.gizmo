@@ -1,0 +1,159 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name TransformVector
+ inputs 2
+ tile_color 0x162d41ff
+ addUserKnob {20 User}
+ addUserKnob {41 in l "Normal channel" T whatZ.in}
+ addUserKnob {41 out l "Normal out" T wherePOS.out}
+}
+ Input {
+  inputs 0
+  name InputNormal
+  xpos 779
+  ypos -343
+ }
+set Ncb26f000 [stack 0]
+ Multiply {
+  value 0
+  name Multiply1
+  xpos 950
+  ypos -305
+ }
+set Ncb26ec00 [stack 0]
+ Add {
+  value {{TM1.world_matrix.8} {TM1.world_matrix.9} {TM1.world_matrix.10} {TM1.world_matrix.11}}
+  name Add3
+  xpos 1170
+  ypos -209
+ }
+push $Ncb26f000
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in Normal
+  out TMP
+  name whatZ
+  xpos 779
+  ypos -215
+ }
+set Ncb26e400 [stack 0]
+ MergeExpression {
+  inputs 2
+  channel0 {-TMP.X -TMP.Y TMP.Z}
+  expr0 B.TMP.X*A.r+B.TMP.Y*A.g+B.TMP.Z*A.b+A.a
+  channel1 none
+  channel2 none
+  channel3 none
+  name MergeExpression3
+  xpos 1060
+  ypos -106
+ }
+push $Ncb26ec00
+ Add {
+  value {{TM1.world_matrix.4} {TM1.world_matrix.5} {TM1.world_matrix.6} {TM1.world_matrix.7}}
+  name Add2
+  xpos 1060
+  ypos -209
+ }
+push $Ncb26e400
+ MergeExpression {
+  inputs 2
+  channel0 {-TMP.X TMP.Y -TMP.Z}
+  expr0 B.TMP.X*A.r+B.TMP.Y*A.g+B.TMP.Z*A.b+A.a
+  channel1 none
+  channel2 none
+  channel3 none
+  name MergeExpression2
+  xpos 950
+  ypos -106
+ }
+push $Ncb26ec00
+ Add {
+  value {{TM1.world_matrix.0} {TM1.world_matrix.1} {TM1.world_matrix.2} {TM1.world_matrix.3}}
+  name Add1
+  xpos 950
+  ypos -209
+ }
+push $Ncb26e400
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 B.TMP.X*A.r+B.TMP.Y*A.g+B.TMP.Z*A.b+A.a
+  channel1 none
+  channel2 none
+  channel3 none
+  name MergeExpression1
+  xpos 840
+  ypos -106
+ }
+push $Ncb26e400
+ ShuffleCopy {
+  inputs 2
+  in TMP
+  in2 TMP
+  red red
+  out TMP
+  name ShuffleCopy1
+  xpos 782
+  ypos -68
+ }
+ ShuffleCopy {
+  inputs 2
+  in TMP
+  in2 TMP
+  green green
+  out TMP
+  name ShuffleCopy2
+  xpos 780
+  ypos -10
+ }
+ ShuffleCopy {
+  inputs 2
+  in TMP
+  in2 TMP
+  blue blue
+  out TMP
+  name ShuffleCopy3
+  xpos 777
+  ypos 38
+ }
+ Shuffle {
+  in TMP
+  alpha black
+  out Normal
+  name wherePOS
+  xpos 780
+  ypos 86
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 780
+  ypos 112
+ }
+ Output {
+  name Output1
+  xpos 780
+  ypos 167
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 647
+  ypos -347
+  number 1
+ }
+ Axis2 {
+  matrix {
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+      {{parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix} {parent.parent.Camera2.world_matrix}}
+    }
+  name TM1
+  xpos 630
+  ypos -270
+ }
+end_group

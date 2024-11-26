@@ -1,0 +1,143 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name EnvMapper
+ inputs 2
+ tile_color 0xff00ff
+ addUserKnob {20 User}
+ addUserKnob {41 Normalchannel T getnorm.in}
+ addUserKnob {6 blur +STARTLINE}
+ addUserKnob {41 filter -STARTLINE T IDistort1.filter}
+ addUserKnob {41 Blurchannel -STARTLINE T blurchan.in}
+ addUserKnob {41 blur_scale l "blur scale" T IDistort1.blur_scale}
+ addUserKnob {41 filter_1 l filter T IDistort2.filter}
+}
+ Input {
+  inputs 0
+  name InputNormals
+  xpos -197
+  ypos -450
+ }
+set Nf67f68b0 [stack 0]
+push $Nf67f68b0
+ Input {
+  inputs 0
+  name InputENVmap
+  xpos -30
+  ypos -455
+  number 1
+ }
+set Nf67f74e0 [stack 0]
+ Reformat {
+  type "to box"
+  box_width {{InputNormals.width i}}
+  box_height {{InputNormals.height i}}
+  resize distort
+  center false
+  name Reformat1
+  xpos 35
+  ypos -401
+ }
+push $Nf67f74e0
+ Switch {
+  inputs 2
+  which {{InputNormals.height>InputENVmap.height?1:InputNormals.width>InputENVmap.width?1:0 i}}
+  name Switch1
+  xpos -30
+  ypos -348
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ ShuffleCopy {
+  inputs 2
+  in Normal
+  red red
+  green green
+  blue blue
+  out TMP
+  name getnorm
+  xpos -30
+  ypos -284
+ }
+set Nf680a0b0 [stack 0]
+push $Nf680a0b0
+ Expression {
+  inputs 1+1
+  channel0 {-TMP.X TMP.Y -TMP.Z}
+  expr0 -y+(acos(-TMP.Y)/(PI)*height)
+  channel1 {TMP.X -TMP.Y -TMP.Z}
+  expr1 -x+((.5+atan2(TMP.X,TMP.Z)/(2*PI))*width)
+  channel2 none
+  channel3 none
+  maskChannelMask none
+  name Expression1
+  xpos -30
+  ypos -231
+ }
+set Nf9861770 [stack 0]
+add_layer {flexblur flexblur.B}
+ ShuffleCopy {
+  inputs 2
+  in alpha
+  red red
+  green green
+  blue blue
+  out flexblur
+  name blurchan
+  xpos -110
+  ypos -193
+ }
+ IDistort {
+  channels rgb
+  uv TMP
+  blur flexblur.B
+  blur_scale 100
+  name IDistort1
+  xpos -110
+  ypos -167
+ }
+push $Nf9861770
+ IDistort {
+  channels rgb
+  uv TMP
+  blur_scale {{parent.IDistort1.blur_scale}}
+  name IDistort2
+  xpos 35
+  ypos -168
+ }
+ Switch {
+  inputs 2
+  which {{parent.blur}}
+  name bluronoff
+  xpos -30
+  ypos -121
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos -30
+  ypos -95
+ }
+set Nf9863c00 [stack 0]
+push $Nf9863c00
+ Crop {
+  box {0 0 {InputNormals.width i} {InputNormals.height i}}
+  reformat true
+  crop false
+  name Crop1
+  xpos 21
+  ypos -38
+ }
+ Switch {
+  inputs 2
+  which {{InputNormals.height>InputENVmap.height?1:InputNormals.width>InputENVmap.width?1:0}}
+  name Switch2
+  xpos -30
+  ypos 15
+ }
+ Output {
+  name Output1
+  xpos -30
+  ypos 61
+ }
+end_group

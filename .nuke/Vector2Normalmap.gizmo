@@ -1,0 +1,107 @@
+#! C:/Program Files/Nuke15.0v2/nuke-15.0.2.dll -nx
+version 15.0 v2
+Group {
+name Vector2Normalmap
+ tile_color 0xa4a4ffff
+ gl_color 0x174709ff
+ addUserKnob {20 User}
+ addUserKnob {6 switchRG l "R G switch" +STARTLINE}
+ addUserKnob {6 flipR l "flip R" +STARTLINE}
+ addUserKnob {6 flipg l "flip G" -STARTLINE}
+ addUserKnob {6 b_range l "full range" t "when full range is checked the output normal can store reversed normals." +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 305
+  ypos -202
+ }
+set Nce00cc00 [stack 0]
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3 rgba.green 0 1 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1"
+  name Shuffle1
+  xpos 216
+  ypos -149
+ }
+push $Nce00cc00
+ Switch {
+  inputs 2
+  which {{parent.switchRG}}
+  name rgswitch
+  xpos 303
+  ypos -96
+ }
+set N2dd06000 [stack 0]
+ Multiply {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value {-1 1 1 1}
+  name flipRed
+  xpos 239
+  ypos -14
+ }
+push $N2dd06000
+ Switch {
+  inputs 2
+  which {{parent.flipR}}
+  name redflipper
+  xpos 303
+  ypos 32
+ }
+set Nce00d400 [stack 0]
+ Multiply {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  value {1 -1 1 1}
+  name flipGreen
+  selected true
+  xpos 234
+  ypos 69
+ }
+push $Nce00d400
+ Switch {
+  inputs 2
+  which {{parent.flipg}}
+  name greenflipper
+  xpos 299
+  ypos 114
+ }
+set Nce00d800 [stack 0]
+ Multiply {
+  value {0.5 0.5 0.5 0.5}
+  name Multiply3
+  xpos 170
+  ypos 179
+ }
+ Add {
+  value 0.5
+  name Add1
+  xpos 173
+  ypos 223
+ }
+push $Nce00d800
+ Multiply {
+  value {0.5 0.5 1 1}
+  name Multiplytofit
+  xpos 299
+  ypos 186
+ }
+ Add {
+  value {0.5 0.5 0 0}
+  name liftintobox
+  xpos 296
+  ypos 238
+ }
+ Switch {
+  inputs 2
+  which {{parent.b_range}}
+  name full_rangeswitch
+  xpos 294
+  ypos 328
+ }
+ Output {
+  name Output1
+  xpos 285
+  ypos 402
+ }
+end_group

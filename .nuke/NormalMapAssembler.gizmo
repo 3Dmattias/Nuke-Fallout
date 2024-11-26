@@ -1,0 +1,238 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name NormalMapAssembler
+ inputs 4
+ tile_color 0x7f7fffff
+ addUserKnob {20 User}
+ addUserKnob {6 Highpass -STARTLINE}
+ Highpass true
+ addUserKnob {41 size l "" -STARTLINE T BlurHighpassNM.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 Enhance T MultiplyEnhanceNM.value}
+}
+ Input {
+  inputs 0
+  name InputLeft
+  xpos 657
+  ypos 215
+ }
+ Saturation {
+  saturation 0
+  mode Maximum
+  name Saturation1
+  xpos 657
+  ypos 262
+ }
+ set C5023ffe0 [stack 0]
+set N5016d240 [stack 0]
+push $N5016d240
+ Blur {
+  channels rgb
+  size 100
+  name BlurHighpassNM
+  xpos 548
+  ypos 324
+ }
+ set C502404c0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge4
+  xpos 582
+  ypos 384
+ }
+push $N5016d240
+ Switch {
+  inputs 2
+  which {{Highpass i}}
+  name SwitchHighpassNM
+  xpos 657
+  ypos 430
+ }
+ set C500edd30 [stack 0]
+ Input {
+  inputs 0
+  name InputRight
+  xpos 767
+  ypos 216
+  number 1
+ }
+clone $C5023ffe0 {
+  xpos 767
+  ypos 262
+  selected false
+ }
+set N5023ca40 [stack 0]
+push $N5023ca40
+clone $C502404c0 {
+  xpos 859
+  ypos 323
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge5
+  xpos 814
+  ypos 392
+ }
+push $N5023ca40
+clone $C500edd30 {
+  inputs 2
+  xpos 767
+  ypos 434
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 720
+  ypos 474
+ }
+ Multiply {
+  channels rgb
+  value 1
+  name MultiplyEnhanceNM
+  xpos 720
+  ypos 500
+ }
+ set C50241d20 [stack 0]
+set N5023e780 [stack 0]
+ Expression {
+  channel0 rgb
+  expr0 1-fabs(b)
+  name Expression1
+  xpos 1171
+  ypos 588
+ }
+ set C50241f90 [stack 0]
+ Input {
+  inputs 0
+  name InputTop
+  xpos 1059
+  ypos 223
+  number 2
+ }
+clone $C5023ffe0 {
+  xpos 1059
+  ypos 263
+  selected false
+ }
+set N5023ec60 [stack 0]
+push $N5023ec60
+clone $C502404c0 {
+  xpos 965
+  ypos 325
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge6
+  xpos 1025
+  ypos 386
+ }
+push $N5023ec60
+clone $C500edd30 {
+  inputs 2
+  xpos 1059
+  ypos 423
+  selected false
+ }
+ Input {
+  inputs 0
+  name InputBottom
+  xpos 1183
+  ypos 223
+  number 3
+ }
+clone $C5023ffe0 {
+  xpos 1183
+  ypos 263
+  selected false
+ }
+set N5023ffe0 [stack 0]
+push $N5023ffe0
+clone $C502404c0 {
+  xpos 1282
+  ypos 322
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge7
+  xpos 1216
+  ypos 375
+ }
+push $N5023ffe0
+clone $C500edd30 {
+  inputs 2
+  xpos 1183
+  ypos 422
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  xpos 1120
+  ypos 458
+ }
+clone $C50241d20 {
+  xpos 1120
+  ypos 484
+  selected false
+ }
+set N50241d20 [stack 0]
+clone $C50241f90 {
+  xpos 1326
+  ypos 586
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation min
+  name Merge3
+  xpos 1251
+  ypos 645
+ }
+push $N50241d20
+ Add {
+  channels rgb
+  value 0.5
+  name Add2
+  xpos 1120
+  ypos 536
+ }
+push $N5023e780
+ Add {
+  channels rgb
+  value 0.5
+  name Add1
+  xpos 720
+  ypos 546
+ }
+ ShuffleCopy {
+  inputs 2
+  green green
+  name ShuffleCopy1
+  xpos 904
+  ypos 603
+ }
+ ShuffleCopy {
+  inputs 2
+  blue blue
+  alpha white
+  name ShuffleCopy2
+  xpos 1093
+  ypos 719
+ }
+ Output {
+  name OutputNormalmap
+  xpos 1093
+  ypos 784
+ }
+end_group

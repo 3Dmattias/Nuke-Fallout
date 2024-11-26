@@ -1,0 +1,26 @@
+#! C:/Program Files/Nuke15.0v2/nuke-15.0.2.dll -nx
+version 15.0 v2
+Gizmo {
+}
+Input {
+inputs 0
+name Input1
+xpos 957
+ypos 344
+}
+Expression {
+expr0 cx
+expr1 (cy*width/height)
+expr2 sqrt(1-min(1,sqrt(cx*cx+(cy*width/height)*(cy*width/height)))*min(1,sqrt(cx*cx+(cy*width/height)*(cy*width/height))))
+expr3 1-smoothstep(0,1,(-1+sqrt(cx*cx+(cy*width/height)*(cy*width/height)))*width/2+1)
+enable_mix_luminance false
+name Expression7
+xpos 957
+ypos 384
+}
+Output {
+name Output1
+xpos 957
+ypos 484
+}
+end_group

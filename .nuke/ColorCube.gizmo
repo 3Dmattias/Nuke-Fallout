@@ -1,0 +1,51 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name ColorCube
+ addUserKnob {20 User}
+ addUserKnob {41 Black T ColorCube.Black}
+ addUserKnob {41 White T ColorCube.White}
+ addUserKnob {41 Red T ColorCube.Red}
+ addUserKnob {41 Yellow T ColorCube.Yellow}
+ addUserKnob {41 Green T ColorCube.Green}
+ addUserKnob {41 Cyan T ColorCube.Cyan}
+ addUserKnob {41 Blue T ColorCube.Blue}
+ addUserKnob {41 Magenta T ColorCube.Magenta}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 316
+  ypos -241
+ }
+ Expression {
+  expr0 mix(mix(mix(Black.r,Blue.r,b),mix(Green.r,Cyan.r,b),g),mix(mix(Red.r,Magenta.r,b),mix(Yellow.r,White.r,b),g),r)
+  expr1 mix(mix(mix(Black.g,Blue.g,b),mix(Red.g,Magenta.g,b),r),mix(mix(Green.g,Cyan.g,b),mix(Yellow.g,White.g,b),r),g)
+  expr2 mix(mix(mix(Black.b,Green.b,g),mix(Red.b,Yellow.b,g),r),mix(mix(Blue.b,Cyan.b,g),mix(Magenta.b,White.b,g),r),b)
+  name ColorCube
+  xpos 316
+  ypos -201
+  addUserKnob {20 User}
+  addUserKnob {18 Black}
+  Black {0 0 0}
+  addUserKnob {18 White}
+  White {1 1 1}
+  addUserKnob {18 Red}
+  Red {1 0 0}
+  addUserKnob {18 Yellow}
+  Yellow {1 1 0}
+  addUserKnob {18 Green}
+  Green {0 1 0}
+  addUserKnob {18 Cyan}
+  Cyan {0 1 1}
+  addUserKnob {18 Blue}
+  Blue {0 0 1}
+  addUserKnob {18 Magenta}
+  Magenta {1 0 1}
+ }
+ Output {
+  name Output1
+  xpos 316
+  ypos -101
+ }
+end_group

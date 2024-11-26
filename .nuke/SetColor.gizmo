@@ -1,0 +1,29 @@
+#! C:/Program Files/Nuke15.0v2/nuke-15.0.2.dll -nx
+version 15.0 v2
+Group {
+name SetColor
+addUserKnob {20 SetColor}
+addUserKnob {41 channels T SetColGrade.channels}
+addUserKnob {41 Color T SetColGrade.add}
+addUserKnob {26 info l "" +STARTLINE T "\n\n\n\nColorpicker and hold CTRL + ALT to capture from input layer"}
+}
+Input {
+inputs 0
+name Input1
+xpos 957
+ypos 344
+}
+Grade {
+white 0
+add {0 0 0 0}
+black_clamp false
+name SetColGrade
+xpos 957
+ypos 384
+}
+Output {
+name Output1
+xpos 957
+ypos 484
+}
+end_group

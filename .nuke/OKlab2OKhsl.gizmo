@@ -1,0 +1,56 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name OKlab2OKhsl
+tile_color 0xea519eff
+addUserKnob {20 OKhsltab l Okhsl}
+addUserKnob {6 fromOKhsl +STARTLINE}
+}
+Input {
+inputs 0
+name Input1
+xpos -1470
+ypos -490
+}
+set Nfb39f000 [stack 0]
+Expression {
+expr0 b
+expr1 g*cos((r-.5)*2*PI)
+expr2 g*sin((r-.5)*2*PI)
+name toOKlab
+xpos -1382
+ypos -442
+addUserKnob {20 User}
+addUserKnob {7 L}
+L 0.6
+addUserKnob {7 C}
+C 0.1
+}
+push $Nfb39f000
+Expression {
+expr0 (atan2((b),(g))/2/PI)+.5
+expr1 sqrt(g*g+b*b)
+expr2 r
+name toOKhsl
+xpos -1580
+ypos -442
+addUserKnob {20 User}
+addUserKnob {7 L}
+L 0.6
+addUserKnob {7 C}
+C 0.1
+}
+Switch {
+inputs 2
+which {{fromOKhsl}}
+name Switch1
+selected true
+xpos -1470
+ypos -394
+}
+Output {
+name Output1
+xpos -1470
+ypos -346
+}
+end_group

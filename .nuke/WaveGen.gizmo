@@ -1,0 +1,58 @@
+#! C:/Program Files/Nuke6.0v5/Nuke6.0.exe -nx
+version 6.0 v5
+Group {
+name WaveGen
+ addUserKnob {20 User}
+ addUserKnob {26 INF l "" +STARTLINE T "SYNDICATE WaveGEN"}
+ addUserKnob {26 ""}
+ addUserKnob {41 Origin T Expression5.Origin}
+ addUserKnob {26 ""}
+ addUserKnob {41 WaveLength T Expression5.WaveLength}
+ addUserKnob {41 Amplitude T Expression5.Amplitude}
+ addUserKnob {41 Phase T Expression5.Phase}
+ addUserKnob {26 ""}
+ addUserKnob {41 ripple T Expression5.ripple}
+ addUserKnob {41 ImpactFrame T Expression5.ImpactFrame}
+ addUserKnob {26 ""}
+ addUserKnob {41 Scale T Expression5.Scale}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -178
+  ypos -101
+ }
+ Expression {
+  temp_name0 onny
+  temp_expr0 0
+  expr0 ripple==1?red+(1/(hypot((x-Origin.x),(y-Origin.y))+1))*sin(((hypot(x-Origin.x,y-Origin.y)/Scale+((-frame()/25)*sqrt(15.4095*WaveLength))+(Phase*WaveLength))*2*pi/WaveLength))*(.5/256*WaveLength*Scale*Amplitude)*(exp(-pow2((hypot(x-Origin.x,y-Origin.y)/WaveLength/Scale+((-(frame()-ImpactFrame)/25)/WaveLength/1.1*sqrt(15.4095*WaveLength)))))):red+sin(((hypot(x-Origin.x,y-Origin.y)/Scale+((-frame()/25)*sqrt(15.4095*WaveLength))+(Phase*WaveLength))*2*pi/WaveLength))*(.5/256*WaveLength*Scale*Amplitude)
+  expr1 onny==1?1:0
+  name Expression5
+  xpos -178
+  ypos -61
+  addUserKnob {20 User}
+  addUserKnob {26 INF l "" +STARTLINE T "SYNDICATE 2010"}
+  addUserKnob {26 ""}
+  addUserKnob {12 Origin t "Origin of ripple"}
+  Origin {47.5 39}
+  addUserKnob {26 ""}
+  addUserKnob {7 WaveLength t "Wavelength in pixels" R 1 100}
+  WaveLength 0.12
+  addUserKnob {7 Amplitude t "Amplitude in wavelengths" R 0 10}
+  Amplitude 0.14
+  addUserKnob {7 Phase t "wave phase"}
+  addUserKnob {26 ""}
+  addUserKnob {6 ripple +STARTLINE}
+  ripple true
+  addUserKnob {7 ImpactFrame R 0 1000}
+  ImpactFrame 16
+  addUserKnob {26 ""}
+  addUserKnob {7 Scale t "meters per pixel" R 0 10}
+  Scale 100
+ }
+ Output {
+  name Output1
+  xpos -178
+  ypos 39
+ }
+end_group

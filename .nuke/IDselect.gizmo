@@ -1,0 +1,64 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+add_layer {Material_ID Material_ID.ID}
+Group {
+name IDselect
+ tile_color 0xff6362ff
+ addUserKnob {20 User}
+ addUserKnob {41 IDchannel T movechanneltotemp.in}
+ addUserKnob {3 ID}
+ ID 2
+ addUserKnob {41 IDout T movechannelfromtemp.out}
+}
+ Input {
+  inputs 0
+  name InputIntegerfloat
+  xpos -120
+  ypos -417
+ }
+add_layer {IDTMP IDTMP.ID}
+ Shuffle {
+  in Material_ID
+  out IDTMP
+  name movechanneltotemp
+  xpos -120
+  ypos -309
+ }
+ Add {
+  channels IDTMP
+  value {{-(parent.ID-1) i}}
+  name select_range
+  xpos -230
+  ypos -315
+  addUserKnob {20 User}
+  addUserKnob {7 offset}
+ }
+ Clamp {
+  channels IDTMP
+  minimum 0.9
+  maximum 1.1
+  MinClampTo_enable true
+  MaxClampTo 0
+  MaxClampTo_enable true
+  name clamptherange
+  xpos -335
+  ypos -315
+ }
+ Shuffle {
+  in IDTMP
+  name movechannelfromtemp
+  xpos -335
+  ypos -270
+ }
+ Remove {
+  channels IDTMP
+  name Removetempchannel
+  xpos -335
+  ypos -244
+ }
+ Output {
+  name Output1
+  xpos -335
+  ypos -163
+ }
+end_group

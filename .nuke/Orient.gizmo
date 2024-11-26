@@ -1,0 +1,49 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name Orient
+ tile_color 0xc079e1ff
+ addUserKnob {20 Canvas}
+ addUserKnob {41 Orientation T SYNrevolver.Orientation}
+ addUserKnob {26 mirrortxt l "" +STARTLINE T "Mirror: "}
+ addUserKnob {41 Horizontal -STARTLINE T SYNrevolverMirror.Horizontal}
+ addUserKnob {41 Vertical -STARTLINE T SYNrevolverMirror.Vertical}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 323
+  ypos 57
+ }
+ Transform {
+  rotate {{-SYNrevolver.Orientation*90}}
+  center {{width/2.0} {height/2.0}}
+  filter Impulse
+  name SYNrevolvertransform
+  xpos 323
+  ypos 125
+ }
+ Reformat {
+  type "to box"
+  box_width {{SYNrevolver.Orientation==0||SYNrevolver.Orientation==2?width:height}}
+  box_height {{SYNrevolver.Orientation==0||SYNrevolver.Orientation==2?height:width}}
+  box_fixed true
+  resize none
+  filter Impulse
+  name SYNrevolver
+  xpos 323
+  ypos 162
+  addUserKnob {20 User}
+  addUserKnob {4 Orientation M {0 90 180 -90 ""}}
+ }
+ Mirror {
+  name SYNrevolverMirror
+  xpos 322
+  ypos 199
+ }
+ Output {
+  name Output1
+  xpos 323
+  ypos 234
+ }
+end_group

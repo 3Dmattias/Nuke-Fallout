@@ -1,0 +1,50 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name DirBlurFast
+ addUserKnob {20 User l INVISIBLE +INVISIBLE}
+ addUserKnob {20 DirBlur l "directional blur"}
+ addUserKnob {41 dir T Constant1.dir}
+ addUserKnob {41 amount T Constant1.amount}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  color {{cos(radians(dir))*amount*(fmod(frame,1)-.5)*2} {sin(radians(dir))*amount*(fmod(frame,1)-.5)*2} 0 0}
+  name Constant1
+  xpos 1401
+  ypos -498
+  addUserKnob {20 DirBlur l "directional blur"}
+  addUserKnob {7 dir R -90 90}
+  addUserKnob {7 amount R 0 100}
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 1291
+  ypos -515
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ ShuffleCopy {
+  inputs 2
+  in rgb
+  red red
+  green green
+  out TMP
+  name ShuffleCopy3
+  xpos 1291
+  ypos -475
+ }
+ VectorBlur {
+  channels rgba
+  uv TMP
+  name VectorBlur2
+  xpos 1291
+  ypos -434
+ }
+ Output {
+  name Output1
+  xpos 1291
+  ypos -334
+ }
+end_group

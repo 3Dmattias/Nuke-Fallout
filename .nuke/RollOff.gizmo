@@ -1,0 +1,404 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name RollOff
+tile_color 0x7aa9ffff
+addUserKnob {20 RollOff}
+addUserKnob {26 info l "" +STARTLINE T "Soft Rolloff"}
+addUserKnob {7 hueprotection}
+hueprotection 1
+addUserKnob {6 OKlab +STARTLINE}
+}
+Input {
+ inputs 0
+ name Input1
+ xpos 1390
+ ypos -586
+}
+Dot {
+ name Dot2
+ xpos 1424
+ ypos -534
+}
+set Nbb0d4800 [stack 0]
+ColorMatrix {
+ matrix {
+     {0.4122214708 0.5363325363 0.0514459929}
+     {0.2119034982 0.6806995451 0.1073969566}
+     {0.0883024619 0.2817188376 0.6299787005}
+   }
+ name ColorMatrix1
+ xpos 1500
+ ypos -538
+}
+Expression {
+ expr0 pow(r,(1/3))
+ expr1 pow(g,(1/3))
+ expr2 pow(b,(1/3))
+ name Expression65
+ xpos 1500
+ ypos -490
+}
+Expression {
+ channel0 {rgba.red -rgba.green -rgba.blue none}
+ expr0 1-exp(-r)
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ expr1 1-exp(-g)
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr2 1-exp(-b)
+ channel3 {none none none -rgba.alpha}
+ name rolloffhere2
+ tile_color 0xff0000
+ xpos 1500
+ ypos -442
+}
+Expression {
+ expr0 r*r*r
+ expr1 g*g*g
+ expr2 b*b*b
+ name Expression1
+ xpos 1500
+ ypos -394
+}
+ColorMatrix {
+ matrix {
+     {0.4122214708 0.5363325363 0.0514459929}
+     {0.2119034982 0.6806995451 0.1073969566}
+     {0.0883024619 0.2817188376 0.6299787005}
+   }
+ invert true
+ name ColorMatrix3
+ xpos 1500
+ ypos -346
+}
+set N29768c00 [stack 0]
+push $Nbb0d4800
+Group {
+ name OKlab
+ tile_color 0xea8ee500
+ xpos 1390
+ ypos -490
+ addUserKnob {20 OKlab}
+ addUserKnob {6 fromOKlab l "from OKlab" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -1360
+  ypos -586
+ }
+set N29768800 [stack 0]
+ ColorMatrix {
+  matrix {
+      {0.2104542553 0.793617785 -0.0040720468}
+      {1.977998495 -2.428592205 0.4505937099}
+      {0.0259040371 0.7827717662 -0.80867577}
+    }
+  invert true
+  name ColorMatrix7
+  xpos -1250
+  ypos -490
+ }
+ Expression {
+  expr0 r*r*r
+  expr1 g*g*g
+  expr2 b*b*b
+  name Expression71
+  xpos -1250
+  ypos -440
+ }
+ ColorMatrix {
+  matrix {
+      {0.4122214708 0.5363325363 0.0514459929}
+      {0.2119034982 0.6806995451 0.1073969566}
+      {0.0883024619 0.2817188376 0.6299787005}
+    }
+  invert true
+  name ColorMatrix8
+  xpos -1250
+  ypos -392
+ }
+push $N29768800
+ ColorMatrix {
+  matrix {
+      {0.4122214708 0.5363325363 0.0514459929}
+      {0.2119034982 0.6806995451 0.1073969566}
+      {0.0883024619 0.2817188376 0.6299787005}
+    }
+  name ColorMatrix1
+  xpos -1470
+  ypos -490
+ }
+ Expression {
+  expr0 pow(r,(1/3))
+  expr1 pow(g,(1/3))
+  expr2 pow(b,(1/3))
+  name Expression65
+  xpos -1470
+  ypos -442
+ }
+ ColorMatrix {
+  matrix {
+      {0.2104542553 0.793617785 -0.0040720468}
+      {1.977998495 -2.428592205 0.4505937099}
+      {0.0259040371 0.7827717662 -0.80867577}
+    }
+  name ColorMatrix2
+  xpos -1470
+  ypos -394
+ }
+ Switch {
+  inputs 2
+  which {{fromOKlab}}
+  name Switch1
+  selected true
+  xpos -1360
+  ypos -298
+ }
+ Output {
+  name Output1
+  xpos -1360
+  ypos -154
+ }
+end_group
+Expression {
+ channel0 {rgba.red -rgba.green -rgba.blue none}
+ expr0 1-exp(-r)
+ channel1 {-rgba.red -rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green -rgba.blue none}
+ channel3 {none none none -rgba.alpha}
+ name rolloffhere1
+ tile_color 0xff0000
+ xpos 1390
+ ypos -442
+}
+Group {
+ name OKlab1
+ tile_color 0xea8ee500
+ xpos 1390
+ ypos -394
+ addUserKnob {20 OKlab}
+ addUserKnob {6 fromOKlab l "from OKlab" +STARTLINE}
+ fromOKlab true
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -1360
+  ypos -586
+ }
+set N297cb400 [stack 0]
+ ColorMatrix {
+  matrix {
+      {0.2104542553 0.793617785 -0.0040720468}
+      {1.977998495 -2.428592205 0.4505937099}
+      {0.0259040371 0.7827717662 -0.80867577}
+    }
+  invert true
+  name ColorMatrix7
+  xpos -1250
+  ypos -490
+ }
+ Expression {
+  expr0 r*r*r
+  expr1 g*g*g
+  expr2 b*b*b
+  name Expression71
+  xpos -1250
+  ypos -440
+ }
+ ColorMatrix {
+  matrix {
+      {0.4122214708 0.5363325363 0.0514459929}
+      {0.2119034982 0.6806995451 0.1073969566}
+      {0.0883024619 0.2817188376 0.6299787005}
+    }
+  invert true
+  name ColorMatrix8
+  xpos -1250
+  ypos -392
+ }
+push $N297cb400
+ ColorMatrix {
+  matrix {
+      {0.4122214708 0.5363325363 0.0514459929}
+      {0.2119034982 0.6806995451 0.1073969566}
+      {0.0883024619 0.2817188376 0.6299787005}
+    }
+  name ColorMatrix1
+  xpos -1470
+  ypos -490
+ }
+ Expression {
+  expr0 pow(r,(1/3))
+  expr1 pow(g,(1/3))
+  expr2 pow(b,(1/3))
+  name Expression65
+  xpos -1470
+  ypos -442
+ }
+ ColorMatrix {
+  matrix {
+      {0.2104542553 0.793617785 -0.0040720468}
+      {1.977998495 -2.428592205 0.4505937099}
+      {0.0259040371 0.7827717662 -0.80867577}
+    }
+  name ColorMatrix2
+  xpos -1470
+  ypos -394
+ }
+ Switch {
+  inputs 2
+  which {{fromOKlab}}
+  name Switch1
+  selected true
+  xpos -1360
+  ypos -298
+ }
+ Output {
+  name Output1
+  xpos -1360
+  ypos -154
+ }
+end_group
+Group {
+ inputs 2
+ name Mix
+ xpos 1390
+ ypos -353
+ addUserKnob {20 User}
+ addUserKnob {41 channels T Mix.channels}
+ addUserKnob {7 mix}
+ mix {{hueprotection}}
+}
+ Input {
+  inputs 0
+  name B
+  xpos 792
+  ypos -275
+  number 1
+ }
+ Input {
+  inputs 0
+  name A
+  xpos 565
+  ypos -268
+ }
+ Blend {
+  inputs 2
+  weight0 {{parent.mix}}
+  weight1 {{1-weight0}}
+  normalize false
+  name Mix
+  xpos 683
+  ypos -161
+ }
+ Output {
+  name Output1
+  xpos 683
+  ypos 141
+ }
+end_group
+push $Nbb0d4800
+Dot {
+ name Dot1
+ xpos 1204
+ ypos -534
+}
+set N29837800 [stack 0]
+Expression {
+ channel0 {rgba.red -rgba.green -rgba.blue none}
+ expr0 1-exp(-r)
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ expr1 1-exp(-g)
+ expr2 1-exp(-b)
+ channel3 {none none none -rgba.alpha}
+ name rolloffhere3
+ tile_color 0xff0000
+ xpos 1299
+ ypos -442
+}
+push $N29837800
+Colorspace {
+ colorspace_in sRGB
+ colorspace_out HSV
+ name swithctoHSV
+ xpos 1170
+ ypos -484
+}
+Expression {
+ channel0 {-rgba.red -rgba.green -rgba.blue none}
+ channel1 {-rgba.red -rgba.green -rgba.blue none}
+ expr2 1-exp(-b)
+ channel3 {none none none -rgba.alpha}
+ name rolloffhere
+ tile_color 0xff0000
+ xpos 1170
+ ypos -436
+}
+Colorspace {
+ colorspace_in HSV
+ colorspace_out sRGB
+ name HSVandbackagain
+ xpos 1170
+ ypos -388
+}
+Group {
+ inputs 2
+ name Mix1
+ xpos 1170
+ ypos -353
+ addUserKnob {20 User}
+ addUserKnob {41 channels T Mix.channels}
+ addUserKnob {7 mix}
+ mix {{hueprotection}}
+}
+ Input {
+  inputs 0
+  name B
+  xpos 792
+  ypos -275
+  number 1
+ }
+ Input {
+  inputs 0
+  name A
+  xpos 565
+  ypos -268
+ }
+ Blend {
+  inputs 2
+  weight0 {{parent.mix}}
+  weight1 {{1-weight0}}
+  normalize false
+  name Mix
+  xpos 683
+  ypos -161
+ }
+ Output {
+  name Output1
+  xpos 683
+  ypos 141
+ }
+end_group
+Switch {
+ inputs 2
+ which {{OKlab}}
+ name Switch1
+ xpos 1170
+ ypos -250
+}
+Output {
+ name Output1
+ xpos 1170
+ ypos -154
+}
+push $N29768c00
+Viewer {
+ frame_range 1-320
+ fps 25
+ name Viewer1
+ xpos 1500
+ ypos -58
+}
+end_group

@@ -1,0 +1,839 @@
+#! C:/Program Files/Nuke15.1v3/nuke-15.1.3.dll -nx
+version 15.1 v3
+Group {
+  name Normal2Depth
+ tile_color 0xb742a800
+ mapsize {0.2014302741 0.1888168558}
+ addUserKnob {20 Normal2depth l "Normal to Depth"}
+ addUserKnob {6 RGswitch l "Switch R and G" +STARTLINE}
+ addUserKnob {6 FlipR l "Flip R" +STARTLINE}
+ addUserKnob {6 FlipG l "Flip G" +STARTLINE}
+ addUserKnob {7 blueclamp l "Clamp blue"}
+ blueclamp 0.05
+ addUserKnob {7 magnify l Magnify R 0 5}
+ magnify 1
+ addUserKnob {26 ""}
+ addUserKnob {26 headsup l "" +STARTLINE T "Input will be resized to the nearest even pixel resolution.\nThis is due to peculiarities of Nukes FFT nodes."}
+ addUserKnob {20 Info}
+ addUserKnob {26 info l "" +STARTLINE T "Normal2Depth by Mattias Malmer\n\nA nuke implementation of TinyTexels shadertoy:\n\nHeight Map from Normal Map\nhttps://www.shadertoy.com/view/XcjXDc\n"}
+}
+ Input {
+  inputs 0
+  name Normal
+  xpos 180
+  ypos -465
+ }
+ Reformat {
+  type "to box"
+  box_width {{floor(width/2)*2}}
+  box_height {{floor(height/2)*2}}
+  box_fixed true
+  resize none
+  center false
+  name Reformat1
+  xpos 180
+  ypos -393
+ }
+ Grade {
+  blackpoint 0.5
+  black_clamp false
+  name Grade29
+  xpos 180
+  ypos -345
+ }
+set N56ace800 [stack 0]
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.red 0 0"
+  name Shuffle6
+  xpos 290
+  ypos -321
+ }
+push $N56ace800
+ Switch {
+  inputs 2
+  which {{parent.RGswitch}}
+  name RGswitch
+  xpos 180
+  ypos -297
+ }
+set N5139b700 [stack 0]
+ Multiply {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value -1
+  name Multiply1
+  xpos 290
+  ypos -273
+ }
+push $N5139b700
+ Switch {
+  inputs 2
+  which {{parent.FlipR}}
+  name Rflip
+  xpos 180
+  ypos -249
+ }
+set N56af0500 [stack 0]
+ Multiply {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  value -1
+  name Multiply4
+  xpos 290
+  ypos -225
+ }
+push $N56af0500
+ Switch {
+  inputs 2
+  which {{parent.FlipG}}
+  name Gflip
+  xpos 180
+  ypos -201
+ }
+ Group {
+  name Normalize1
+  tile_color 0x172e41ff
+  note_font Verdana
+  xpos 180
+  ypos -153
+  mapsize {0.15 0.15}
+  addUserKnob {20 User}
+  addUserKnob {41 VectorChannel T CreateTMP.in}
+  addUserKnob {41 Destination T PutTMPtoChannel.out}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 597
+   ypos -493
+  }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+  Shuffle {
+   in rgb
+   out TMP
+   name CreateTMP
+   xpos 597
+   ypos -439
+  }
+set N56acfc00 [stack 0]
+push $N56acfc00
+  Expression {
+   channel0 TMP
+   expr0 sqrt(TMP.X*TMP.X+TMP.Y*TMP.Y+TMP.Z*TMP.Z)
+   channel1 none
+   channel2 none
+   channel3 none
+   name VectorLength
+   xpos 440
+   ypos -391
+  }
+  Merge2 {
+   inputs 2
+   operation divide
+   Achannels TMP
+   Bchannels TMP
+   output TMP
+   name dividevectorwithlength
+   xpos 597
+   ypos -345
+  }
+  Shuffle {
+   in TMP
+   out rgb
+   name PutTMPtoChannel
+   xpos 597
+   ypos -279
+  }
+  Remove {
+   channels TMP
+   name RemoveTMP
+   xpos 597
+   ypos -253
+  }
+  Output {
+   name Output1
+   xpos 597
+   ypos -188
+  }
+  Viewer {
+   input_process false
+   name Viewer1
+   xpos 865
+   ypos -234
+  }
+ end_group
+ Clamp {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  minimum {{parent.blueclamp}}
+  maximum_enable false
+  name blueclamp
+  xpos 180
+  ypos -105
+ }
+ Multiply {
+  channels {rgba.red rgba.green -rgba.blue none}
+  value {{parent.magnify}}
+  name magnify
+  xpos 180
+  ypos -63
+ }
+ Expression {
+  channel0 {rgba.red -rgba.green -rgba.blue none}
+  expr0 r/b
+  channel1 {-rgba.red rgba.green -rgba.blue none}
+  expr1 g/b
+  channel2 {-rgba.red -rgba.green rgba.blue none}
+  expr2 0
+  expr3 0
+  name derivatives
+  xpos 180
+  ypos 15
+ }
+ FFT {
+  name FFT1
+  tile_color 0xff000000
+  xpos 180
+  ypos 57
+ }
+ Dot {
+  name Dot19
+  xpos 324
+  ypos 66
+ }
+set N56b98c00 [stack 0]
+ Expression {
+  channel0 rgb
+  expr0 min((1-x/(width-1)),(1-abs(1-y/(height-1)*2)))
+  channel3 {none none none -rgba.alpha}
+  name Expression3
+  xpos 400
+  ypos 87
+ }
+ Expression {
+  channel0 rgb
+  expr0 smoothstep(0,1,r)
+  name Expression4
+  xpos 400
+  ypos 111
+ }
+push $N56b98c00
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 Ag*Bg
+  expr2 Ab*Bb
+  expr3 Aa*Ba
+  name MergeExpression2
+  xpos 290
+  ypos 159
+ }
+ Dot {
+  name Dot21
+  xpos 434
+  ypos 162
+ }
+ Expression {
+  expr0 (x<-1+0.5*width)?r(x*2,y):r(((width-x-2)*2),(height-y)%height)
+  expr1 (x<-1+0.5*width)?r(x*2+1,y):-r(((width-x-2)*2+1),(height-y)%height)
+  expr2 (x<-1+0.5*width)?g(x*2,y):g(((width-x-2)*2),(height-y)%height)
+  expr3 (x<-1+0.5*width)?g(x*2+1,y):-g(((width-x-2)*2+1),(height-y)%height)
+  name Expression19
+  xpos 400
+  ypos 207
+ }
+ Expression {
+  expr0 r(x,(y+0.5*height)%height)
+  expr1 g(x,(y+0.5*height)%height)
+  expr2 b(x,(y+0.5*height)%height)
+  expr3 a(x,(y+0.5*height)%height)
+  name Expression21
+  xpos 400
+  ypos 231
+ }
+ Crop {
+  box {0 0 {width-1} {height}}
+  reformat true
+  name Crop48
+  xpos 400
+  ypos 255
+ }
+ Dot {
+  name Dot18
+  xpos 434
+  ypos 306
+ }
+ Dot {
+  name Dot2
+  xpos 654
+  ypos 306
+ }
+set N56bd9000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 764
+  ypos 306
+ }
+set N56bd9400 [stack 0]
+ Dot {
+  name Dot4
+  xpos 984
+  ypos 306
+ }
+ Expression {
+  expr0 x<(width*.5)?x:x-width
+  expr1 y<(height*.5)?y:y-height
+  expr2 0
+  name uv
+  xpos 950
+  ypos 399
+ }
+ Dot {
+  name Dot15
+  xpos 984
+  ypos 474
+ }
+set N56c04000 [stack 0]
+ Dot {
+  name Dot12
+  xpos 1094
+  ypos 546
+ }
+ Dot {
+  name Dot14
+  xpos 1094
+  ypos 810
+ }
+ Dot {
+  name Dot13
+  xpos 984
+  ypos 882
+ }
+ Expression {
+  channel0 rgb
+  expr0 r==0?1:g==0?1:0
+  name Expression2
+  xpos 730
+  ypos 879
+ }
+push $N56c04000
+ Group {
+  name Normalize
+  tile_color 0x172e41ff
+  note_font Verdana
+  xpos 950
+  ypos 639
+  mapsize {0.15 0.15}
+  addUserKnob {20 User}
+  addUserKnob {41 VectorChannel T CreateTMP.in}
+  addUserKnob {41 Destination T PutTMPtoChannel.out}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 597
+   ypos -493
+  }
+  Shuffle {
+   in rgb
+   out TMP
+   name CreateTMP
+   xpos 597
+   ypos -439
+  }
+set N56c05800 [stack 0]
+push $N56c05800
+  Expression {
+   channel0 TMP
+   expr0 sqrt(TMP.X*TMP.X+TMP.Y*TMP.Y+TMP.Z*TMP.Z)
+   channel1 none
+   channel2 none
+   channel3 none
+   name VectorLength
+   xpos 440
+   ypos -391
+  }
+  Merge2 {
+   inputs 2
+   operation divide
+   Achannels TMP
+   Bchannels TMP
+   output TMP
+   name dividevectorwithlength
+   xpos 597
+   ypos -345
+  }
+  Shuffle {
+   in TMP
+   out rgb
+   name PutTMPtoChannel
+   xpos 597
+   ypos -279
+  }
+  Remove {
+   channels TMP
+   name RemoveTMP
+   xpos 597
+   ypos -253
+  }
+  Output {
+   name Output1
+   xpos 597
+   ypos -188
+  }
+  Viewer {
+   input_process false
+   name Viewer1
+   xpos 865
+   ypos -234
+  }
+ end_group
+set N5109ec00 [stack 0]
+ Dot {
+  name Dot5
+  xpos 874
+  ypos 666
+ }
+push $N5109ec00
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 Ag*Bg
+  expr2 Ab*Bb
+  expr3 Aa*Ba
+  name MergeExpression3
+  xpos 950
+  ypos 687
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.green 0 1 rgba.alpha 0 3"
+  name Shuffle4
+  xpos 950
+  ypos 735
+ }
+push $N56c04000
+ Expression {
+  channel0 {rgba.red rgba.green -rgba.blue none}
+  expr0 r==0?0:abs(r)==floor(width*.5)?0:1
+  channel1 {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  expr1 g==0?0:abs(g)==floor(height*.5)?0:1
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  expr2 0
+  channel3 none
+  expr3 0
+  name MASKAB
+  xpos 730
+  ypos 471
+ }
+set N56ca8400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 764
+  ypos 522
+ }
+set N56ca8800 [stack 0]
+push $N56ca8400
+push $N56bd9400
+ Expression {
+  channel0 {rgba.red rgba.green -rgba.blue none}
+  expr0 sin(2*PI*x/width)
+  channel1 {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  expr1 sin(2*PI*y/height)
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  expr2 0
+  channel3 none
+  name u
+  xpos 730
+  ypos 399
+ }
+push $N56bd9000
+ Expression {
+  expr0 g
+  expr1 -r
+  expr2 a
+  channel3 alpha
+  expr3 -b
+  name reverse_integration
+  xpos 620
+  ypos 351
+ }
+ Group {
+  inputs 2
+  name divide
+  tile_color 0x5151bcff
+  xpos 620
+  ypos 399
+  addUserKnob {20 User l Divide}
+  addUserKnob {6 red +STARTLINE}
+  red true
+  addUserKnob {6 green +STARTLINE}
+  green true
+  addUserKnob {6 blue +STARTLINE}
+  blue true
+  addUserKnob {26 ""}
+  addUserKnob {6 alpha +STARTLINE}
+  alpha true
+ }
+  Input {
+   inputs 0
+   name Input2
+   xpos 1280
+   ypos 374
+   number 1
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos 1500
+   ypos 374
+  }
+set N56ca9800 [stack 0]
+  MergeExpression {
+   inputs 2
+   expr0 B.r/A.r
+   expr1 B.g/A.g
+   expr2 B.b/A.b
+   channel3 alpha
+   expr3 B.a/A.a
+   name divider
+   xpos 1390
+   ypos 422
+  }
+  Dot {
+   name Dot3
+   xpos 1314
+   ypos 474
+  }
+set N56ce8000 [stack 0]
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos 570
+  }
+set N56ce8400 [stack 0]
+  Dot {
+   name Dot1
+   xpos 1314
+   ypos 666
+  }
+set N56ce8800 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1314
+   ypos 762
+  }
+push $N56ce8800
+push $N56ce8400
+push $N56ce8000
+push $N56ca9800
+  Dot {
+   name Dot4
+   xpos 1534
+   ypos 474
+  }
+set N56ce9000 [stack 0]
+  Switch {
+   inputs 2
+   which {{parent.red}}
+   name Switch1
+   xpos 1390
+   ypos 518
+  }
+push $N56ce9000
+  ShuffleCopy {
+   inputs 2
+   red red
+   alpha alpha2
+   name ShuffleCopy2
+   xpos 1500
+   ypos 566
+  }
+set N56ce9400 [stack 0]
+  Switch {
+   inputs 2
+   which {{parent.green}}
+   name Switch2
+   xpos 1390
+   ypos 614
+  }
+push $N56ce9400
+  ShuffleCopy {
+   inputs 2
+   green green
+   alpha alpha2
+   name ShuffleCopy3
+   xpos 1500
+   ypos 662
+  }
+set N56ce9800 [stack 0]
+  Switch {
+   inputs 2
+   which {{parent.blue}}
+   name Switch3
+   xpos 1390
+   ypos 710
+  }
+push $N56ce9800
+  ShuffleCopy {
+   inputs 2
+   blue blue
+   alpha alpha2
+   name ShuffleCopy4
+   xpos 1500
+   ypos 758
+  }
+set N56ce9c00 [stack 0]
+  Switch {
+   inputs 2
+   which {{parent.alpha}}
+   name Switch4
+   xpos 1390
+   ypos 806
+  }
+push $N56ce9c00
+  ShuffleCopy {
+   inputs 2
+   name ShuffleCopy5
+   xpos 1500
+   ypos 854
+  }
+  Output {
+   name Output1
+   xpos 1500
+   ypos 950
+  }
+ end_group
+ Expression {
+  expr0 isinf(r)?0:isnan(r)?0:r
+  expr1 isinf(g)?0:isnan(g)?0:g
+  expr2 isinf(b)?0:isnan(b)?0:b
+  channel3 alpha
+  expr3 isinf(a)?0:isnan(a)?0:a
+  name remove_nan_inf
+  xpos 620
+  ypos 423
+ }
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 Ag*Bg
+  expr2 Ab*Bb
+  expr3 Aa*Ba
+  name flush
+  xpos 620
+  ypos 471
+ }
+ Dot {
+  name Dot6
+  xpos 654
+  ypos 546
+ }
+set N56d2d000 [stack 0]
+ Dot {
+  name Dot9
+  xpos 654
+  ypos 594
+ }
+set N56d2d400 [stack 0]
+push $N56d2d000
+ Dot {
+  name Dot10
+  xpos 874
+  ypos 570
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.blue 0 2 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1"
+  name Shuffle2
+  xpos 840
+  ypos 591
+ }
+ Keymix {
+  inputs 3
+  maskChannel rgba.blue
+  name Keymix2
+  xpos 730
+  ypos 633
+ }
+push $N56ca8800
+ Dot {
+  name Dot7
+  xpos 544
+  ypos 522
+ }
+push $N56d2d400
+push $N56d2d000
+ Dot {
+  name Dot11
+  xpos 434
+  ypos 570
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.red 0 0 rgba.blue 0 2 rgba.green 0 1 rgba.alpha 0 3"
+  name Shuffle1
+  xpos 400
+  ypos 591
+ }
+ Keymix {
+  inputs 3
+  maskChannel rgba.red
+  name Keymix1
+  xpos 510
+  ypos 633
+ }
+ Group {
+  inputs 2
+  name ShuffleX
+  tile_color 0x9e3c63ff
+  xpos 620
+  ypos 687
+  addUserKnob {20 Shuffle}
+  addUserKnob {41 shuffle l "" -STARTLINE T ShuffleXinternal.shuffle}
+ }
+  Input {
+   inputs 0
+   name A
+   xpos -1690
+   ypos 183
+   number 1
+  }
+  Input {
+   inputs 0
+   name B
+   xpos -1580
+   ypos 183
+  }
+  Shuffle2 {
+   inputs 2
+   fromInput1 {{0} B A}
+   fromInput2 {{1} B A}
+   in2 rgba
+   mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 1 2 rgba.blue 0 2 rgba.alpha 1 3 rgba.alpha 0 3"
+   name ShuffleXinternal
+   xpos -1580
+   ypos 279
+  }
+  Output {
+   name Output1
+   xpos -1599
+   ypos 390
+  }
+ end_group
+set N5109f700 [stack 0]
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 Ag*Bg
+  expr2 Ab*Bb
+  expr3 Aa*Ba
+  name MergeExpression1
+  xpos 620
+  ypos 735
+ }
+set N56d80400 [stack 0]
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.alpha 0 3 rgba.green 0 1 rgba.blue 0 2 rgba.red 0 0 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle5
+  xpos 730
+  ypos 783
+ }
+push $N56d80400
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  name Plus
+  xpos 620
+  ypos 831
+ }
+push $N5109f700
+ Dot {
+  name Dot16
+  xpos 544
+  ypos 738
+ }
+ Keymix {
+  inputs 3
+  maskChannel rgba.red
+  invertMask true
+  name Keymix3
+  xpos 510
+  ypos 873
+ }
+ Dot {
+  name Dot17
+  xpos 434
+  ypos 882
+ }
+ Crop {
+  box {0 0 {width+1} {height}}
+  reformat true
+  intersect true
+  name Crop49
+  xpos 400
+  ypos 951
+ }
+ Expression {
+  expr0 r(x,(y+0.5*height)%height)
+  expr1 g(x,(y+0.5*height)%height)
+  expr2 b(x,(y+0.5*height)%height)
+  expr3 a(x,(y+0.5*height)%height)
+  name Expression17
+  xpos 400
+  ypos 975
+ }
+ Expression {
+  expr0 x%2==0?r(x/2,y):-g(width-(x/2)-1,(height-y)%height)
+  expr1 x%2==0?b(x/2,y):-a(width-(x/2)-1,(height-y)%height)
+  expr2 0
+  name Expression22
+  xpos 400
+  ypos 999
+ }
+ Dot {
+  name Dot20
+  xpos 434
+  ypos 1074
+ }
+ InvFFT {
+  name InvFFT1
+  tile_color 0xff000000
+  xpos 180
+  ypos 1065
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 black -1 -1 rgba.alpha 0 3 rgba.red 0 0 rgba.green 0 1 rgba.red 0 0 rgba.blue 0 2"
+  name Shuffle3
+  xpos 180
+  ypos 1191
+ }
+ Multiply {
+  value {{-1/width}}
+  name Multiply3
+  xpos 180
+  ypos 1233
+ }
+set N56dad400 [stack 0]
+ Output {
+  name depth
+  xpos 180
+  ypos 1311
+ }
+push $N56dad400
+ Viewer {
+  frame_range 1-100
+  fps 25
+  monitorOutNDISenderName "NukeX - Normalrec - Viewer1"
+  name Viewer1
+  xpos 180
+  ypos 93
+ }
+end_group

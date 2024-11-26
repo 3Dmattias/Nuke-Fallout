@@ -1,0 +1,49 @@
+#! C:/Program Files/Nuke7.0v4/Nuke7.0.exe -nx
+version 7.0 v4
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name ViewNormalQuick
+ addUserKnob {20 User}
+ addUserKnob {26 params l "" +STARTLINE T "Camera Parameters"}
+ addUserKnob {41 focal_length T Expression1.focal_length}
+ addUserKnob {41 backplane T Expression1.backplane}
+ addUserKnob {41 Destination T Normalize1.Destination}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 690
+  ypos -352
+ }
+ Expression {
+  channel0 {Normal.X -Normal.Y -Normal.Z}
+  expr0 -(((x/width)-.5)*2)*(backplane/2)
+  channel1 {-Normal.X Normal.Y -Normal.Z}
+  expr1 -(((y/height)-.5)*2*(height/width))*(backplane/2)
+  channel2 {-Normal.X -Normal.Y Normal.Z}
+  expr2 focal_length
+  channel3 none
+  name Expression1
+  xpos 690
+  ypos -312
+  addUserKnob {20 User}
+  addUserKnob {26 info l "" +STARTLINE T CameraSettings}
+  addUserKnob {7 focal_length R 0 1000}
+  focal_length 50
+  addUserKnob {7 backplane R 0 100}
+  backplane 24
+ }
+ Normalize {
+  name Normalize1
+  note_font Verdana
+  xpos 690
+  ypos -288
+  VectorChannel Normal
+  Destination Normal
+ }
+ Output {
+  name Output1
+  xpos 690
+  ypos -188
+ }
+end_group

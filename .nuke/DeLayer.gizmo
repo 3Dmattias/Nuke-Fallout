@@ -1,0 +1,38 @@
+#! C:/Program Files/Nuke9.0v5/nuke-9.0.5.dll -nx
+version 9.0 v5
+Group {
+name DeLayer
+inputs 2
+tile_color 0xff1313ff
+addUserKnob {20 User l Info}
+addUserKnob {26 info l "" +STARTLINE T "Dissasemble the comp using its alpha and background. \nAlpha is assumed to come from the comp input."}
+}
+Input {
+inputs 0
+name bg
+xpos -1430
+ypos 326
+number 1
+}
+Input {
+inputs 0
+name comp
+selected true
+xpos -1580
+ypos 326
+}
+MergeExpression {
+inputs 2
+expr0 A.r*B.a-A.r+B.r
+expr1 A.g*B.a-A.g+B.g
+expr2 A.b*B.a-A.b+B.b
+name DELAYER
+xpos -1509
+ypos 415
+}
+Output {
+name Output1
+xpos -1509
+ypos 515
+}
+end_group

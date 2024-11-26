@@ -1,0 +1,30 @@
+
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Gizmo {
+
+ addUserKnob {20 User}
+ addUserKnob {9 SourceMatrix t "Ctrl-drag Source Matrix to the Animation Menu"}
+ SourceMatrix {
+     {1 0 0 0}
+     {0 1 0 0}
+     {0 0 1 0}
+     {0 0 0 1}
+   }
+ addUserKnob {7 Determinant +INVISIBLE}
+ Determinant {{SourceMatrix.0*(SourceMatrix.5*SourceMatrix.10-SourceMatrix.6*SourceMatrix.9)+SourceMatrix.1*(SourceMatrix.6*SourceMatrix.8-SourceMatrix.4*SourceMatrix.10)+SourceMatrix.2*(SourceMatrix.4*SourceMatrix.9-SourceMatrix.5*SourceMatrix.8) i}}
+ addUserKnob {9 InverseRotScale  +INVISIBLE}
+InverseRotScale {
+	{{1/Determinant*(SourceMatrix.5*SourceMatrix.10-SourceMatrix.6*SourceMatrix.9)} {1/Determinant*(SourceMatrix.2*SourceMatrix.9-SourceMatrix.1*SourceMatrix.10)} {1/Determinant*(SourceMatrix.1*SourceMatrix.6-SourceMatrix.2*SourceMatrix.5)}}
+	{{1/Determinant*(SourceMatrix.6*SourceMatrix.8-SourceMatrix.4*SourceMatrix.10) i} {1/Determinant*(SourceMatrix.0*SourceMatrix.10-SourceMatrix.2*SourceMatrix.8) i} {1/Determinant*(SourceMatrix.2*SourceMatrix.4-SourceMatrix.0*SourceMatrix.6)}}
+	{{1/Determinant*(SourceMatrix.4*SourceMatrix.9-SourceMatrix.5*SourceMatrix.8) i} {1/Determinant*(SourceMatrix.1*SourceMatrix.8-SourceMatrix.0*SourceMatrix.9) i} {1/Determinant*(SourceMatrix.0*SourceMatrix.5-SourceMatrix.1*SourceMatrix.4)} }
+	}
+ addUserKnob {9 InverseMatrix t "Ctrl-drag Inverse Matrix from the Animation Menu to the Matrix of choice"}
+ InverseMatrix {
+     {{InverseRotScale.0} {InverseRotScale.1} {InverseRotScale.2} {-(SourceMatrix.3*InverseRotScale.0+SourceMatrix.7*InverseRotScale.1+SourceMatrix.11*InverseRotScale.2)}}
+     {{InverseRotScale.3} {InverseRotScale.4} {InverseRotScale.5} {-(SourceMatrix.3*InverseRotScale.3+SourceMatrix.7*InverseRotScale.4+SourceMatrix.11*InverseRotScale.5)}}
+     {{InverseRotScale.6} {InverseRotScale.7} {InverseRotScale.8} {-(SourceMatrix.3*InverseRotScale.6+SourceMatrix.7*InverseRotScale.7+SourceMatrix.11*InverseRotScale.8)}}
+     {0 0 0 1}
+   }
+}
+end_group

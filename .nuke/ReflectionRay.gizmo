@@ -1,0 +1,105 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name ReflectionRay
+ inputs 2
+ tile_color 0x172e41ff
+ addUserKnob {20 User}
+ addUserKnob {41 ViewNormal T Shuffle5.in}
+ addUserKnob {41 SurfaceNormal T Shuffle6.in}
+ addUserKnob {41 RayDestination T Shuffle7.out}
+ addUserKnob {26 info l "" +STARTLINE T "\nKeeps Channels from SurfaceNormal"}
+}
+ Input {
+  inputs 0
+  name InputViewNormal
+  xpos 598
+  ypos -426
+  number 1
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle5
+  xpos 598
+  ypos -387
+ }
+ Multiply {
+  channels TMP
+  value -1
+  name Multiply1
+  xpos 598
+  ypos -361
+ }
+set N342293d0 [stack 0]
+push $N342293d0
+ Input {
+  inputs 0
+  name InputNormal
+  xpos 758
+  ypos -425
+ }
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle6
+  xpos 758
+  ypos -367
+ }
+set N33e65540 [stack 0]
+ MergeExpression {
+  inputs 2
+  channel0 TMP
+  expr0 (A.TMP.X)*(B.TMP.X)+(A.TMP.Y)*(B.TMP.Y)+(A.TMP.Z)*(B.TMP.Z)
+  channel1 none
+  channel2 none
+  channel3 none
+  name Merge_dot1
+  xpos 670
+  ypos -290
+ }
+push $N33e65540
+ MergeExpression {
+  inputs 2
+  channel0 {TMP.X -TMP.Y -TMP.Z}
+  expr0 A.TMP.X*B.TMP.X*2
+  channel1 {-TMP.X TMP.Y -TMP.Z}
+  expr1 A.TMP.Y*B.TMP.Y*2
+  channel2 {-TMP.X -TMP.Y TMP.Z}
+  expr2 A.TMP.Z*B.TMP.Z*2
+  channel3 none
+  name MergeExpression1
+  xpos 758
+  ypos -231
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name Merge1
+  xpos 598
+  ypos -169
+ }
+ Shuffle {
+  in TMP
+  out Normal
+  name Shuffle7
+  xpos 598
+  ypos -95
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 598
+  ypos -34
+ }
+ Output {
+  name Output1
+  xpos 598
+  ypos 31
+ }
+end_group

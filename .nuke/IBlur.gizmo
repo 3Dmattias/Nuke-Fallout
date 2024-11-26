@@ -1,0 +1,631 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name IBlur
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {41 channels T Keymix3.channels}
+ addUserKnob {41 Blursize T Blur17.size}
+ addUserKnob {41 Blurchannel T Shuffle6.in}
+ addUserKnob {41 subchannel T Shuffle6.red}
+ addUserKnob {6 HighQuality l "High Quality" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name InputControl
+  xpos 1032
+  ypos -517
+  number 1
+ }
+add_layer {Iblurmask Iblurmask.a}
+ AddChannels {
+  channels Iblurmask
+  name AddChannels1
+  xpos 1032
+  ypos -444
+ }
+ Shuffle {
+  red alpha
+  out Iblurmask
+  name Shuffle6
+  xpos 1032
+  ypos -394
+ }
+ Dot {
+  name Dot41
+  xpos 1066
+  ypos -277
+ }
+set N345a1ec0 [stack 0]
+ Dot {
+  name Dot42
+  xpos 1372
+  ypos -277
+ }
+ Dot {
+  name Dot16
+  xpos 1372
+  ypos -153
+ }
+set N24045ce0 [stack 0]
+ Dot {
+  name Dot17
+  xpos 1372
+  ypos -115
+ }
+set N24051fe0 [stack 0]
+ Dot {
+  name Dot18
+  xpos 1372
+  ypos -77
+ }
+set N24051140 [stack 0]
+ Dot {
+  name Dot19
+  xpos 1372
+  ypos -39
+ }
+set N3479f810 [stack 0]
+ Dot {
+  name Dot20
+  xpos 1372
+  ypos -3
+ }
+set N3479f5a0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 1372
+  ypos 35
+ }
+set N34797950 [stack 0]
+ Dot {
+  name Dot2
+  xpos 1372
+  ypos 73
+ }
+set N34796f90 [stack 0]
+ Dot {
+  name Dot3
+  xpos 1372
+  ypos 111
+ }
+set N34797e30 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1372
+  ypos 149
+ }
+set N34797bc0 [stack 0]
+ Dot {
+  name Dot5
+  xpos 1372
+  ypos 187
+ }
+ Grade {
+  channels Iblurmask
+  blackpoint 0.9
+  white_clamp true
+  name Grade1
+  xpos 1243
+  ypos 177
+ }
+ Input {
+  inputs 0
+  name InputSrc
+  xpos 717
+  ypos -517
+ }
+ Dot {
+  name Dot37
+  xpos 751
+  ypos -334
+ }
+set N345a0180 [stack 0]
+ Dot {
+  name Dot38
+  xpos 948
+  ypos -334
+ }
+set N3459ff10 [stack 0]
+ Dot {
+  name Dot21
+  xpos 948
+  ypos -153
+ }
+set N3479f0c0 [stack 0]
+ Dot {
+  name Dot22
+  xpos 948
+  ypos -115
+ }
+set N3479ee50 [stack 0]
+ Dot {
+  name Dot23
+  xpos 948
+  ypos -77
+ }
+set N3479ebe0 [stack 0]
+ Dot {
+  name Dot31
+  xpos 948
+  ypos -39
+ }
+set N3479e970 [stack 0]
+ Dot {
+  name Dot32
+  xpos 946
+  ypos -3
+ }
+set N3479e700 [stack 0]
+ Dot {
+  name Dot6
+  xpos 946
+  ypos 35
+ }
+set N347a3ec0 [stack 0]
+ Dot {
+  name Dot7
+  xpos 946
+  ypos 73
+ }
+set N347a4130 [stack 0]
+ Dot {
+  name Dot8
+  xpos 946
+  ypos 111
+ }
+set N347a43a0 [stack 0]
+ Dot {
+  name Dot9
+  xpos 946
+  ypos 149
+ }
+set N347a4610 [stack 0]
+ Dot {
+  name Dot15
+  xpos 946
+  ypos 187
+ }
+ Blur {
+  size {{Blur17.size i x207 0} {Blur17.size i}}
+  name Blur1
+  xpos 1021
+  ypos 177
+ }
+push $N34797bc0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.8
+  whitepoint 0.9
+  white_clamp true
+  name Grade2
+  xpos 1243
+  ypos 139
+ }
+push $N347a4610
+ Blur {
+  size {{Blur17.size*(9/10) i} {Blur17.size*(9/10) i}}
+  name Blur2
+  xpos 1021
+  ypos 139
+ }
+push $N34797e30
+ Grade {
+  channels Iblurmask
+  blackpoint 0.7
+  whitepoint 0.8
+  white_clamp true
+  name Grade3
+  xpos 1243
+  ypos 101
+ }
+push $N347a43a0
+ Blur {
+  size {{Blur17.size*(8/10) i} {Blur17.size*(8/10) i}}
+  name Blur3
+  xpos 1021
+  ypos 101
+ }
+push $N34796f90
+ Grade {
+  channels Iblurmask
+  blackpoint 0.6
+  whitepoint 0.7
+  white_clamp true
+  name Grade4
+  xpos 1243
+  ypos 63
+ }
+push $N347a4130
+ Blur {
+  size {{Blur17.size*(7/10) i} {Blur17.size*(7/10) i}}
+  name Blur4
+  xpos 1021
+  ypos 63
+ }
+push $N34797950
+ Grade {
+  channels Iblurmask
+  blackpoint 0.5
+  whitepoint 0.6
+  white_clamp true
+  name Grade5
+  xpos 1243
+  ypos 25
+ }
+push $N347a3ec0
+ Blur {
+  size {{Blur17.size*(6/10) i} {Blur17.size*(6/10) i}}
+  name Blur5
+  xpos 1021
+  ypos 25
+ }
+push $N3479f5a0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.4
+  whitepoint 0.5
+  white_clamp true
+  name Grade11
+  xpos 1243
+  ypos -13
+ }
+push $N3479e700
+ Blur {
+  size {{Blur17.size*(5/10) i} {Blur17.size*(5/10) i}}
+  name Blur6
+  xpos 1021
+  ypos -13
+ }
+push $N3479f810
+ Grade {
+  channels Iblurmask
+  blackpoint 0.3
+  whitepoint 0.4
+  white_clamp true
+  name Grade12
+  xpos 1243
+  ypos -49
+ }
+push $N3479e970
+ Blur {
+  size {{Blur17.size*(4/10) i} {Blur17.size*(4/10) i}}
+  name Blur7
+  xpos 1023
+  ypos -49
+ }
+push $N24051140
+ Grade {
+  channels Iblurmask
+  blackpoint 0.2
+  whitepoint 0.3
+  white_clamp true
+  name Grade13
+  xpos 1243
+  ypos -87
+ }
+push $N3479ebe0
+ Blur {
+  size {{Blur17.size*(3/10) i} {Blur17.size*(3/10) i}}
+  name Blur8
+  xpos 1023
+  ypos -87
+ }
+push $N24051fe0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.1
+  whitepoint 0.2
+  white_clamp true
+  name Grade14
+  xpos 1243
+  ypos -125
+ }
+push $N3479ee50
+ Blur {
+  size {{Blur17.size*(2/10) i} {Blur17.size*(2/10) i}}
+  name Blur9
+  xpos 1023
+  ypos -125
+ }
+push $N24045ce0
+ Grade {
+  channels Iblurmask
+  whitepoint 0.1
+  white_clamp true
+  name Grade15
+  xpos 1243
+  ypos -163
+ }
+push $N3479f0c0
+ Blur {
+  size {{Blur17.size*(1/10) i} {Blur17.size*(1/10) i}}
+  name Blur10
+  xpos 1023
+  ypos -163
+ }
+push $N3459ff10
+ Dot {
+  name Dot39
+  xpos 1167
+  ypos -334
+ }
+ Keymix {
+  inputs 3
+  maskChannel Iblurmask.a
+  name Keymix3
+  xpos 1133
+  ypos -163
+ }
+ set C24384d70 [stack 0]
+clone $C24384d70 {
+  inputs 3
+  xpos 1133
+  ypos -125
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1133
+  ypos -87
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1133
+  ypos -49
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos -13
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos 25
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos 63
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos 101
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos 139
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 1131
+  ypos 177
+  selected false
+ }
+ Dot {
+  name Dot34
+  xpos 1165
+  ypos 314
+ }
+push $N345a1ec0
+ Dot {
+  name Dot40
+  xpos 721
+  ypos -277
+ }
+ Dot {
+  name Dot10
+  xpos 721
+  ypos -188
+ }
+set N24380930 [stack 0]
+ Dot {
+  name Dot11
+  xpos 721
+  ypos -79
+ }
+set N24380ba0 [stack 0]
+ Dot {
+  name Dot24
+  xpos 721
+  ypos 24
+ }
+set N24380e10 [stack 0]
+ Dot {
+  name Dot26
+  xpos 721
+  ypos 136
+ }
+set N24381080 [stack 0]
+ Dot {
+  name Dot28
+  xpos 721
+  ypos 237
+ }
+ Grade {
+  channels Iblurmask
+  blackpoint 0.8
+  white_clamp true
+  name Grade10
+  xpos 592
+  ypos 227
+ }
+push $N345a0180
+ Dot {
+  name Dot36
+  xpos 519
+  ypos -334
+ }
+set N3459f070 [stack 0]
+ Dot {
+  name Dot13
+  xpos 297
+  ypos -334
+ }
+ Dot {
+  name Dot12
+  xpos 297
+  ypos -188
+ }
+set N24381f20 [stack 0]
+ Dot {
+  name Dot14
+  xpos 297
+  ypos -79
+ }
+set N24382190 [stack 0]
+ Dot {
+  name Dot25
+  xpos 297
+  ypos 24
+ }
+set N24382400 [stack 0]
+ Dot {
+  name Dot27
+  xpos 297
+  ypos 136
+ }
+set N24382670 [stack 0]
+ Dot {
+  name Dot29
+  xpos 297
+  ypos 237
+ }
+ Blur {
+  name Blur17
+  xpos 372
+  ypos 227
+ }
+push $N24381080
+ Grade {
+  channels Iblurmask
+  blackpoint 0.6
+  whitepoint 0.8
+  white_clamp true
+  name Grade9
+  xpos 592
+  ypos 126
+ }
+push $N24382670
+ Blur {
+  size {{Blur17.size*(4/5) i} {Blur17.size*(4/5) i}}
+  name Blur16
+  xpos 372
+  ypos 126
+ }
+push $N24380e10
+ Grade {
+  channels Iblurmask
+  blackpoint 0.4
+  whitepoint 0.6
+  white_clamp true
+  name Grade8
+  xpos 592
+  ypos 14
+ }
+push $N24382400
+ Blur {
+  size {{Blur17.size*(3/5) i} {Blur17.size*(3/5) i}}
+  name Blur15
+  xpos 372
+  ypos 14
+ }
+push $N24380ba0
+ Grade {
+  channels Iblurmask
+  blackpoint 0.2
+  whitepoint 0.4
+  white_clamp true
+  name Grade7
+  xpos 592
+  ypos -89
+ }
+push $N24382190
+ Blur {
+  size {{Blur17.size*(2/5) i} {Blur17.size*(2/5) i}}
+  name Blur14
+  xpos 372
+  ypos -89
+ }
+push $N24380930
+ Grade {
+  channels Iblurmask
+  whitepoint 0.2
+  white_clamp true
+  name Grade6
+  xpos 592
+  ypos -198
+ }
+push $N24381f20
+ Blur {
+  size {{Blur17.size*(1/5) i} {Blur17.size*(1/5) i}}
+  name Blur13
+  xpos 372
+  ypos -198
+ }
+push $N3459f070
+clone $C24384d70 {
+  inputs 3
+  xpos 482
+  ypos -198
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 482
+  ypos -89
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 482
+  ypos 14
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 482
+  ypos 126
+  selected false
+ }
+clone $C24384d70 {
+  inputs 3
+  xpos 482
+  ypos 227
+  selected false
+ }
+ Dot {
+  name Dot33
+  xpos 516
+  ypos 314
+ }
+ Switch {
+  inputs 2
+  which {{parent.HighQuality}}
+  name Switch1
+  selected true
+  xpos 796
+  ypos 310
+ }
+ Remove {
+  channels Iblurmask
+  name Remove1
+  xpos 796
+  ypos 365
+ }
+ Output {
+  name Output1
+  xpos 796
+  ypos 456
+ }
+end_group

@@ -1,0 +1,72 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name DotProduct
+ inputs 2
+ tile_color 0x172e41ff
+ addUserKnob {20 User}
+ addUserKnob {41 NormalA T Shuffle5.in}
+ addUserKnob {41 NormalB T Shuffle6.in}
+ addUserKnob {41 Destination T Shuffle7.out}
+ addUserKnob {26 info l "" +STARTLINE T "\nKeeps Channels from B"}
+}
+ Input {
+  inputs 0
+  name InputA
+  xpos 598
+  ypos -325
+  number 1
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle5
+  xpos 598
+  ypos -250
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos 700
+  ypos -312
+ }
+ Shuffle {
+  in Normal
+  out TMP
+  name Shuffle6
+  xpos 691
+  ypos -251
+ }
+ MergeExpression {
+  inputs 2
+  channel0 TMP
+  expr0 (A.TMP.X)*(B.TMP.X)+(A.TMP.Y)*(B.TMP.Y)+(A.TMP.Z)*(B.TMP.Z)
+  channel1 none
+  channel2 none
+  channel3 none
+  name Merge_dot1
+  xpos 643
+  ypos -219
+ }
+ Shuffle {
+  in TMP
+  out rgb
+  name Shuffle7
+  xpos 643
+  ypos -188
+ }
+ Remove {
+  channels TMP
+  name Remove1
+  xpos 643
+  ypos -162
+ }
+ Output {
+  name Output1
+  selected true
+  xpos 643
+  ypos -97
+ }
+end_group

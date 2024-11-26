@@ -1,0 +1,118 @@
+#! C:/Program Files/Nuke7.0v10/Nuke7.0.exe -nx
+version 7.0 v10
+Group {
+name ColorShift
+ tile_color 0xfa22ffff
+ addUserKnob {20 ColorShift}
+ addUserKnob {41 colorspace_out l ColorMath T TurnToHSL.colorspace_out}
+ addUserKnob {26 hslhsvonly l "" -STARTLINE T "   Use only HSL or HSV!"}
+ addUserKnob {20 Hue n 1}
+ addUserKnob {41 Reds T colormagickmachine.Reds}
+ addUserKnob {41 Oranges T colormagickmachine.Oranges}
+ addUserKnob {41 Yellows T colormagickmachine.Yellows}
+ addUserKnob {41 Greens T colormagickmachine.Greens}
+ addUserKnob {41 Aquas T colormagickmachine.Aquas}
+ addUserKnob {41 Blues T colormagickmachine.Blues}
+ addUserKnob {41 Purples T colormagickmachine.Purples}
+ addUserKnob {41 Magentas T colormagickmachine.Magentas}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 Saturation n 1}
+ addUserKnob {41 SaturationReds l Reds T colormagickmachine.SaturationReds}
+ addUserKnob {41 SaturationOranges l Oranges T colormagickmachine.SaturationOranges}
+ addUserKnob {41 SaturationYellows l Yellows T colormagickmachine.SaturationYellows}
+ addUserKnob {41 SaturationGreens l Greens T colormagickmachine.SaturationGreens}
+ addUserKnob {41 SaturationAquas l Aquas T colormagickmachine.SaturationAquas}
+ addUserKnob {41 SaturationBlues l Blues T colormagickmachine.SaturationBlues}
+ addUserKnob {41 SaturationPurples l Purples T colormagickmachine.SaturationPurples}
+ addUserKnob {41 SaturationMagentas l Magentas T colormagickmachine.SaturationMagentas}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 Gain n 1}
+ addUserKnob {41 GainReds l Reds T colormagickmachine.GainReds}
+ addUserKnob {41 GainOranges l Oranges T colormagickmachine.GainOranges}
+ addUserKnob {41 GainYellows l Yellows T colormagickmachine.GainYellows}
+ addUserKnob {41 GainGreens l Greens T colormagickmachine.GainGreens}
+ addUserKnob {41 GainAquas l Aquas T colormagickmachine.GainAquas}
+ addUserKnob {41 GainBlues l Blues T colormagickmachine.GainBlues}
+ addUserKnob {41 GainPurples l Purples T colormagickmachine.GainPurples}
+ addUserKnob {41 GainMagentas l Magentas T colormagickmachine.GainMagentas}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 449
+  ypos -100
+ }
+ Colorspace {
+  colorspace_out HSL
+  name TurnToHSL
+  xpos 449
+  ypos -60
+ }
+ Expression {
+  expr0 "(0<=r&&r<(1/12))?r+(Reds/6)*(1-fmod(r*12,1))+(Oranges/12)*(fmod(r*12,1)):\n((1/12)<=r&&r<(1/6))?r+(Oranges/12)*(1-fmod(r*12,1))+(Yellows/6)*(fmod(r*12,1)):\n((1/6)<=r&&r<(2/6))?r+(Yellows/6)*(1-fmod(r*6,1))+(Greens/6)*(fmod(r*6,1)):\n((2/6)<=r&&r<(3/6))?r+(Greens/6)*(1-fmod(r*6,1))+(Aquas/6)*(fmod(r*6,1)):\n((3/6)<=r&&r<(4/6))?r+(Aquas/6)*(1-fmod(r*6,1))+(Blues/6)*(fmod(r*6,1)):\n((4/6)<=r&&r<(9/12))?r+(Blues/6)*(1-fmod(r*12,1))+(Purples/12)*(fmod(r*12,1)):\n((9/12)<=r&&r<(5/6))?r+(Purples/12)*(1-fmod(r*12,1))+(Magentas/6)*(fmod(r*12,1)):\nr+(Magentas/6)*(1-fmod(r*6,1))+(Reds/6)*(fmod(r*6,1))"
+  expr1 "(0<=r&&r<(1/12))?g*((SaturationReds)*(1-fmod(r*12,1))+(SaturationOranges)*(fmod(r*12,1))):\n((1/12)<=r&&r<(1/6))?g*((SaturationOranges)*(1-fmod(r*12,1))+(SaturationYellows)*(fmod(r*12,1))):\n((1/6)<=r&&r<(2/6))?g*((SaturationYellows)*(1-fmod(r*6,1))+(SaturationGreens)*(fmod(r*6,1))):\n((2/6)<=r&&r<(3/6))?g*((SaturationGreens)*(1-fmod(r*6,1))+(SaturationAquas)*(fmod(r*6,1))):\n((3/6)<=r&&r<(4/6))?g*((SaturationAquas)*(1-fmod(r*6,1))+(SaturationBlues)*(fmod(r*6,1))):\n((4/6)<=r&&r<(9/12))?g*((SaturationBlues)*(1-fmod(r*12,1))+(SaturationPurples)*(fmod(r*12,1))):\n((9/12)<=r&&r<(5/6))?g*((SaturationPurples)*(1-fmod(r*12,1))+(SaturationMagentas)*(fmod(r*12,1))):\ng*((SaturationMagentas)*(1-fmod(r*6,1))+(SaturationReds)*(fmod(r*6,1)))"
+  expr2 "(0<=r&&r<(1/12))?b*((GainReds)*(1-fmod(r*12,1))+(GainOranges)*(fmod(r*12,1))):\n((1/12)<=r&&r<(1/6))?b*((GainOranges)*(1-fmod(r*12,1))+(GainYellows)*(fmod(r*12,1))):\n((1/6)<=r&&r<(2/6))?b*((GainYellows)*(1-fmod(r*6,1))+(GainGreens)*(fmod(r*6,1))):\n((2/6)<=r&&r<(3/6))?b*((GainGreens)*(1-fmod(r*6,1))+(GainAquas)*(fmod(r*6,1))):\n((3/6)<=r&&r<(4/6))?b*((GainAquas)*(1-fmod(r*6,1))+(GainBlues)*(fmod(r*6,1))):\n((4/6)<=r&&r<(9/12))?b*((GainBlues)*(1-fmod(r*12,1))+(GainPurples)*(fmod(r*12,1))):\n((9/12)<=r&&r<(5/6))?b*((GainPurples)*(1-fmod(r*12,1))+(GainMagentas)*(fmod(r*12,1))):\nb*((GainMagentas)*(1-fmod(r*6,1))+(GainReds)*(fmod(r*6,1)))"
+  name colormagickmachine
+  xpos 449
+  ypos -3
+  addUserKnob {20 Hue}
+  addUserKnob {7 Reds R -1 1}
+  addUserKnob {7 Oranges R -1 1}
+  addUserKnob {7 Yellows R -1 1}
+  addUserKnob {7 Greens R -1 1}
+  addUserKnob {7 Aquas R -1 1}
+  addUserKnob {7 Blues R -1 1}
+  addUserKnob {7 Purples R -1 1}
+  addUserKnob {7 Magentas R -1 1}
+  addUserKnob {20 Saturation}
+  addUserKnob {7 SaturationReds l Reds R 0 2}
+  SaturationReds 1
+  addUserKnob {7 SaturationOranges l Oranges R 0 2}
+  SaturationOranges 1
+  addUserKnob {7 SaturationYellows l Yellows R 0 2}
+  SaturationYellows 1
+  addUserKnob {7 SaturationGreens l Greens R 0 2}
+  SaturationGreens 1
+  addUserKnob {7 SaturationAquas l Aquas R 0 2}
+  SaturationAquas 1
+  addUserKnob {7 SaturationBlues l Blues R 0 2}
+  SaturationBlues 1
+  addUserKnob {7 SaturationPurples l Purples R 0 2}
+  SaturationPurples 1
+  addUserKnob {7 SaturationMagentas l Magentas R 0 2}
+  SaturationMagentas 1
+  addUserKnob {20 Gain}
+  addUserKnob {7 GainReds l Reds R 0 2}
+  GainReds 1
+  addUserKnob {7 GainOranges l Oranges R 0 2}
+  GainOranges 1
+  addUserKnob {7 GainYellows l Yellows R 0 2}
+  GainYellows 1
+  addUserKnob {7 GainGreens l Greens R 0 2}
+  GainGreens 1
+  addUserKnob {7 GainAquas l Aquas R 0 2}
+  GainAquas 1
+  addUserKnob {7 GainBlues l Blues R 0 2}
+  GainBlues 1
+  addUserKnob {7 GainPurples l Purples R 0 2}
+  GainPurples 1
+  addUserKnob {7 GainMagentas l Magentas R 0 2}
+  GainMagentas 1
+  addUserKnob {20 User}
+ }
+ Colorspace {
+  colorspace_in {{TurnToHSL.colorspace_out}}
+  name TurnHSLback
+  selected true
+  xpos 449
+  ypos 50
+ }
+ Output {
+  name Output1
+  xpos 449
+  ypos 150
+ }
+end_group

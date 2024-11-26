@@ -1,0 +1,69 @@
+#! C:/Program Files/Nuke6.1v1/Nuke6.1.exe -nx
+version 6.1 v1
+Group {
+name TransformMaskedPlus
+ inputs 2
+ tile_color 0xa57aaaff
+ addUserKnob {20 Transform l User}
+ addUserKnob {41 matrix T Transformtransformmaskedplus.matrix}
+ addUserKnob {41 translate T Transformtransformmaskedplus.translate}
+ addUserKnob {41 rotate T Transformtransformmaskedplus.rotate}
+ addUserKnob {41 scale T Transformtransformmaskedplus.scale}
+ addUserKnob {41 skew T Transformtransformmaskedplus.skew}
+ addUserKnob {41 center T Transformtransformmaskedplus.center}
+ addUserKnob {41 filter T Transformtransformmaskedplus.filter}
+ addUserKnob {41 clamp T Transformtransformmaskedplus.clamp}
+ addUserKnob {41 black_outside l "black outside" T Transformtransformmaskedplus.black_outside}
+ addUserKnob {41 motionblur T Transformtransformmaskedplus.motionblur}
+ addUserKnob {41 shutter T Transformtransformmaskedplus.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T Transformtransformmaskedplus.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T Transformtransformmaskedplus.shuttercustomoffset}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 grade l "" +STARTLINE T "Grade inside Mask"}
+ addUserKnob {41 channels T Gradetransformmaskedplus.channels}
+ addUserKnob {41 blackpoint T Gradetransformmaskedplus.blackpoint}
+ addUserKnob {41 whitepoint T Gradetransformmaskedplus.whitepoint}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -212
+  ypos -323
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -104
+  ypos -326
+ }
+ Dot {
+  name Dot1
+  xpos -70
+  ypos -275
+ }
+set N16b32490 [stack 0]
+ Transform {
+  name Transformtransformmaskedplus
+  xpos -44
+  ypos -235
+ }
+ Grade {
+
+  name Gradetransformmaskedplus
+  xpos -44
+  ypos -209
+ }
+push $N16b32490
+ Keymix {
+  inputs 3
+  name cutouttransformmaskedplus
+  xpos -104
+  ypos -155
+ }
+ Output {
+  name Output1
+  xpos -104
+  ypos -55
+ }
+end_group

@@ -1,0 +1,74 @@
+#! C:/Program Files/Nuke6.2v2/Nuke6.2.exe -nx
+version 6.2 v2
+add_layer {Normal Normal.X Normal.Y Normal.Z}
+Group {
+name Normalize
+ inputs 1
+ tile_color 0x172e41ff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 User}
+ addUserKnob {41 VectorChannel T CreateTMP.in}
+ addUserKnob {41 Destination T PutTMPtoChannel.out}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 597
+  ypos -493
+ }
+add_layer {TMP TMP.X TMP.Y TMP.Z}
+ Shuffle {
+  in Normal
+  out TMP
+  name CreateTMP
+  xpos 597
+  ypos -439
+ }
+set N14270620 [stack 0]
+push $N14270620
+ Expression {
+  channel0 TMP
+  expr0 sqrt(TMP.X*TMP.X+TMP.Y*TMP.Y+TMP.Z*TMP.Z)
+  channel1 none
+  channel2 none
+  channel3 none
+  name VectorLength
+  xpos 440
+  ypos -391
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  Achannels TMP
+  Bchannels TMP
+  output TMP
+  name dividevectorwithlength
+  xpos 597
+  ypos -345
+ }
+ Shuffle {
+  in TMP
+  out rgb
+  name PutTMPtoChannel
+  xpos 597
+  ypos -279
+ }
+ Remove {
+  channels TMP
+  name RemoveTMP
+  xpos 597
+  ypos -253
+ }
+ Output {
+  name Output1
+  xpos 597
+  ypos -188
+ }
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos 865
+  ypos -234
+ }
+end_group
