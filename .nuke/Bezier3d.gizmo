@@ -1,0 +1,5811 @@
+#! C:/Program Files/Nuke15.1v3/nuke-15.1.3.dll -nx
+version 15.1 v3
+Group {
+ name Bezier3d
+ inputs 4
+ tile_color 0xff5f00ff
+ addUserKnob {20 Bezier3D}
+ addUserKnob {7 radius R 0 5}
+ radius {0.1}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 quality}
+ quality {20}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 info l "" +STARTLINE T "Bezier3D by Mattias Malmer"}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.color.r} {parent.color.g} {parent.color.b} 1}
+  format "256 256 0 0 256 256 1 square_256"
+  name beziercolor
+  xpos 1500
+  ypos -417
+ }
+set N1b4c4000 [stack 0]
+ Input {
+  inputs 0
+  name end
+  xpos 6230
+  ypos -681
+ }
+ Axis3 {
+  display off
+  selectable false
+  name endaxis
+  xpos 5910
+  ypos -702
+ }
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp38
+  xpos 5690
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.975
+ }
+set N1b4c4c00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D41
+  xpos 5790
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b4c5400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b4c5c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b59a800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b4c5400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b59b800 [stack 0]
+push $N1b59a800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b59b800
+push $N1b4c5c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b4c4c00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp19
+  xpos 5580
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.95
+ }
+set N1b5cd000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D22
+  xpos 5680
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b5cd800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b604000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b604c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b5cd800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b605c00 [stack 0]
+push $N1b604c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b605c00
+push $N1b604000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b5cd000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp22
+  xpos 5470
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.925
+ }
+set N1b631400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D24
+  xpos 5570
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b631c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b672400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b673000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b631c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b694000 [stack 0]
+push $N1b673000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b694000
+push $N1b672400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b631400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp23
+  xpos 5360
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.9
+ }
+set N1b695800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D25
+  xpos 5460
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b6d2000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b6d2800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b6d3400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b6d2000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b704400 [stack 0]
+push $N1b6d3400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b704400
+push $N1b6d2800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b695800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp24
+  xpos 5250
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.875
+ }
+set N1b705c00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D26
+  xpos 5350
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b754400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b754c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b755800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b754400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b776800 [stack 0]
+push $N1b755800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b776800
+push $N1b754c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b705c00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp25
+  xpos 5140
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.85
+ }
+set N1b7c6000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D27
+  xpos 5240
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b7c6800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b7c7000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b7c7c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b7c6800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b7f8c00 [stack 0]
+push $N1b7c7c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b7f8c00
+push $N1b7c7000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b7c6000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp26
+  xpos 5030
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.825
+ }
+set N1b842400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D28
+  xpos 5130
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b842c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b843400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b87a000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b842c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b87b000 [stack 0]
+push $N1b87a000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b87b000
+push $N1b843400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b842400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp27
+  xpos 4920
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.8
+ }
+set N1b8c0800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D29
+  xpos 5020
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b8c1000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b8c1800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b8f0400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b8c1000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b8f1400 [stack 0]
+push $N1b8f0400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b8f1400
+push $N1b8c1800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b8c0800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp28
+  xpos 4810
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.775
+ }
+set N1b92cc00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D30
+  xpos 4910
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b92d400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b92dc00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b970800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b92d400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b971800 [stack 0]
+push $N1b970800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b971800
+push $N1b92dc00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b92cc00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp20
+  xpos 4700
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.75
+ }
+set N1b9ab000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D31
+  xpos 4800
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1b9ab800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1b9ee000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1b9eec00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1b9ab800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1b9efc00 [stack 0]
+push $N1b9eec00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1b9efc00
+push $N1b9ee000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1b9ab000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp21
+  xpos 4590
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.725
+ }
+set N1ba21400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D23
+  xpos 4690
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1ba21c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1ba6c400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1ba6d000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1ba21c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1ba98000 [stack 0]
+push $N1ba6d000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1ba98000
+push $N1ba6c400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp29
+  xpos 4480
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.7
+ }
+set N1ba99800 [stack 0]
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp30
+  xpos 4370
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.675
+ }
+set N1ba99c00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D33
+  xpos 4470
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bae8400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bae8c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bae9800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bae8400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bb18800 [stack 0]
+push $N1bae9800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bb18800
+push $N1bae8c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1ba99c00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp31
+  xpos 4260
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.65
+ }
+set N1bb60000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D34
+  xpos 4360
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bb60800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bb61000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bb61c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bb60800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bb98c00 [stack 0]
+push $N1bb61c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bb98c00
+push $N1bb61000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bb60000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp32
+  xpos 4150
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.625
+ }
+set N1bbdc400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D35
+  xpos 4250
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bbdcc00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bbdd400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bc12000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bbdcc00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bc13000 [stack 0]
+push $N1bc12000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bc13000
+push $N1bbdd400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bbdc400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp33
+  xpos 4040
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.6
+ }
+set N1bc58800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D36
+  xpos 4140
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bc59000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bc59800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bc86400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bc59000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bc87400 [stack 0]
+push $N1bc86400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bc87400
+push $N1bc59800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bc58800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp34
+  xpos 3930
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.575
+ }
+set N1bccec00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D37
+  xpos 4030
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bccf400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bccfc00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bd02800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bccf400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bd03800 [stack 0]
+push $N1bd02800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bd03800
+push $N1bccfc00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bccec00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp35
+  xpos 3820
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.55
+ }
+set N1bd3f000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D38
+  xpos 3920
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bd3f800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bd88000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bd88c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bd3f800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bd89c00 [stack 0]
+push $N1bd88c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bd89c00
+push $N1bd88000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bd3f000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp36
+  xpos 3710
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.525
+ }
+set N1bdbb400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D39
+  xpos 3810
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bdbbc00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1be00400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1be01000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bdbbc00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1be34000 [stack 0]
+push $N1be01000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1be34000
+push $N1be00400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bdbb400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp37
+  xpos 3600
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.5
+ }
+set N1be35800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D40
+  xpos 3700
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1be7c000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1be7c800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1be7d400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1be7c000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1beb0400 [stack 0]
+push $N1be7d400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1beb0400
+push $N1be7c800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1ba21400
+push $N1ba99800
+ Group {
+  inputs 3
+  name Line3D32
+  xpos 4580
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bef0000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bef0800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bef1400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bef0000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bf28400 [stack 0]
+push $N1bef1400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bf28400
+push $N1bef0800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1be35800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp18
+  xpos 3490
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.475
+ }
+set N1bf29c00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D12
+  xpos 3590
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bf78400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bf78c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1bf79800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bf78400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1bf98800 [stack 0]
+push $N1bf79800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1bf98800
+push $N1bf78c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp10
+  xpos 2610
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.275
+ }
+set N1bfe6000 [stack 0]
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp9
+  xpos 2500
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.25
+ }
+set N1bfe6400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D13
+  xpos 2600
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality 24
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1bfe6c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1bfe7400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c026000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1bfe6c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c027000 [stack 0]
+push $N1c026000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c027000
+push $N1bfe7400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1bf29c00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp17
+  xpos 3380
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.45
+ }
+set N1c068800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D21
+  xpos 3480
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c069000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c069800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c096400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c069000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c097400 [stack 0]
+push $N1c096400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c097400
+push $N1c069800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c068800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp16
+  xpos 3270
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.425
+ }
+set N1c0dec00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D20
+  xpos 3370
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c0df400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c0dfc00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c114800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c0df400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c115800 [stack 0]
+push $N1c114800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c115800
+push $N1c0dfc00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c0dec00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp14
+  xpos 3160
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.4
+ }
+set N1c151000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D18
+  xpos 3260
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c151800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c190000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c190c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c151800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c191c00 [stack 0]
+push $N1c190c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c191c00
+push $N1c190000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c151000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp15
+  xpos 3050
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.375
+ }
+set N1c1c7400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D17
+  xpos 3150
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c1c7c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c210400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c211000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c1c7c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c240000 [stack 0]
+push $N1c211000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c240000
+push $N1c210400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c1c7400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp13
+  xpos 2940
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.35
+ }
+set N1c241800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D19
+  xpos 3040
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c28a000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c28a800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c28b400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c28a000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c2be400 [stack 0]
+push $N1c28b400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c2be400
+push $N1c28a800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c241800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp11
+  xpos 2830
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.325
+ }
+set N1c2bfc00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D16
+  xpos 2930
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c30c400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c30cc00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c30d800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c30c400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c338800 [stack 0]
+push $N1c30d800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c338800
+push $N1c30cc00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c2bfc00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp12
+  xpos 2720
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.3
+ }
+set N1c382000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D14
+  xpos 2820
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c382800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c383000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c383c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c382800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c3bac00 [stack 0]
+push $N1c383c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c3bac00
+push $N1c383000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c382000
+push $N1bfe6000
+ Group {
+  inputs 3
+  name Line3D15
+  xpos 2710
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c3fc800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c3fd000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c3fdc00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c3fc800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c424c00 [stack 0]
+push $N1c3fdc00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c424c00
+push $N1c3fd000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+ Input {
+  inputs 0
+  name cp1
+  xpos 1060
+  ypos -1737
+  number 2
+ }
+ Axis3 {
+  display off
+  selectable false
+  name cp1axis
+  xpos 1290
+  ypos -1758
+ }
+ Dot {
+  name Dot2
+  xpos 1314
+  ypos -198
+ }
+ Input {
+  inputs 0
+  name cp2
+  xpos 6230
+  ypos -1737
+  number 1
+ }
+ Axis3 {
+  display off
+  selectable false
+  name cp2axis
+  xpos 6020
+  ypos -1758
+ }
+ Dot {
+  name Dot1
+  xpos 6044
+  ypos -174
+ }
+push $N1b4c4000
+push $N1bfe6400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp8
+  xpos 2390
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.225
+ }
+set N1c46fc00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D11
+  xpos 2490
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c4a8400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c4a8c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c4a9800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c4a8400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c4d4800 [stack 0]
+push $N1c4a9800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c4d4800
+push $N1c4a8c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c46fc00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp6
+  xpos 2280
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.2
+ }
+set N1c518000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D10
+  xpos 2380
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c518800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c519000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c519c00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c518800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c558c00 [stack 0]
+push $N1c519c00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c558c00
+push $N1c519000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c518000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp7
+  xpos 2170
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.175
+ }
+set N1c598400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D8
+  xpos 2270
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c598c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c599400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c5d4000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c598c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c5d5000 [stack 0]
+push $N1c5d4000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c5d5000
+push $N1c599400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c598400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp5
+  xpos 2060
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.15
+ }
+set N1c610800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D9
+  xpos 2160
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c611000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c611800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c64c400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c611000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c64d400 [stack 0]
+push $N1c64c400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c64d400
+push $N1c611800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c610800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp4
+  xpos 1950
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.125
+ }
+set N1c68ac00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D7
+  xpos 2050
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c68b400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c68bc00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c6ca800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c68b400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c6cb800 [stack 0]
+push $N1c6ca800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c6cb800
+push $N1c68bc00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c68ac00
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp3
+  xpos 1840
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.1
+ }
+set N1c703000 [stack 0]
+ Group {
+  inputs 3
+  name Line3D6
+  xpos 1940
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c703800 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c74c000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c74cc00 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c703800
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c74dc00 [stack 0]
+push $N1c74cc00
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c74dc00
+push $N1c74c000
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c703000
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp2
+  xpos 1730
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.075
+ }
+set N1c775400 [stack 0]
+ Group {
+  inputs 3
+  name Line3D5
+  xpos 1830
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c775c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c7c8400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c7c9000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c775c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c7ea000 [stack 0]
+push $N1c7c9000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c7ea000
+push $N1c7c8400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c775400
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp1
+  xpos 1620
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.05
+ }
+set N1c7eb800 [stack 0]
+ Group {
+  inputs 3
+  name Line3D4
+  xpos 1720
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c830000 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c830800 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c831400 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c830000
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c86a400 [stack 0]
+push $N1c831400
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c86a400
+push $N1c830800
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c7eb800
+ Axis3 {
+  inputs 0
+  display off
+  selectable false
+  translate {{"lerp(lerp(lerp(startaxis.world_matrix.3,cp1axis.world_matrix.3,along),lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),along) , lerp(lerp(cp1axis.world_matrix.3,cp2axis.world_matrix.3,along),lerp(cp2axis.world_matrix.3,endaxis.world_matrix.3,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.7,cp1axis.world_matrix.7,along),lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),along) , lerp(lerp(cp1axis.world_matrix.7,cp2axis.world_matrix.7,along),lerp(cp2axis.world_matrix.7,endaxis.world_matrix.7,along),along),along)"} {"lerp(lerp(lerp(startaxis.world_matrix.11,cp1axis.world_matrix.11,along),lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),along) , lerp(lerp(cp1axis.world_matrix.11,cp2axis.world_matrix.11,along),lerp(cp2axis.world_matrix.11,endaxis.world_matrix.11,along),along),along)"}}
+  name interp
+  xpos 1510
+  ypos -1230
+  addUserKnob {20 User}
+  addUserKnob {7 along}
+  along 0.025
+ }
+set N1c86bc00 [stack 0]
+ Group {
+  inputs 3
+  name Line3D3
+  xpos 1610
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.Line3D2.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.Line3D2.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c8b8400 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c8b8c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c8b9800 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c8b8400
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c8e6800 [stack 0]
+push $N1c8b9800
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c8e6800
+push $N1c8b8c00
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+push $N1b4c4000
+push $N1c86bc00
+ Input {
+  inputs 0
+  name start
+  xpos 1060
+  ypos -681
+  number 3
+ }
+ Axis3 {
+  display off
+  selectable false
+  name startaxis
+  xpos 1400
+  ypos -702
+ }
+ Group {
+  inputs 3
+  name Line3D2
+  xpos 1500
+  ypos -681
+  addUserKnob {20 Line3D}
+  addUserKnob {7 radius l "" +STARTLINE R 0 10}
+  radius {{parent.radius}}
+  addUserKnob {3 quality}
+  quality {{parent.quality}}
+ }
+  Input {
+   inputs 0
+   name start
+   xpos 950
+   ypos -297
+  }
+  Axis3 {
+   display off
+   selectable false
+   name line_startaxis
+   xpos 960
+   ypos -174
+  }
+set N1c928c00 [stack 0]
+  Input {
+   inputs 0
+   name color
+   xpos 1060
+   ypos -441
+   number 2
+  }
+  Dot {
+   name Dot1
+   xpos 1094
+   ypos -342
+  }
+set N1c929400 [stack 0]
+  Dot {
+   name Dot4
+   xpos 1314
+   ypos -342
+  }
+  Sphere {
+   rows {{parent.line_Cylinder.columns}}
+   columns {{parent.line_Cylinder.columns}}
+   radius {{parent.line_Cylinder.radius}}
+   name line_endcap
+   xpos 1280
+   ypos -249
+  }
+  Dot {
+   name Dot2
+   xpos 1314
+   ypos -54
+  }
+set N1c968000 [stack 0]
+  Dot {
+   name Dot3
+   xpos 1057
+   ypos -54
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   name line_endcapstartpos
+   xpos 950
+   ypos -9
+  }
+push $N1c928c00
+  Input {
+   inputs 0
+   name end
+   xpos 1170
+   ypos -297
+   number 1
+  }
+  Axis3 {
+   inputs 2
+   display off
+   selectable false
+   look_axis +Y
+   name line_endaxis
+   xpos 1180
+   ypos -174
+  }
+set N1c969000 [stack 0]
+push $N1c968000
+  TransformGeo {
+   inputs 2
+   name line_endcapendpos
+   xpos 1170
+   ypos -9
+  }
+push $N1c969000
+push $N1c929400
+  Cylinder {
+   selectable false
+   rows 1
+   columns {{parent.quality}}
+   radius {{parent.radius}}
+   height 1
+   translate {0 0.5 0}
+   name line_Cylinder
+   xpos 1060
+   ypos -249
+  }
+  TransformGeo {
+   inputs 2
+   selectable false
+   scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+   look_axis +Y
+   name line_scaler
+   xpos 1060
+   ypos -105
+  }
+  Scene {
+   inputs 3
+   name line_comnbine
+   xpos 1070
+   ypos 18
+  }
+  Output {
+   name Output1
+   xpos 1060
+   ypos 135
+  }
+ end_group
+ Scene {
+  inputs 42
+  selectable false
+  name beziercollect
+  xpos 3600
+  ypos -198
+ }
+ Output {
+  name Output1
+  xpos 3590
+  ypos -57
+ }
+end_group

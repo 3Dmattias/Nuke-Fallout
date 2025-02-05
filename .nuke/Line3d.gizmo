@@ -1,0 +1,137 @@
+#! C:/Program Files/Nuke15.1v3/nuke-15.1.3.dll -nx
+version 15.1 v3
+Group {
+ name Line3d
+ inputs 2
+ tile_color 0xff5f00ff
+ addUserKnob {20 Line3D}
+ addUserKnob {7 radius R 0 5}
+ radius 0.1
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 quality}
+ quality 20
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 info l "" +STARTLINE T "Line3D by Mattias Malmer"}
+}
+ Input {
+  inputs 0
+  name start
+  xpos 950
+  ypos -321
+  number 1
+ }
+ Axis3 {
+  display off
+  selectable false
+  name line_startaxis
+  xpos 960
+  ypos -174
+ }
+set N1d5a5400 [stack 0]
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.color.r} {parent.color.g} {parent.color.b} 1}
+  format "256 256 0 0 256 256 1 square_256"
+  name line_color
+  xpos 1060
+  ypos -441
+ }
+ Dot {
+  name Dot1
+  xpos 1094
+  ypos -342
+ }
+set N1d5a4c00 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1314
+  ypos -342
+ }
+ Sphere {
+  rows {{parent.line_Cylinder.columns}}
+  columns {{parent.line_Cylinder.columns}}
+  radius {{parent.line_Cylinder.radius}}
+  name line_endcap
+  xpos 1280
+  ypos -249
+ }
+ Dot {
+  name Dot2
+  xpos 1314
+  ypos -54
+ }
+set Nda6000 [stack 0]
+ Dot {
+  name Dot3
+  xpos 874
+  ypos -54
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name line_endcapstartpos
+  xpos 950
+  ypos -9
+ }
+push $N1d5a5400
+ Input {
+  inputs 0
+  name end
+  xpos 1170
+  ypos -321
+ }
+ Axis3 {
+  inputs 2
+  display off
+  selectable false
+  look_axis +Y
+  name line_endaxis
+  xpos 1180
+  ypos -174
+ }
+set Nda7000 [stack 0]
+push $Nda6000
+ TransformGeo {
+  inputs 2
+  name line_endcapendpos
+  xpos 1170
+  ypos -9
+ }
+push $Nda7000
+push $N1d5a4c00
+ Cylinder {
+  selectable false
+  rows 1
+  columns {{parent.quality}}
+  radius {{parent.radius}}
+  height 1
+  translate {0 0.5 0}
+  name line_Cylinder
+  xpos 1060
+  ypos -249
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  scaling {1 {"sqrt((line_endaxis.world_matrix.3-line_startaxis.world_matrix.3)*(line_endaxis.world_matrix.3-line_startaxis.world_matrix.3) + (line_endaxis.world_matrix.7-line_startaxis.world_matrix.7)*(line_endaxis.world_matrix.7-line_startaxis.world_matrix.7) + (line_endaxis.world_matrix.11-line_startaxis.world_matrix.11)*(line_endaxis.world_matrix.11-line_startaxis.world_matrix.11))"} 1}
+  look_axis +Y
+  name line_scaler
+  xpos 1060
+  ypos -105
+ }
+ Scene {
+  inputs 3
+  name line_comnbine
+  xpos 1070
+  ypos 18
+ }
+ Output {
+  name Output1
+  xpos 1060
+  ypos 135
+ }
+end_group
